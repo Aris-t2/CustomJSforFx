@@ -41,9 +41,9 @@ or <code>Shift+F2</code> to open Firefox's command line, then enter the command 
 <code>\ PROFILENAME \chrome\userChrome.css</code> (method 1)</br>
 <code>\ PROFILENAME \chrome\userChrome.js</code> (method 2)</br>
 </br>
-<b>3.</b> Copy files and folders into <code>\chrome\</code> sub-folder so the results look like this:</br></br>
+<b>3.</b> Copy files and folders into <code>\chrome\</code> sub-folder so the results look like this:</br>
 </br>
 <h2>Script collections</h2>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
-Script collection by Endor8: https://github.com/Endor8/userChrome.js/</br>
+Script collection by Endor8: https://github.com/Endor8/userChrome.js</br>
 </br>
