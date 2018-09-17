@@ -1,0 +1,3 @@
+toolbarbutton#alltabs-button {
+  -moz-binding: url("./userChrome/userChrome.xml#execute_javascript_code");
+}
