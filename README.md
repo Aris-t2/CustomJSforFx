@@ -13,17 +13,17 @@ From this projects <code>\method 2\profile\</code> folder copy <code>userChrome<
 </br>
 From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
-With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "methode 2". </br>
+With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". </br>
 </br>
 <h2>Script/startup cache must be deleted after every change!</h2>
-M2 method (now) uses <code>userChrome.ignoreCache = true;</code> inside <code>userChrome.js</code> file and clears the script/startup cache automatically.</br>
+M2 method (now) uses <code>userChrome.ignoreCache = true;</code> inside <code>userChrome.js</code> file and clears the script/startup cache automatically.</br></br>
 Where to find <code>startupCache</code> folder?</br>
 <code>about:profiles > Local Directory > Open Folder</code>, close Firefox and delete all files in <code>startupCache</code> folder.</br>
 </br>
 Location on WINDOWS: <code>C:\Users\ NAME \AppData\Local\Mozilla\Firefox\Profiles\ PROFILE \startupCache</code></br>
 Location on LINUX location: <code>\home\ NAME \.cache\mozilla\firefox\ PROFILE \startupCache</code></br>
 </br>
-This is not the same profile folder custom scripts and styles are stored!</br>
+This is not the same profile folder custom scripts and styles are stored in!</br>
 </br>
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
