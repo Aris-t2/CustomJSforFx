@@ -16,12 +16,12 @@ var AddAddonbar = {
 	
 	try {
 	  var tb_addonbar = document.createElement("toolbar");
-	  tb_addonbar.setAttribute("id","uc_addonbar");
+	  tb_addonbar.setAttribute("id","addonbar");
 	  tb_addonbar.setAttribute("customizable","true");
 	  tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar");
 	  tb_addonbar.setAttribute("mode","icons");
 	  tb_addonbar.setAttribute("iconsize","small");
-	  tb_addonbar.setAttribute("toolboxid","rowser-bottombox");
+	  tb_addonbar.setAttribute("toolboxid","browser-bottombox");
 	  tb_addonbar.setAttribute("context","toolbar-context-menu");
 	  tb_addonbar.setAttribute("toolbarname", addonbar_label);
 	  tb_addonbar.setAttribute("label", addonbar_label);
@@ -37,8 +37,8 @@ var AddAddonbar = {
 
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
-      #uc_addonbar toolbarpaletteitem[place=toolbar][id^=wrapper-customizableui-special-spring],\
-	  #uc_addonbar toolbarspring {\
+      #addonbar toolbarpaletteitem[place=toolbar][id^=wrapper-customizableui-special-spring],\
+	  #addonbar toolbarspring {\
 		-moz-box-flex: 1 !important;\
 		min-width: 100% !important;\
 		max-width: unset !important;\
