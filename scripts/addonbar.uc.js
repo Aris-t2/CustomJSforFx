@@ -52,4 +52,6 @@ var AddAddonbar = {
 
 }
 
-AddAddonbar.init();
+setTimeout(function(){
+  AddAddonbar.init();
+},500);

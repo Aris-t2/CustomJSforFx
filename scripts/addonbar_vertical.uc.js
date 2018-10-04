@@ -94,5 +94,6 @@ var AddonbarVertical = {
   }
 
 }
-
-AddonbarVertical.init();
+setTimeout(function(){
+  AddonbarVertical.init();
+},500);
