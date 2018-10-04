@@ -77,7 +77,7 @@ var AddonbarVertical = {
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
-		#addonbar_v[orient="vertical"] { \
+		#addonbar_v { \
 	      -moz-appearance: none !important; \
 		  background-color: var(--toolbar-bgcolor); \
 		  background-image: var(--toolbar-bgimage); \
