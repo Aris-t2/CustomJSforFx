@@ -130,6 +130,11 @@ var AddSeparator = {
 		  height: 1px !important; \
 		  width: 18px !important; \
 		}\
+		toolbar[orient="vertical"] toolbarspacer { \
+		  -moz-appearance: none !important; \
+		  height: 18px !important; \
+		  width: 18px !important; \
+		}\
 		#customization-palette toolbarpaletteitem[id^="wrapper-customizableui-special-spring"], \
 		#customization-palette-container :-moz-any(#spring,#wrapper-spring) { \
 		  display: none !important; \
