@@ -32,8 +32,12 @@ try {
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #uc_undo_closetab_button .toolbarbutton-icon {\
-		list-style-image: url(chrome://browser/skin/undo.svg); /* icon / path to icon */ \
+		list-style-image: url("chrome://browser/skin/undo.svg"); /* icon / path to icon */ \
 		fill: blue; /* icon color name/code */\
+	  }\
+	  :-moz-any(#customization-palette,#widget-overflow-fixed-list) #uc_undo_closetab_button .toolbarbutton-icon {\
+		width: 16px !important; \
+		height: 16px !important; \
 	  }\
 	\
   '), null, null);
