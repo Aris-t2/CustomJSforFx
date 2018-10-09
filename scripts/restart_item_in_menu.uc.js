@@ -23,7 +23,7 @@ var RestartMenuFileAppItems = {
 	} catch(e) {}
 
 	try {
-	  restartitem_filemenu = document.createElement("menuitem");
+	  restartitem_filemenu = document.createXULElement("menuitem");
 	  restartitem_filemenu.setAttribute("label", button_label);
 	  restartitem_filemenu.setAttribute("id","fileMenu-restart-item");
 	  restartitem_filemenu.setAttribute("key", "R");
@@ -36,7 +36,7 @@ var RestartMenuFileAppItems = {
 	} catch(e) {}
 
 	try {
-	  restartitem_appmenu = document.createElement("toolbarbutton");
+	  restartitem_appmenu = document.createXULElement("toolbarbutton");
 	  restartitem_appmenu.setAttribute("label", button_label);
 	  restartitem_appmenu.setAttribute("id","appMenu-restart-button");
 	  restartitem_appmenu.setAttribute("class","subviewbutton subviewbutton-iconic");

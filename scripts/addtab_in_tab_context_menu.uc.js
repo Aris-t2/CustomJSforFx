@@ -9,13 +9,13 @@ var NewTabMenuItem = {
 	var item_label = "New Tab";
 
 	try {
-	  addtab_sep = document.createElement("menuseparator");
+	  addtab_sep = document.createXULElement("menuseparator");
 	  addtab_sep.setAttribute("id","newtab-menuitem_sep");
 	  document.getElementById("tabContextMenu").appendChild(addtab_sep);
 	} catch(e) {}
 
 	try {
-	  addtab_item = document.createElement("menuitem");
+	  addtab_item = document.createXULElement("menuitem");
 	  addtab_item.setAttribute("label", item_label);
 	  addtab_item.setAttribute("id","newtab-menuitem");
 	  addtab_item.setAttribute("class","menuitem-iconic");

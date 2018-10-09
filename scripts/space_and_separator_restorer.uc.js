@@ -25,7 +25,7 @@ var AddSeparator = {
   
 	try {
 		
-	  var tb_config = document.createElement("toolbar");
+	  var tb_config = document.createXULElement("toolbar");
 	  tb_config.setAttribute("id","configuration_toolbar");
 	  tb_config.setAttribute("customizable","true");
 	  tb_config.setAttribute("class","toolbar-primary chromeclass-toolbar");
@@ -41,7 +41,7 @@ var AddSeparator = {
 	  document.querySelector('#navigator-toolbox').appendChild(tb_config);
 	  
 	  
-	  var tb_label = document.createElement("label");
+	  var tb_label = document.createXULElement("label");
 	  tb_label.setAttribute("label", tb_config_label+": ");
 	  tb_label.setAttribute("value", tb_config_label+": ");
 	  tb_label.setAttribute("id","tb_config_tb_label");
@@ -50,7 +50,7 @@ var AddSeparator = {
 	  tb_config.appendChild(tb_label);
 	  
 	  
-	  var tb_spacer = document.createElement("toolbarspacer");
+	  var tb_spacer = document.createXULElement("toolbarspacer");
 	  tb_spacer.setAttribute("id","spacer");
 	  tb_spacer.setAttribute("class","chromeclass-toolbar-additional");
 	  tb_spacer.setAttribute("customizableui-areatype","toolbar");
@@ -60,17 +60,17 @@ var AddSeparator = {
 	  tb_config.appendChild(tb_spacer);
 	
 	  
-	  var tb_sep = document.createElement("toolbarseparator");
+	  var tb_sep = document.createXULElement("toolbarseparator");
 	  tb_sep.setAttribute("id","separator");
 	  tb_sep.setAttribute("class","chromeclass-toolbar-additional");
 	  tb_sep.setAttribute("customizableui-areatype","toolbar");
 	  tb_sep.setAttribute("removable","false");
 	  tb_sep.setAttribute("label", tb_sep_label);
-	  	  
+ 	  
 	  tb_config.appendChild(tb_sep);
 	  
 	 
-	  var tb_spring = document.createElement("toolbarspring");
+	  var tb_spring = document.createXULElement("toolbarspring");
 	  tb_spring.setAttribute("id","spring");
 	  tb_spring.setAttribute("class","chromeclass-toolbar-additional");
 	  tb_spring.setAttribute("customizableui-areatype","toolbar");
@@ -125,8 +125,9 @@ var AddSeparator = {
 		}\
 		toolbar[orient="vertical"] toolbarseparator { \
 		  -moz-appearance: none !important; \
-		  border-bottom: 1px solid !important; \
-		  margin: 1px 2px !important; \
+		  border-top: 1px solid rgba(15,17,38, 0.5) !important; \
+		  border-bottom: 1px solid rgba(255,255,255, 0.3) !important; \
+		  margin: 2px 2px !important; \
 		  height: 1px !important; \
 		  width: 18px !important; \
 		}\

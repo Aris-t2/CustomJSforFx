@@ -15,7 +15,7 @@ var AddAddonbar = {
 	var addonbar_label = "Add-on Bar";
 	
 	try {
-	  var tb_addonbar = document.createElement("toolbar");
+	  var tb_addonbar = document.createXULElement("toolbar");
 	  tb_addonbar.setAttribute("id","addonbar");
 	  tb_addonbar.setAttribute("customizable","true");
 	  tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar");

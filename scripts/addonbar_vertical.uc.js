@@ -20,12 +20,12 @@ var AddonbarVertical = {
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
 	
 	try {
-	  var toolbox_abv = document.createElement("toolbox");
+	  var toolbox_abv = document.createXULElement("toolbox");
 	  toolbox_abv.setAttribute("orient","horizontal");
 	  toolbox_abv.setAttribute("id","toolbox_abv");
 	  toolbox_abv.setAttribute("insertbefore","sidebar-box");
 	  
-	  var tb_addonbarv = document.createElement("toolbar");
+	  var tb_addonbarv = document.createXULElement("toolbar");
 	  tb_addonbarv.setAttribute("id","addonbar_v");
 	  tb_addonbarv.setAttribute("customizable","true");
 	  tb_addonbarv.setAttribute("class","toolbar-primary chromeclass-toolbar");
