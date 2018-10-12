@@ -2,7 +2,7 @@
 //
 // no 'toggle'-key feature
 // no 'close' button
-// no 'Vertical Add-on Bar' entry in toolbar context menu
+// 'Vertical Add-on Bar' entry is only visible in toolbars context menu when in customizing mode
 //
 // flexible spaces on toolbar work 'vertically'
 // toolbar can be on the left or on the right

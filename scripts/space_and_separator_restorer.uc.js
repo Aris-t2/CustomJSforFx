@@ -32,9 +32,9 @@ var AddSeparator = {
 	  tb_config.setAttribute("mode","icons");
 	  tb_config.setAttribute("iconsize","small");
 	  tb_config.setAttribute("toolboxid","navigator-toolbox");
-	  tb_config.setAttribute("context","toolbar-context-menu");
-	  tb_config.setAttribute("toolbarname", tb_config_label);
-	  tb_config.setAttribute("label", tb_config_label);
+	  //tb_config.setAttribute("context","toolbar-context-menu"); // don't show toolbar in context menu
+	  //tb_config.setAttribute("toolbarname", tb_config_label); // don't show toolbar in context menu
+	  //tb_config.setAttribute("label", tb_config_label); // don't show toolbar in context menu
 	  tb_config.setAttribute("lockiconsize","true");
 	  tb_config.setAttribute("defaultset","toolbarspacer,toolbarseparator");
 	  
