@@ -1,4 +1,6 @@
 // 'Do nothing on double click on tabs toolbar' script for Firefox 60+ by Aris
+// Only works, if Firefox titlebar is used not OS titlebar ...
+// ... Customizing mode > 'Titlebar' checkbox > unchecked
 
 var CatchDoubleClick = {
   init: function() {
@@ -13,7 +15,6 @@ var CatchDoubleClick = {
 				&& e.originalTarget.getAttribute("anonid") != "scrollbutton-down"
 				  && e.originalTarget.getAttribute("anonid") != "close-button")
 	  {
-
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -25,4 +26,6 @@ var CatchDoubleClick = {
 
 }
 
-CatchDoubleClick.init();
+setTimeout(function(){
+  CatchDoubleClick.init();
+},500);

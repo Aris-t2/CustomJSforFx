@@ -9,7 +9,9 @@
 // toolbar is display horizontally in customizing mode
 
 
+Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
+var appversion = parseInt(Services.appinfo.version);
 
 var AddonbarVertical = {
   init: function() {
@@ -20,12 +22,14 @@ var AddonbarVertical = {
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
 	
 	try {
-	  var toolbox_abv = document.createXULElement("toolbox");
+	  if(appversion <= 62) var toolbox_abv = document.createElement("toolbox");
+	  else var toolbox_abv = document.createXULElement("toolbox");
 	  toolbox_abv.setAttribute("orient","horizontal");
 	  toolbox_abv.setAttribute("id","toolbox_abv");
 	  toolbox_abv.setAttribute("insertbefore","sidebar-box");
 	  
-	  var tb_addonbarv = document.createXULElement("toolbar");
+	  if(appversion <= 62) var tb_addonbarv = document.createElement("toolbar");
+	  else var tb_addonbarv = document.createXULElement("toolbar");
 	  tb_addonbarv.setAttribute("id","addonbar_v");
 	  tb_addonbarv.setAttribute("customizable","true");
 	  tb_addonbarv.setAttribute("class","toolbar-primary chromeclass-toolbar");
@@ -39,6 +43,8 @@ var AddonbarVertical = {
 	  tb_addonbarv.setAttribute("label", addonbar_v_label);
 	  tb_addonbarv.setAttribute("lockiconsize","true");
 	  tb_addonbarv.setAttribute("defaultset","spring");
+	  
+	  CustomizableUI.registerArea("addonbar_v", {legacy: true});
 
 	  toolbox_abv.appendChild(tb_addonbarv);
 	  

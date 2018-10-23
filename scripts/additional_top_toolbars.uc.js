@@ -3,6 +3,11 @@
 // - "tb_label": set a toolbar name
 // - use toolbar[id^="additional_top_toolbar"] {...} to affect all toolbars at once in CSS
 
+
+Components.utils.import("resource:///modules/CustomizableUI.jsm");
+var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
+var appversion = parseInt(Services.appinfo.version);
+
 var AdditionalTopToolbars = {
   init: function() {
 	  
@@ -17,17 +22,20 @@ var AdditionalTopToolbars = {
 
 	    while(i<=number_of_additional_top_toolbars) {
 		
-		  var toptoolbar = document.createXULElement("toolbar");
+		  if(appversion <= 62) var toptoolbar = document.createElement("toolbar");
+		  else var toptoolbar = document.createXULElement("toolbar");
 		
 		  if(i==1) {
 			toptoolbar.setAttribute("id","additional_top_toolbar1");
 			toptoolbar.setAttribute("toolbarname", tb_label);
 			toptoolbar.setAttribute("label", tb_label);
+			CustomizableUI.registerArea("additional_top_toolbar1", {legacy: true});
 		  }
 		  else {
 			toptoolbar.setAttribute("id", "additional_top_toolbar"+i+"");
 			toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
 			toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
+			CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
 		  }
 		
 		  toptoolbar.setAttribute("customizable","true");
@@ -52,7 +60,7 @@ var AdditionalTopToolbars = {
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
 		toolbar[id^="additional_top_toolbar"] { \
-	      -moz-appearance: none !important; \
+		  -moz-appearance: none !important; \
 		  background-color: var(--toolbar-bgcolor); \
 		  background-image: var(--toolbar-bgimage); \
 		  background-clip: padding-box; \

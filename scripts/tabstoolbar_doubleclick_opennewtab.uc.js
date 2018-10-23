@@ -1,4 +1,6 @@
 // 'Double click on tabs toolbar opens a new tab' script for Firefox 60+ by Aris
+// Only works, if Firefox titlebar is used not OS titlebar ...
+// ... Customizing mode > 'Titlebar' checkbox > unchecked
 
 var NewTabOnDoubleClick = {
   init: function() {
@@ -26,4 +28,6 @@ var NewTabOnDoubleClick = {
 
 }
 
-NewTabOnDoubleClick.init();
+setTimeout(function(){
+  NewTabOnDoubleClick.init();
+},500);

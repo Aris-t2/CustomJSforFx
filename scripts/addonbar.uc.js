@@ -7,7 +7,9 @@
 // flexible spaces on add-on bar behave like on old Firefox versions
 
 
+Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
+var appversion = parseInt(Services.appinfo.version);
 
 var AddAddonbar = {
   init: function() {
@@ -15,18 +17,22 @@ var AddAddonbar = {
 	var addonbar_label = "Add-on Bar";
 	
 	try {
-	  var tb_addonbar = document.createXULElement("toolbar");
+  
+	  if(appversion <= 62) var tb_addonbar = document.createElement("toolbar");
+	  else var tb_addonbar = document.createXULElement("toolbar");
 	  tb_addonbar.setAttribute("id","addonbar");
 	  tb_addonbar.setAttribute("customizable","true");
-	  tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar");
+	  tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar customization-target");
 	  tb_addonbar.setAttribute("mode","icons");
 	  tb_addonbar.setAttribute("iconsize","small");
-	  tb_addonbar.setAttribute("toolboxid","browser-bottombox");
+	  tb_addonbar.setAttribute("toolboxid","navigator-toolbox");
 	  tb_addonbar.setAttribute("context","toolbar-context-menu");
 	  tb_addonbar.setAttribute("toolbarname", addonbar_label);
 	  tb_addonbar.setAttribute("label", addonbar_label);
 	  tb_addonbar.setAttribute("lockiconsize","true");
-	  tb_addonbar.setAttribute("defaultset","spring,spring");
+	  tb_addonbar.setAttribute("defaultset","spring,spring"); 
+	  
+	  CustomizableUI.registerArea("addonbar", {legacy: true});
 
 	  document.getElementById("browser-bottombox").appendChild(tb_addonbar);
 	  
