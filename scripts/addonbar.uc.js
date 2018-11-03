@@ -49,6 +49,10 @@ var AddAddonbar = {
 		min-width: 100% !important;\
 		max-width: unset !important;\
 	  }\
+	  #main-window[customizing] #addonbar { \
+		outline: 1px dashed !important; \
+		outline-offset: -2px !important; \
+	  } \
 	  \
 	'), null, null);
 

@@ -4,8 +4,10 @@
 
 var NewTabOnDoubleClick = {
   init: function() {
+	  
+	try {
 
-	document.getElementById("TabsToolbar").addEventListener("dblclick", function openNewTabOnDoubleClick(e) {
+	 document.getElementById("TabsToolbar").addEventListener("dblclick", function openNewTabOnDoubleClick(e) {
 				
 	  if(e.button==0
 	    && e.target.localName != "tab"
@@ -22,7 +24,9 @@ var NewTabOnDoubleClick = {
 
 	  }
 
-	}, false);
+	 }, false);
+	
+	} catch(e) {}
 
   }
 

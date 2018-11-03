@@ -32,7 +32,7 @@ var AddonbarVertical = {
 	  else var tb_addonbarv = document.createXULElement("toolbar");
 	  tb_addonbarv.setAttribute("id","addonbar_v");
 	  tb_addonbarv.setAttribute("customizable","true");
-	  tb_addonbarv.setAttribute("class","toolbar-primary chromeclass-toolbar");
+	  tb_addonbarv.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");
 	  tb_addonbarv.setAttribute("mode","icons");
 	  tb_addonbarv.setAttribute("iconsize","small");
 	  tb_addonbarv.setAttribute("toolboxid","navigator-toolbox");
@@ -89,6 +89,10 @@ var AddonbarVertical = {
 		  background-image: var(--toolbar-bgimage); \
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
+		} \
+		#main-window[customizing] #addonbar_v { \
+		  outline: 1px dashed !important; \
+		  outline-offset: -2px !important; \
 		} \
 	  \
 	  '), null, null);

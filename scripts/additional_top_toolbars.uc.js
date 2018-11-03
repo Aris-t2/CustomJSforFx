@@ -66,6 +66,10 @@ var AdditionalTopToolbars = {
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
 		} \
+		#main-window[customizing] toolbar[id^="additional_top_toolbar"] { \
+		  outline: 1px dashed !important; \
+		  outline-offset: -2px !important; \
+		} \
 	  \
 	  '), null, null);
 

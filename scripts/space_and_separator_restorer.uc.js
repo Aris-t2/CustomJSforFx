@@ -35,12 +35,12 @@ var AddSeparator = {
 	  tb_config.setAttribute("iconsize","small");
 	  tb_config.setAttribute("toolboxid","navigator-toolbox");
 	  tb_config.setAttribute("lockiconsize","true");
+	  tb_config.setAttribute("ordinal","1005");
 	  tb_config.setAttribute("defaultset","toolbarspacer,toolbarseparator");
 	  
 	  CustomizableUI.registerArea("configuration_toolbar", {legacy: true});
 	  
-	  document.querySelector('#navigator-toolbox').appendChild(tb_config);
-	  
+	  document.querySelector('#navigator-toolbox').appendChild(tb_config); 
 	  
 	  if(appversion <= 62) var tb_label = document.createElement("label");
 	  else var tb_label = document.createXULElement("label");

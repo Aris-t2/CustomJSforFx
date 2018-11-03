@@ -4,8 +4,9 @@
 
 var CatchDoubleClick = {
   init: function() {
-
-	document.getElementById("TabsToolbar").addEventListener("dblclick", function removeDoubleClick(e) {
+	
+	try {
+	 document.getElementById("TabsToolbar").addEventListener("dblclick", function removeDoubleClick(e) {
 				
 	  if(e.button==0
 	    && e.target.localName != "tab"
@@ -20,7 +21,9 @@ var CatchDoubleClick = {
 
 	  }
 
-	}, false);
+	 }, false);
+	
+	} catch(e) {}
 
   }
 
