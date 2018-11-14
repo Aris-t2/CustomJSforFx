@@ -30,7 +30,7 @@ var AddSeparator = {
 	  else var tb_config = document.createXULElement("toolbar");
 	  tb_config.setAttribute("id","configuration_toolbar");
 	  tb_config.setAttribute("customizable","true");
-	  tb_config.setAttribute("class","toolbar-primary chromeclass-toolbar");
+	  tb_config.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");
 	  tb_config.setAttribute("mode","icons");
 	  tb_config.setAttribute("iconsize","small");
 	  tb_config.setAttribute("toolboxid","navigator-toolbox");
@@ -39,6 +39,7 @@ var AddSeparator = {
 	  tb_config.setAttribute("defaultset","toolbarspacer,toolbarseparator");
 	  
 	  CustomizableUI.registerArea("configuration_toolbar", {legacy: true});
+	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_config);
 	  
 	  document.querySelector('#navigator-toolbox').appendChild(tb_config); 
 	  

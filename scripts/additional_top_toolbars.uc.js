@@ -25,21 +25,11 @@ var AdditionalTopToolbars = {
 		  if(appversion <= 62) var toptoolbar = document.createElement("toolbar");
 		  else var toptoolbar = document.createXULElement("toolbar");
 		
-		  if(i==1) {
-			toptoolbar.setAttribute("id","additional_top_toolbar1");
-			toptoolbar.setAttribute("toolbarname", tb_label);
-			toptoolbar.setAttribute("label", tb_label);
-			CustomizableUI.registerArea("additional_top_toolbar1", {legacy: true});
-		  }
-		  else {
-			toptoolbar.setAttribute("id", "additional_top_toolbar"+i+"");
-			toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
-			toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
-			CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
-		  }
-		
+		  toptoolbar.setAttribute("id", "additional_top_toolbar"+i+"");
+		  toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
+		  toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
 		  toptoolbar.setAttribute("customizable","true");
-		  toptoolbar.setAttribute("class","toolbar-primary chromeclass-toolbar");
+		  toptoolbar.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");
 		  toptoolbar.setAttribute("mode","icons");
 		  toptoolbar.setAttribute("iconsize","small");
 		  toptoolbar.setAttribute("toolboxid","navigator-toolbox");
@@ -47,6 +37,9 @@ var AdditionalTopToolbars = {
 		  toptoolbar.setAttribute("lockiconsize","true");
 		  toptoolbar.setAttribute("defaultset","spring");
 		
+		  CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
+		  if(appversion >= 65) CustomizableUI.registerToolbarNode(toptoolbar);
+		  
 		  document.querySelector('#navigator-toolbox').appendChild(toptoolbar);
 
 		  i++;
