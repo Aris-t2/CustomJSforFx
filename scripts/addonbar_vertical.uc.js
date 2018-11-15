@@ -1,7 +1,8 @@
 // 'Vertical Add-on Bar' script for Firefox 60+ by Aris
 //
-// no 'toggle'-key feature
 // no 'close' button
+// no 'toggle'-key feature
+// optional toggle button hides the toolbar temporarily, it gets restored on every restart
 // 'Vertical Add-on Bar' entry is only visible in toolbars context menu when in customizing mode
 //
 // flexible spaces on toolbar work 'vertically'
@@ -15,8 +16,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AddonbarVertical = {
   init: function() {
-
+	  
 	var addonbar_v_label = "Vertical Add-on Bar"; // toolbar name
+	var button_label = "Toggle vertical Add-on Bar"; // Toggle button name
+	var addonbar_v_togglebutton = true; // display toggle button for vertical toolbar (true) or not (false)
 	var addonbar_v_on_the_left = true; // display vertical toolbar on the left (true) or the right (false)
 	var insert_before_borders = false; // may not always offer a visible change
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
@@ -44,10 +47,10 @@ var AddonbarVertical = {
 	  tb_addonbarv.setAttribute("lockiconsize","true");
 	  tb_addonbarv.setAttribute("defaultset","spring");
 	  
+	  toolbox_abv.appendChild(tb_addonbarv);
+	  
 	  CustomizableUI.registerArea("addonbar_v", {legacy: true});
 	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_addonbarv);
-
-	  toolbox_abv.appendChild(tb_addonbarv);
 	  
 	  if(addonbar_v_on_the_left) {
 	    if(insert_before_borders) document.getElementById("browser").insertBefore(toolbox_abv,document.getElementById("browser").firstChild);
@@ -76,16 +79,49 @@ var AddonbarVertical = {
 	
 	  observer.observe(document.querySelector('#main-window'), { attributes: true, attributeFilter: ['customizing'] });
 	  
+	  if(addonbar_v_togglebutton) {
+	  
+		CustomizableUI.createWidget({
+			id: "tooglebutton_addonbar_v", // button id
+			defaultArea: CustomizableUI.AREA_NAVBAR,
+			removable: true,
+			label: button_label, // button title
+			tooltiptext: button_label, // tooltip title
+			onClick: function(event) {
+			  var vAddonBar = document.getElementById("addonbar_v");
+			  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
+			},
+			onCreated: function(button) {
+			  return button;
+			}
+				
+		});
+	  }
+	  
 	} catch(e) {}
 
-	// style toolbar
+	// style toolbar & toggle button
+	var addonbar_v_style = '';
+	var tooglebutton_addonbar_v_style = '';
+	
 	if(style_addonbar_v) {
-	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
-
-	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
-	  \
+	  var end_border =' \
 		#addonbar_v { \
-	      -moz-appearance: none !important; \
+			-moz-border-end: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
+		}\
+	  ';
+		  
+	  if(!addonbar_v_on_the_left) {
+		end_border ='\
+		  #addonbar_v { \
+			-moz-border-start: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
+		  }\
+		';
+	  }
+
+	  addonbar_v_style ='\
+		#addonbar_v { \
+		  -moz-appearance: none !important; \
 		  background-color: var(--toolbar-bgcolor); \
 		  background-image: var(--toolbar-bgimage); \
 		  background-clip: padding-box; \
@@ -95,12 +131,26 @@ var AddonbarVertical = {
 		  outline: 1px dashed !important; \
 		  outline-offset: -2px !important; \
 		} \
-	  \
-	  '), null, null);
-
-	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
-	
+		'+end_border+' \
+	  ';
 	}
+	
+	if(addonbar_v_togglebutton) {
+	  tooglebutton_addonbar_v_style ='\
+		#tooglebutton_addonbar_v .toolbarbutton-icon {\
+		  list-style-image: url("chrome://browser/skin/sidebars.svg"); /* icon / path to icon */ \
+		  fill: green; /* icon color name/code */\
+		}\
+	  ';
+	}
+	  
+	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
+	  '+addonbar_v_style+' \
+	  '+tooglebutton_addonbar_v_style+' \
+	'), null, null);
+	  
+	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
   }
 

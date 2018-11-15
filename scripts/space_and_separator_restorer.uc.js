@@ -38,10 +38,11 @@ var AddSeparator = {
 	  tb_config.setAttribute("ordinal","1005");
 	  tb_config.setAttribute("defaultset","toolbarspacer,toolbarseparator");
 	  
+	  document.querySelector('#navigator-toolbox').appendChild(tb_config);
+	  
 	  CustomizableUI.registerArea("configuration_toolbar", {legacy: true});
 	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_config);
 	  
-	  document.querySelector('#navigator-toolbox').appendChild(tb_config); 
 	  
 	  if(appversion <= 62) var tb_label = document.createElement("label");
 	  else var tb_label = document.createXULElement("label");

@@ -37,11 +37,11 @@ var AdditionalTopToolbars = {
 		  toptoolbar.setAttribute("lockiconsize","true");
 		  toptoolbar.setAttribute("defaultset","spring");
 		
+		  document.querySelector('#navigator-toolbox').appendChild(toptoolbar);
+		  
 		  CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
 		  if(appversion >= 65) CustomizableUI.registerToolbarNode(toptoolbar);
 		  
-		  document.querySelector('#navigator-toolbox').appendChild(toptoolbar);
-
 		  i++;
 		
 	    }

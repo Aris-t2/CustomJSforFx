@@ -1,7 +1,12 @@
 "use strict";
 
+/* Firefox 57+ userChrome.js tweaks - SCROLLBARS ********************************************** */
+/* by Aris (aris-addons@gmx.net)*************************************************************** */
+/* Github: https://github.com/aris-t2/customscrollbarsforfx *********************************** */
 /* ******************************************************************************************** */
-/* Custom Scrollbars for Firefox 60+ by Aris ************************************************** */
+
+/* ******************************************************************************************** */
+/* Custom Scrollbars for Firefox ************************************************************** */
 /* version 1.0.4 ****************************************************************************** */
 /* ******************************************************************************************** */
 
@@ -44,7 +49,7 @@
 var hide_scrollbars = false; // default: hide_scrollbars = false
 var hide_scrollbar_buttons = false; // default: hide_scrollbar_buttons = false
 var custom_scrollbar_size = true; // default: custom_scrollbar_size = false
-var custom_scrollbar_size_value = 17; // in px // default: custom_scrollbar_size_value = 17
+var custom_scrollbar_size_value = 13; // in px // default: custom_scrollbar_size_value = 17
 var custom_scrollbar_opacity = false; // default: custom_scrollbar_opacity = false
 var custom_opacity_value = "1.0"; // default: custom_opacity_value = "1.0"
 // floating scrollbars

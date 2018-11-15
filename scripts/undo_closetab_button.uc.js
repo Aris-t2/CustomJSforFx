@@ -7,6 +7,7 @@ try {
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
   var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+  var appversion = parseInt(Services.appinfo.version);
   
   var button_label = "Undo Close Tab";
  
@@ -28,6 +29,16 @@ try {
 		
   });
   
+  var undoicon = "";
+  if(appversion <= 62) {
+	  undoicon = '\
+	  #uc_undo_closetab_button .toolbarbutton-icon {\
+		list-style-image: url("chrome://browser/skin/reload.svg"); /* icon / path to icon */ \
+		transform: scaleX(-1); /* icon mirroring */\
+	  }\
+	  ';
+  }
+  
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
@@ -39,6 +50,7 @@ try {
 		width: 16px !important; \
 		height: 16px !important; \
 	  }\
+	  '+undoicon+' \
 	\
   '), null, null);
   

@@ -31,14 +31,13 @@ var AddAddonbar = {
 	  tb_addonbar.setAttribute("label", addonbar_label);
 	  tb_addonbar.setAttribute("lockiconsize","true");
 	  tb_addonbar.setAttribute("defaultset","spring,spring"); 
-	  
-	  CustomizableUI.registerArea("addonbar", {legacy: true});
-	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_addonbar);
 
 	  document.getElementById("browser-bottombox").appendChild(tb_addonbar);
+
+	  CustomizableUI.registerArea("addonbar", {legacy: true});
+	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_addonbar);
 	  
 	} catch(e) {}
-
 
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
@@ -48,11 +47,15 @@ var AddAddonbar = {
 	  #addonbar toolbarspring {\
 		-moz-box-flex: 1 !important;\
 		min-width: 100% !important;\
+		width: unset !important;\
 		max-width: unset !important;\
 	  }\
 	  #main-window[customizing] #addonbar { \
 		outline: 1px dashed !important; \
 		outline-offset: -2px !important; \
+	  } \
+	  #addonbar { \
+		border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
 	  } \
 	  \
 	'), null, null);
