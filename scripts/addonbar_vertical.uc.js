@@ -23,7 +23,7 @@ var AddonbarVertical = {
 	var addonbar_v_on_the_left = true; // display vertical toolbar on the left (true) or the right (false)
 	var insert_before_borders = false; // may not always offer a visible change
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
-	
+
 	try {
 	  if(appversion <= 62) var toolbox_abv = document.createElement("toolbox");
 	  else var toolbox_abv = document.createXULElement("toolbox");
@@ -79,6 +79,11 @@ var AddonbarVertical = {
 	
 	  observer.observe(document.querySelector('#main-window'), { attributes: true, attributeFilter: ['customizing'] });
 	  
+	  try {
+		Services.prefs.getDefaultBranch("browser.vaddonbar.").setBoolPref("enabled",true);
+		setToolbarVisibility(document.getElementById("addonbar_v"), Services.prefs.getBranch("browser.vaddonbar.").getBoolPref("enabled"));
+	  } catch(e) {}
+	  
 	  if(addonbar_v_togglebutton) {
 	  
 		CustomizableUI.createWidget({
@@ -90,8 +95,16 @@ var AddonbarVertical = {
 			onClick: function(event) {
 			  var vAddonBar = document.getElementById("addonbar_v");
 			  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
+			  
+			  Services.prefs.getBranch("browser.vaddonbar.").setBoolPref("enabled",!vAddonBar.collapsed)
+			  
+			  if(!vAddonBar.collapsed)
+			    document.querySelector('#tooglebutton_addonbar_v').setAttribute("checked","true");
+			   else document.querySelector('#tooglebutton_addonbar_v').removeAttribute("checked");
 			},
 			onCreated: function(button) {
+			  if(!document.getElementById("addonbar_v").collapsed)
+			    button.setAttribute("checked","true");
 			  return button;
 			}
 				
