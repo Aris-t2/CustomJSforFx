@@ -1,6 +1,9 @@
 // 'Do nothing on double click on tabs toolbar' script for Firefox 60+ by Aris
-// Only works, if Firefox titlebar is used not OS titlebar ...
+// Script is only for Firefox titlebar not OS titlebar:
 // ... Customizing mode > 'Titlebar' checkbox > unchecked
+
+
+var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 
 var CatchDoubleClick = {
   init: function() {
@@ -8,7 +11,7 @@ var CatchDoubleClick = {
 	try {
 	 document.getElementById("TabsToolbar").addEventListener("dblclick", function removeDoubleClick(e) {
 				
-	  if(e.button==0
+	  if(e.button==0 && Services.prefs.getBranch("browser.tabs.").getBoolPref("drawInTitlebar")
 	    && e.target.localName != "tab"
 		  && e.target.localName != "toolbarbutton"
 			&& e.target.localName != "arrowscrollbox"

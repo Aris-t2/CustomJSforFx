@@ -1,6 +1,9 @@
 // 'Double click on tabs toolbar opens a new tab' script for Firefox 60+ by Aris
-// Only works, if Firefox titlebar is used not OS titlebar ...
-// ... Customizing mode > 'Titlebar' checkbox > unchecked
+// Script is only for Firefox titlebar not OS titlebar:
+// Customizing mode > 'Titlebar' checkbox > unchecked
+
+
+var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 
 var NewTabOnDoubleClick = {
   init: function() {
@@ -9,7 +12,7 @@ var NewTabOnDoubleClick = {
 
 	 document.getElementById("TabsToolbar").addEventListener("dblclick", function openNewTabOnDoubleClick(e) {
 				
-	  if(e.button==0
+	  if(e.button==0 && Services.prefs.getBranch("browser.tabs.").getBoolPref("drawInTitlebar")
 	    && e.target.localName != "tab"
 		  && e.target.localName != "toolbarbutton"
 			&& e.target.localName != "arrowscrollbox"
