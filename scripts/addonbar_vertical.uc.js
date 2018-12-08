@@ -1,7 +1,7 @@
 // 'Vertical Add-on Bar' script for Firefox 60+ by Aris
 //
 // no 'close' button
-// no 'toggle'-key feature
+// 'toggle' toolbar with 'Ctr + Alt + /' on Windows/Linux or 'Cmd + Alt + /' on macOS
 // optional toggle button hides the toolbar temporarily, it gets restored on every restart
 // 'Vertical Add-on Bar' entry is only visible in toolbars context menu when in customizing mode
 //
@@ -110,6 +110,16 @@ var AddonbarVertical = {
 				
 		});
 	  }
+
+	  // 'Ctr + Alt + /' on Windows/Linux or 'Cmd + Alt + /' on macOS to toggle vertical add-on bar
+	  var key = document.createElement('key');
+	  key.id = 'key_toggleVAddonBar';
+	  key.setAttribute('key', '/');
+	  key.setAttribute('modifiers', 'accel,alt');
+	  key.setAttribute('oncommand',
+		'var newvAddonBar = document.getElementById("addonbar_v"); setToolbarVisibility(newvAddonBar, newvAddonBar.collapsed);');
+	  document.getElementById('mainKeyset').appendChild(key);
+
 	  
 	} catch(e) {}
 
@@ -150,10 +160,27 @@ var AddonbarVertical = {
 	
 	if(addonbar_v_togglebutton) {
 	  tooglebutton_addonbar_v_style ='\
-		#tooglebutton_addonbar_v .toolbarbutton-icon {\
-		  list-style-image: url("chrome://browser/skin/sidebars.svg"); /* icon / path to icon */ \
-		  fill: green; /* icon color name/code */\
+		#tooglebutton_addonbar_v .toolbarbutton-icon { \
+		  list-style-image: url("chrome://browser/skin/sidebars.svg"); \
+		  fill: green; \
 		}\
+		/*#tooglebutton_addonbar_v .toolbarbutton-icon { \
+		  list-style-image: url("chrome://browser/skin/forward.svg"); \
+		  fill: red; \
+		} \
+		#tooglebutton_addonbar_v[checked] .toolbarbutton-icon { \
+		  fill: green;  \
+		} \
+		#tooglebutton_addonbar_v { \
+		  background: url("chrome://browser/skin/back.svg") no-repeat; \
+		  background-size: 35% !important; \
+		  background-position: 10% 70% !important; \
+		} \
+		#tooglebutton_addonbar_v[checked] { \
+		  transform: rotate(180deg) !important;  \
+		  background: url("chrome://browser/skin/back.svg") no-repeat; \
+		  background-position: 10% 30% !important; \
+		}*/ \
 	  ';
 	}
 	  
