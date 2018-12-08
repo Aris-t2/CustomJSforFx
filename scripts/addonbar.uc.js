@@ -1,6 +1,7 @@
 // Add-on Bar script for Firefox 60+ by Aris
 //
 // no 'close' button
+// 'toggle' toolbar with 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS
 // no 'Add-on Bar' entry in toolbar context menu
 //
 // flexible spaces on add-on bar behave like on old Firefox versions
