@@ -18,7 +18,9 @@ var NewTabOnDoubleClick = {
 			&& e.target.localName != "arrowscrollbox"
 			  && e.originalTarget.getAttribute("anonid") != "scrollbutton-up"
 				&& e.originalTarget.getAttribute("anonid") != "scrollbutton-down"
-				  && e.originalTarget.getAttribute("anonid") != "close-button")
+				  && e.originalTarget.getAttribute("class") != "scrollbutton-up"
+					&& e.originalTarget.getAttribute("class") != "scrollbutton-down"
+					  && e.originalTarget.getAttribute("anonid") != "close-button")
 	  {
 
 		BrowserOpenTab();
