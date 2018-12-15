@@ -1,11 +1,14 @@
 // 'Classic autocomplete popup with two lined results' script for Firefox 60+ by Aris
-// CSS code based on https://github.com/Aris-t2/CustomCSSforFx/blob/master/classic/css/locationbar/ac_popup_classic_with_url_only_fx65.css
+// CSS code based on https://github.com/Aris-t2/CustomCSSforFx/blob/master/classic/css/locationbar/ac_popup_classic_with_url_only_fx64.css
 // popup width gets adjusted automatically when switching between normal, maximized and fullscreen window modes
 // popup width does not get adjusted automatically when switchting between compact, normal and touch toolbar modes
-// type icons like star, switch to tabs etc. does not get moved to result items end
+// type icons like star, switch to tabs etc. do not get moved to result items end
+// 'Visit...' and 'Search with...' items can be hidden using 'hide_visit_search_items' variable
 
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+
+var hide_visit_search_items = false;
 
 setTimeout(function(){
   try{
@@ -23,7 +26,38 @@ setTimeout(function(){
 	function classicAcpopup(event){
 	
 	  var urlbar_width = Math.round(document.getElementById("urlbar").getBoundingClientRect().width);
-	
+	  
+	  var visit_searchwith_hidden = '';
+	  
+	  if(hide_visit_search_items)
+		  visit_searchwith_hidden = '\
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
+			  min-height: 0 !important; \
+			  height: auto !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:first-of-type:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]), \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]), \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem[anonid="type-icon-spacer"], \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:first-of-type[actiontype="visiturl"] + richlistitem[actiontype="searchengine"], \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:first-of-type:last-of-type[actiontype="searchengine"] { \
+			  z-index: -1000000000 !important; \
+			  position: fixed !important; \
+			  opacity: 0 !important; \
+			  visibility: collapse !important; \
+			  min-height: 0 !important; \
+			  height: 0 !important; \
+			  max-height: 0 !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:not([collapsed="true"]) + richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]), \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) + richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) { \
+			  display: none !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox { \
+			  overflow-y: auto !important; \
+			} \
+		  \
+		  ';
+
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
@@ -133,7 +167,7 @@ setTimeout(function(){
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox{ \
 		  overflow-y: auto !important; \
 		} \
-		\
+		'+visit_searchwith_hidden+' \
 	  '), null, null);
 	  
 
