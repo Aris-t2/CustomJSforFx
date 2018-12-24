@@ -9,6 +9,7 @@
 // invalidate caches from Session Saver add-on
 
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
+var appversion = parseInt(Services.appinfo.version);
 
 var RestartMenuFileAppItems = {
   init: function() {
@@ -23,7 +24,8 @@ var RestartMenuFileAppItems = {
 	} catch(e) {}
 
 	try {
-	  restartitem_filemenu = document.createXULElement("menuitem");
+	  if(appversion <= 62) restartitem_filemenu = document.createElement("menuitem");
+	  else restartitem_filemenu = document.createXULElement("menuitem");
 	  restartitem_filemenu.setAttribute("label", button_label);
 	  restartitem_filemenu.setAttribute("id","fileMenu-restart-item");
 	  restartitem_filemenu.setAttribute("key", "R");
@@ -36,7 +38,8 @@ var RestartMenuFileAppItems = {
 	} catch(e) {}
 
 	try {
-	  restartitem_appmenu = document.createXULElement("toolbarbutton");
+	  if(appversion <= 62) restartitem_appmenu = document.createElement("toolbarbutton");
+	  else restartitem_appmenu = document.createXULElement("toolbarbutton");
 	  restartitem_appmenu.setAttribute("label", button_label);
 	  restartitem_appmenu.setAttribute("id","appMenu-restart-button");
 	  restartitem_appmenu.setAttribute("class","subviewbutton subviewbutton-iconic");
