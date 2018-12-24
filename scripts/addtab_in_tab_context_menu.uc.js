@@ -1,17 +1,20 @@
 // New Tab script for Firefox 60+ by Aris
 // Adds 'New Tab' item to tab context menu
+// option: menuitem label
 // option: show_icon = true/false
 // option: show_menuitem_on_top = true/false
+// option: define own new tab url / default: 'about:newtab'
 
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
+var item_label = "New Tab"; // menuitem label
+var show_icon = true; // icon visible (true) or hidden (false)
+var show_menuitem_on_top = false; // show menuitem on top (true) or not (false)
+var newtab_url = 'about:newtab'; // set own url here e.g. 'https://www.google.com'
+
 var NewTabMenuItem = {
   init: function() {
-
-	var item_label = "New Tab";
-	var show_icon = true;
-	var show_menuitem_on_top = false;
 
 	try {
 	  if(appversion <= 62) addtab_sep = document.createElement("menuseparator");
@@ -77,7 +80,7 @@ var NewTabMenuItem = {
 	  var mainWindow = Components.classes["@mozilla.org/appshell/window-mediator;1"]
 						.getService(Components.interfaces.nsIWindowMediator)
 						.getMostRecentWindow("navigator:browser");
-	  mainWindow.gBrowser.selectedTab = gBrowser.addTab('about:newtab', {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
+	  mainWindow.gBrowser.selectedTab = gBrowser.addTab(newtab_url, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
 	} catch (e) {}
 	
 	/* focuses location bar */
