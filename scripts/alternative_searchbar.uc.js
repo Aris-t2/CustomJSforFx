@@ -16,8 +16,8 @@
 //
 // Note: 'Ctrl + Up&Down keys' and 'Ctrl + Mouse wheel up&down' combos switch through search engines
 
-var clear_searchbar_after_search = true; // clear input after search (true) or not (false)
-var revert_to_first_engine_after_search = true; // revert to first engine (true) or not (false)
+var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
+var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 
 (function() {
