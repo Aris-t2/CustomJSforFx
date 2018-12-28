@@ -11,6 +11,7 @@
 // option: clear search input after search
 // option: revert to first search engine in list after search
 // option: hide oneoff search engines
+// option: select search engine by scrolling mouse wheel over searchbars button
 //
 // Not present: old popup to switch engines !
 //
@@ -19,11 +20,20 @@
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
+var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over searchbars button (true) or not (false)
 
 (function() {
 	var searchbar = document.getElementById("searchbar");
 	
 	updateStyleSheet();
+	
+    // select search engine by scrolling mouse wheel over searchbars button
+	if(select_engine_by_scrolling_over_button)
+	  searchbar.addEventListener("DOMMouseScroll", (event) => {
+		if (event.originalTarget.classList.contains("searchbar-search-button")) {
+          searchbar.selectEngine(event, event.detail > 0);
+		}
+	  }, true);
 	
 	// doSearch function taken from browsers internal 'searchbar.js' file and modified
 	searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
