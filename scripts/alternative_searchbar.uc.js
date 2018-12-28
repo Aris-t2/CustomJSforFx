@@ -1,4 +1,5 @@
-// 'Alternative search bar' script for Firefox 60+ by Aris
+// 'Alternative search bar' script for Firefox 64+ by Aris
+// (script does not work with Firefox versions lower than 64)
 //
 // Based on 'search revert' script by 2002Andreas:
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
@@ -10,38 +11,77 @@
 // option: clear search input after search
 // option: revert to first search engine in list after search
 // option: hide oneoff search engines
-// option: checke for search engine changes and update search bars icon
 //
 // Not present: old popup to switch engines !
 //
-// Note: 'Ctrl + Up/Down key' combo switches through search engines
+// Note: 'Ctrl + Up&Down keys' and 'Ctrl + Mouse wheel up&down' combos switch through search engines
 
-var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
-var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
+var clear_searchbar_after_search = true; // clear input after search (true) or not (false)
+var revert_to_first_engine_after_search = true; // revert to first engine (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
-var check_for_engine_changes = true; // update search engine icon on the fly (true) or on restart (false)
 
 (function() {
 	var searchbar = document.getElementById("searchbar");
 	
 	updateStyleSheet();
 	
-	if(check_for_engine_changes)
-	  checkEngineChange();
-	
-	searchbar._doSearchInternal = searchbar.doSearch;
-	searchbar.doSearch = function(aData, aInNewTab) {
-	  this._doSearchInternal(aData, aInNewTab);
+	// doSearch function taken from browsers internal 'searchbar.js' file and modified
+	searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
+			
+	  let textBox = this._textbox;
 
-	  if(clear_searchbar_after_search)
-		this.value = '';
-	  
-	  if(revert_to_first_engine_after_search) {
-		this.currentEngine = this.engines ? this.engines[0] : this._engines[0];
-		updateStyleSheet();
+	  // Save the current value in the form history
+	  if (aData && !PrivateBrowsingUtils.isWindowPrivate(window) && this.FormHistory.enabled) {
+		this.FormHistory.update({
+			op: "bump",
+			fieldname: textBox.getAttribute("autocompletesearchparam"),
+			value: aData,
+		}, {
+			handleError(aError) {
+			  Cu.reportError("Saving search to form history failed: " + aError.message);
+			},
+		});
 	  }
 
+	  let engine = aEngine || this.currentEngine;
+	  let submission = engine.getSubmission(aData, null, "searchbar");
+	  let telemetrySearchDetails = this.telemetrySearchDetails;
+	  this.telemetrySearchDetails = null;
+	  if (telemetrySearchDetails && telemetrySearchDetails.index == -1) {
+		telemetrySearchDetails = null;
+	  }
+	  // If we hit here, we come either from a one-off, a plain search or a suggestion.
+	  const details = {
+		isOneOff: aOneOff,
+		isSuggestion: (!aOneOff && telemetrySearchDetails),
+		selection: telemetrySearchDetails,
+	  };
+	  BrowserSearch.recordSearchInTelemetry(engine, "searchbar", details);
+	  // null parameter below specifies HTML response for search
+	  let params = {
+		postData: submission.postData,
+	  };
+	  if (aParams) {
+		for (let key in aParams) {
+		  params[key] = aParams[key];
+		}
+	  }
+	  openTrustedLinkIn(submission.uri.spec, aWhere, params);
+		
+		if(clear_searchbar_after_search)
+			this.value = '';
+		  
+		if(revert_to_first_engine_after_search) {
+			this.currentEngine = this.engines ? this.engines[0] : this._engines[0];
+			updateStyleSheet();
+		}
 	};
+		
+	// setIcon function taken from browsers internal 'searchbar.js' file and modified
+	searchbar.setIcon = function(element, uri) {
+	  element.setAttribute("src", uri);
+	  updateStyleSheet();
+	}
 	
 	// main style sheet
 	function updateStyleSheet() {
@@ -100,16 +140,4 @@ var check_for_engine_changes = true; // update search engine icon on the fly (tr
 
 	};
 	
-	// looks for search engine changes to update style sheet
-	function checkEngineChange() {
-	  var current_search_engine = document.getElementById("searchbar").currentEngine.name;
-	  setInterval(function() {
-		var current_search_engine2 = document.getElementById("searchbar").currentEngine.name;
-		if(current_search_engine != current_search_engine2) {
-		  current_search_engine = current_search_engine2;
-		  updateStyleSheet();
-		}
-	  }, 1000);
-		
-	};
 }());
