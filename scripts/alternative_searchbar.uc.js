@@ -22,7 +22,7 @@
 // Configuration area - start
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
-var old_search_engine_selection_popup_fx64 = true; // show old search engine selection popup (true) or not (false)
+var old_search_engine_selection_popup_fx64 = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over searchbars button (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
