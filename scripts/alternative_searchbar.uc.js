@@ -106,7 +106,7 @@ var searchsettingslabel = "Search Settings";
 	  // attach new popup to searchbars search button
 	  document.getAnonymousElementByAttribute(searchbar.firstChild.nextSibling, "class", "searchbar-search-button").setAttribute("popup", "searchbuttonpopup");
 		  
-	  // hide default popup, if clicking on search button
+	  // hide default popup when clicking on search button
 	  searchbar.addEventListener("mousedown", (event) => {
 	   if (event.originalTarget.classList.contains("searchbar-search-button")) {
 		document.getElementById('PopupSearchAutoComplete').hidePopup();
@@ -122,7 +122,7 @@ var searchsettingslabel = "Search Settings";
 
 	};
    
-	// doSearch function taken from browsers internal 'searchbar.xml' file and modified
+	// doSearch function taken from Fx60s internal 'searchbar.xml' file and modified
 	if(appversion < 63) searchbar.doSearch = function(aData, aWhere, aEngine) {
 			
       var textBox = this._textbox;
@@ -155,7 +155,7 @@ var searchsettingslabel = "Search Settings";
 	  }
 	};
 	
-	// doSearch function taken from browsers internal 'searchbar.js' file and modified
+	// doSearch function taken from Fx64s internal 'searchbar.js' file and modified
 	if(appversion >= 63) searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
 			
 	  let textBox = this._textbox;
