@@ -318,17 +318,28 @@ var searchsettingslabel = "Search Settings";
 		.search-go-button[hidden="true"] { \
 		  display: block !important; \
 		} \
+		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay, \
 		.searchbar-search-button:not([addengines=true]) > .searchbar-search-icon-overlay { \
 		  list-style-image: url(chrome://global/skin/icons/arrow-dropdown-12.svg) !important; \
 		  -moz-context-properties: fill !important; \
 		  margin-inline-start: -6px !important; \
 		  margin-inline-end: 2px !important; \
-		  width: 8px !important; \
-		  height: 8px !important; \
+		  width: 11px !important; \
+		  height: 11px !important; \
 		} \
 		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay { \
-		  margin-inline-start: -9px !important; \
-		  margin-inline-end: 2px !important; \
+		  margin-top: 0px !important; \
+		} \
+		.searchbar-search-button[addengines=true]::after { \
+		  content: "" !important; \
+		  background: url(chrome://browser/skin/search-indicator-badge-add.svg) center no-repeat !important; \
+		  display: block !important; \
+		  visibility: visible !important; \
+		  width: 11px !important; \
+		  height: 11px !important; \
+		  -moz-margin-start: 18px !important; \
+		  margin-top: -11px !important; \
+		  position: absolute !important; \
 		} \
 		'+hide_oneoff_search_engines_code+' \
 		'+show_search_engine_names_code+' \
