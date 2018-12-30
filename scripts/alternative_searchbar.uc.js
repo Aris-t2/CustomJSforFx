@@ -9,14 +9,15 @@
 //
 // option: clear search input after search
 // option: revert to first search engine in list after search
-// option: old search engine selection popup (FIREFOX 64+ only!)
+// option: old search engine selection popup ([!] FIREFOX 64+ only [!])
 // option: hide oneoff search engines
 // option: show search engine names instead of icons only
 // option: select search engine by scrolling mouse wheel over searchbars button
 //
-// [!] Old search engine selection popup: 'add engines' feature not present!
-// [!] If searchbar is focused, what can be done with 'Ctrl + K' or 'Ctrl + E', one can switch
-//     through search engines with 'Ctrl + Up&Down keys' and 'Ctrl + Mouse wheel up&down' combos! 
+// [!] Old search engine selection popup: 'add engines' menuitems is not present!
+//     Use default popup instead by hitting 'DOWN' key or typing into text field.
+// [!] If searchbar is focused, what can be done with 'CTRL + K' or 'CTRL + E', one can switch
+//     through search engines with 'CTRL + UP&DOWN keys' and 'CTRL + Mouse wheel UP&DOWN' combos! 
 
 
 // Configuration area - start
@@ -32,23 +33,31 @@ var searchsettingslabel = "Search Settings";
 // Configuration area - end
 
 
-
 // main function
 (function() {
+  try {
 	var searchbar = document.getElementById("searchbar");
 	var appversion = parseInt(Services.appinfo.version);
-	
+
 	updateStyleSheet();
-	
-    // select search engine by scrolling mouse wheel over searchbars button
+
 	if(select_engine_by_scrolling_over_button)
+	  selectEngineByScrollingOverButton();
+
+	if(old_search_engine_selection_popup_fx64 && appversion >= 64)
+	  createOldSelectionPopup();
+
+	// select search engine by scrolling mouse wheel over searchbars button
+	function selectEngineByScrollingOverButton() {
 	  searchbar.addEventListener("DOMMouseScroll", (event) => {
 		if (event.originalTarget.classList.contains("searchbar-search-button")) {
           searchbar.selectEngine(event, event.detail > 0);
 		}
 	  }, true);
-	  
-	if(old_search_engine_selection_popup_fx64 && appversion >= 64) {
+	}
+
+	// old search selection popup
+	function createOldSelectionPopup() {
 
 	  var engines = searchbar.engines;
 		
@@ -63,7 +72,7 @@ var searchsettingslabel = "Search Settings";
 	  searchbuttonpopup.setAttribute("id", "searchbuttonpopup");
 	  searchbuttonpopup.setAttribute("width", searchbar.firstChild.nextSibling.getBoundingClientRect().width - 6 );
 	  searchbuttonpopup.setAttribute("position", "after_start");
-  
+	 
 	  for (var i = 0; i <= engines.length - 1; ++i) {
 					
 		if(appversion <= 62) menuitem = document.createElement("menuitem");
@@ -75,7 +84,6 @@ var searchsettingslabel = "Search Settings";
 		  menuitem.setAttribute("selected", "true");
 		if (engines[i].iconURI)
 		  searchbar.setIcon(menuitem, engines[i].iconURI.spec);
-
 		menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 		
 		searchbuttonpopup.appendChild(menuitem);
@@ -94,14 +102,13 @@ var searchsettingslabel = "Search Settings";
 	  searchbuttonpopup.appendChild(menuitem_om);
 	
 	  document.getElementById("mainPopupSet").appendChild(searchbuttonpopup);
-  
+	  
 	  // attach new popup to searchbars search button
 	  document.getAnonymousElementByAttribute(searchbar.firstChild.nextSibling, "class", "searchbar-search-button").setAttribute("popup", "searchbuttonpopup");
 		  
 	  // hide default popup, if clicking on search button
 	  searchbar.addEventListener("mousedown", (event) => {
 	   if (event.originalTarget.classList.contains("searchbar-search-button")) {
-	
 		document.getElementById('PopupSearchAutoComplete').hidePopup();
 		document.getElementById("PopupSearchAutoComplete").style.visibility="collapse";
 		
@@ -114,7 +121,7 @@ var searchsettingslabel = "Search Settings";
 	  }, true);
 
 	};
-	  
+   
 	// doSearch function taken from browsers internal 'searchbar.xml' file and modified
 	if(appversion < 63) searchbar.doSearch = function(aData, aWhere, aEngine) {
 			
@@ -200,13 +207,11 @@ var searchsettingslabel = "Search Settings";
 		}
 	};
 
-		
 	// setIcon function taken from browsers internal 'searchbar.js' file and modified
 	searchbar.setIcon = function(element, uri) {
 	  element.setAttribute("src", uri);
 	  updateStyleSheet();
 	};
-
 	
 	// override selectEngine function and remove automatic popup opening
 	searchbar.selectEngine = function(aEvent, isNextEngine) {
@@ -222,7 +227,6 @@ var searchsettingslabel = "Search Settings";
       aEvent.stopPropagation();
 
 	};
-	
 
 	// main style sheet
 	function updateStyleSheet() {
@@ -355,5 +359,7 @@ var searchsettingslabel = "Search Settings";
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 
 	};
+	
+  } catch(e) {}
 	
 }());
