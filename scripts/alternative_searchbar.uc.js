@@ -90,8 +90,8 @@ var searchsettingslabel = "Search Settings";
 
 	  }
 
-	  if(appversion <= 62) menuitem = document.createElement("menuseparator");
-		else menuseparator = menuseparator_om = document.createXULElement("menuseparator");
+	  if(appversion <= 62) menuseparator_om = document.createElement("menuseparator");
+		else menuseparator_om = document.createXULElement("menuseparator");
 	  searchbuttonpopup.appendChild(menuseparator_om);
 		
 	  if(appversion <= 62) menuitem_om = document.createElement("menuitem");
