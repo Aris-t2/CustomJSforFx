@@ -10,6 +10,7 @@
 // option: clear search input after search
 // option: revert to first search engine in list after search
 // option: old search engine selection popup ([!] FIREFOX 64+ only [!])
+// option: hide 'addengines' '+' indicator
 // option: hide oneoff search engines
 // option: show search engine names instead of icons only
 // option: select search engine by scrolling mouse wheel over searchbars button
@@ -26,6 +27,7 @@ var revert_to_first_engine_after_search = false; // revert to first engine (true
 var old_search_engine_selection_popup_fx64 = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over searchbars button (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
+var hide_addengines_plus_indicator = false; // hide addengines '+' sign (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
@@ -232,9 +234,10 @@ var searchsettingslabel = "Search Settings";
 	function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	  
-	  var hide_oneoff_search_engines_code='';
-	  var show_search_engine_names_code='';
-	  var show_search_engine_names_with_scrollbar_code='';
+	  var hide_oneoff_search_engines_code = '';
+	  var show_search_engine_names_code = '';
+	  var show_search_engine_names_with_scrollbar_code = '';
+	  var hide_addengines_plus_indicator_code = '';
 	
 	  if(hide_oneoff_search_engines)
 		hide_oneoff_search_engines_code=' \
@@ -243,6 +246,13 @@ var searchsettingslabel = "Search Settings";
 			display: none !important; \
 		  } \
 		';
+		
+	  if(hide_addengines_plus_indicator)
+	   hide_addengines_plus_indicator_code=' \
+	     .searchbar-search-button[addengines=true]::after { \
+		   visibility: hidden !important; \
+		 } \
+	   ';
 		
 	  if(show_search_engine_names && !hide_oneoff_search_engines)
 	   show_search_engine_names_code=' \
@@ -297,10 +307,7 @@ var searchsettingslabel = "Search Settings";
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		\
 		#searchbuttonpopup {\
-		  -moz-margin-start: 3px; \
-		} \
-		.searchbar-search-button { \
-		  -moz-margin-start: -4px; \
+		  -moz-margin-start: -1px; \
 		} \
 		.searchbar-search-button .searchbar-search-icon { \
 		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
@@ -312,6 +319,7 @@ var searchsettingslabel = "Search Settings";
 		  fill: #3683ba !important; \
 		  transform: scaleX(-1) !important; \
 		  background: unset !important; \
+		  margin-inline-end: 4px !important; \
 		} \
 		.search-go-button:hover { \
 		  fill: #1d518c !important; \
@@ -335,7 +343,7 @@ var searchsettingslabel = "Search Settings";
 		  margin-top: 0px !important; \
 		} \
 		.searchbar-search-button[addengines=true]::after { \
-		  content: "" !important; \
+		  content: " " !important; \
 		  background: url(chrome://browser/skin/search-indicator-badge-add.svg) center no-repeat !important; \
 		  display: block !important; \
 		  visibility: visible !important; \
@@ -345,6 +353,10 @@ var searchsettingslabel = "Search Settings";
 		  margin-top: -11px !important; \
 		  position: absolute !important; \
 		} \
+		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay { \
+		  visibility: visible !important; \
+		} \
+		'+hide_addengines_plus_indicator_code+' \
 		'+hide_oneoff_search_engines_code+' \
 		'+show_search_engine_names_code+' \
 		'+show_search_engine_names_with_scrollbar_code+' \
