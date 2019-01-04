@@ -12,6 +12,7 @@
 // option: old search engine selection popup ([!] FIREFOX 64+ only [!])
 // option: hide 'addengines' '+' indicator
 // option: hide oneoff search engines
+// option: hide placeholder text 'Search'
 // option: show search engine names instead of icons only
 // option: select search engine by scrolling mouse wheel over searchbars button
 //
@@ -19,6 +20,7 @@
 //     Use default popup instead by hitting 'DOWN' key or typing into text field.
 // [!] If searchbar is focused, what can be done with 'CTRL + K' or 'CTRL + E', one can switch
 //     through search engines with 'CTRL + UP&DOWN keys' and 'CTRL + Mouse wheel UP&DOWN' combos! 
+// [!] Changing search engine inside default/modern popup: right-click search icon and select 'Set As Default Search Engine'
 
 
 // Configuration area - start
@@ -28,6 +30,7 @@ var old_search_engine_selection_popup_fx64 = false; // show old search engine se
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over searchbars button (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var hide_addengines_plus_indicator = false; // hide addengines '+' sign (true) or not (false)
+var hide_placeholder = false; // hide placeholder (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
@@ -42,6 +45,10 @@ var searchsettingslabel = "Search Settings";
 	var appversion = parseInt(Services.appinfo.version);
 
 	updateStyleSheet();
+	
+	if(hide_placeholder)
+	  hideSearchbarsPlaceholder();
+	
 
 	if(select_engine_by_scrolling_over_button)
 	  selectEngineByScrollingOverButton();
@@ -56,7 +63,12 @@ var searchsettingslabel = "Search Settings";
           searchbar.selectEngine(event, event.detail > 0);
 		}
 	  }, true);
-	}
+	};
+	
+	// hide placeholder
+	function hideSearchbarsPlaceholder() {
+	  searchbar.getElementsByClassName('searchbar-textbox')[0].removeAttribute("placeholder");
+	};
 
 	// old search selection popup
 	function createOldSelectionPopup() {
