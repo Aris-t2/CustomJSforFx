@@ -3,34 +3,35 @@
 // Based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
-// Search glass always visible at search bars end (like with old search)
-// Search button shows current search engines icon (like with old search)
-// Search buttons dropmarker always visible (like with old search)
+// Feature: search glass is always visible at search bars end (like with old search)
+// Feature: search button shows current search engines icon (like with old search)
+// Feature: search buttons dropmarker is always visible (like with old search)
 //
-// option: clear search input after search
-// option: revert to first search engine in list after search
-// option: old search engine selection popup ([!] FIREFOX 64+ only [!])
-// option: hide 'addengines' '+' indicator
-// option: hide oneoff search engines
-// option: hide placeholder text 'Search'
-// option: show search engine names instead of icons only
-// option: select search engine by scrolling mouse wheel over searchbars button
-// option: hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine
+// Option: clear search input after search
+// Option: revert to first search engine in list after search
+// Option: old search engine selection popup ([!] FIREFOX 64+ only [!])
+// Option: hide 'add engines' '+' indicator
+// Option: hide oneoff search engines
+// Option: hide placeholder text 'Search'
+// Option: show search engine names instead of icons only
+// Option: select search engine by scrolling mouse wheel over search bars button
+// Option: hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine
 //
-// [!] Old search engine selection popup: 'add engines' menuitems is not present!
-//     Use default popup instead by hitting 'DOWN' key or typing into text field.
-// [!] If searchbar is focused, what can be done with 'CTRL + K' or 'CTRL + E', one can switch
-//     through search engines with 'CTRL + UP&DOWN keys' and 'CTRL + Mouse wheel UP&DOWN' combos! 
-// [!] Changing search engine inside default/modern popup: right-click search icon and select 'Set As Default Search Engine'
+// [!] Option 'old search engine selection popup': the menuitem to add new new search engine is not present!
+//     Use menuitem inside default popup instead.
+// [!] Default browser feature: if search bar is focused with 'CTRL + K' or 'CTRL + E', one can switch 
+//     through search engines with 'CTRL + UP&DOWN keys' and 'CTRL + MOUSE WHEELs UP&DOWN scrolling'! 
+// [!] Default browser feature: search engine can be changed inside default/modern popup by right-clicking
+//     search icon and selecting 'Set As Default Search Engine' menuitem
 
 
 // Configuration area - start
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var old_search_engine_selection_popup_fx64 = false; // show old search engine selection popup (true) or not (false)
-var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over searchbars button (true) or not (false)
+var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
-var hide_addengines_plus_indicator = false; // hide addengines '+' sign (true) or not (false)
+var hide_addengines_plus_indicator = false; // hide add engines '+' sign (true) or not (false)
 var hide_placeholder = false; // hide placeholder (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
@@ -50,7 +51,6 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	
 	if(hide_placeholder)
 	  hideSearchbarsPlaceholder();
-	
 
 	if(select_engine_by_scrolling_over_button)
 	  selectEngineByScrollingOverButton();
@@ -58,7 +58,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	if(old_search_engine_selection_popup_fx64 && appversion >= 64)
 	  createOldSelectionPopup();
 
-	// select search engine by scrolling mouse wheel over searchbars button
+	// select search engine by scrolling mouse wheel over search bars button
 	function selectEngineByScrollingOverButton() {
 	  searchbar.addEventListener("DOMMouseScroll", (event) => {
 		if (event.originalTarget.classList.contains("searchbar-search-button")) {
@@ -90,7 +90,6 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	  searchbuttonpopup.setAttribute("position", "after_start");
 	 
 	  for (var i = 0; i <= engines.length - 1; ++i) {
-					
 		if(appversion <= 62) menuitem = document.createElement("menuitem");
 		  else menuitem = document.createXULElement("menuitem");
 		var name = engines[i].name;
@@ -103,7 +102,6 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 		
 		searchbuttonpopup.appendChild(menuitem);
-
 	  }
 
 	  if(appversion <= 62) menuseparator_om = document.createElement("menuseparator");
@@ -119,9 +117,9 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	
 	  document.getElementById("mainPopupSet").appendChild(searchbuttonpopup);
 	  
-	  // attach new popup to searchbars search button
+	  // attach new popup to search bars search button
 	  document.getAnonymousElementByAttribute(searchbar.firstChild.nextSibling, "class", "searchbar-search-button").setAttribute("popup", "searchbuttonpopup");
-		  
+
 	  // hide default popup when clicking on search button
 	  searchbar.addEventListener("mousedown", (event) => {
 	   if (event.originalTarget.classList.contains("searchbar-search-button")) {
@@ -137,8 +135,8 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	  }, true);
 
 	};
-   
-	// doSearch function taken from Fx60s internal 'searchbar.xml' file and modified
+
+	// doSearch function taken from Firefox 60s internal 'searchbar.xml' file and added modifications
 	if(appversion < 63) searchbar.doSearch = function(aData, aWhere, aEngine) {
 			
       var textBox = this._textbox;
@@ -170,13 +168,10 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		  updateStyleSheet();
 	  }
 	};
-	
-	// doSearch function taken from Fx64s internal 'searchbar.js' file and modified
+	// doSearch function taken from Firefox 64s internal 'searchbar.js' file and added modifications
 	if(appversion >= 63) searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
-			
 	  let textBox = this._textbox;
 
-	  // Save the current value in the form history
 	  if (aData && !PrivateBrowsingUtils.isWindowPrivate(window) && this.FormHistory.enabled) {
 		this.FormHistory.update({
 			op: "bump",
@@ -196,14 +191,14 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	  if (telemetrySearchDetails && telemetrySearchDetails.index == -1) {
 		telemetrySearchDetails = null;
 	  }
-	  // If we hit here, we come either from a one-off, a plain search or a suggestion.
+
 	  const details = {
 		isOneOff: aOneOff,
 		isSuggestion: (!aOneOff && telemetrySearchDetails),
 		selection: telemetrySearchDetails,
 	  };
 	  BrowserSearch.recordSearchInTelemetry(engine, "searchbar", details);
-	  // null parameter below specifies HTML response for search
+
 	  let params = {
 		postData: submission.postData,
 	  };
@@ -213,7 +208,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		}
 	  }
 	  openTrustedLinkIn(submission.uri.spec, aWhere, params);
-		
+
 		if(clear_searchbar_after_search)
 			this.value = '';
 		  
@@ -223,7 +218,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		}
 	};
 
-	// setIcon function taken from browsers internal 'searchbar.js' file and modified
+	// setIcon function taken from browsers internal 'searchbar.js' file and added modifications
 	searchbar.setIcon = function(element, uri) {
 	  element.setAttribute("src", uri);
 	  updateStyleSheet();
@@ -247,7 +242,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	// main style sheet
 	function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
-	  
+
 	  var hide_oneoff_search_engines_code = '';
 	  var show_search_engine_names_code = '';
 	  var show_search_engine_names_with_scrollbar_code = '';
@@ -260,14 +255,14 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 			display: none !important; \
 		  } \
 		';
-		
+
 	  if(hide_addengines_plus_indicator)
 	   hide_addengines_plus_indicator_code=' \
 	     .searchbar-search-button[addengines=true]::after { \
 		   visibility: hidden !important; \
 		 } \
 	   ';
-		
+
 	  if(show_search_engine_names && !hide_oneoff_search_engines)
 	   show_search_engine_names_code=' \
 		#PopupSearchAutoComplete .search-panel-tree { \
@@ -306,7 +301,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		  white-space: nowrap !important; \
 		} \
 		';
-		
+
 	  if(show_search_engine_names_with_scrollbar && !hide_oneoff_search_engines && show_search_engine_names)
 	   show_search_engine_names_with_scrollbar_code=' \
 		#PopupSearchAutoComplete .search-one-offs { \
@@ -317,7 +312,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		} \
 		\
 		';
-	  
+
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		\
 		#searchbuttonpopup {\
@@ -376,16 +371,16 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		'+show_search_engine_names_with_scrollbar_code+' \
 		\
 	  '), null, null);
-	  
+
 	  // remove old style sheet
 	  if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) {
 		sss.unregisterSheet(uri,sss.AGENT_SHEET);
 	  }
-	  
+
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 
 	};
-	
+
   } catch(e) {}
-	
+
 }());
