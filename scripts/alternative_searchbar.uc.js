@@ -15,6 +15,7 @@
 // option: hide placeholder text 'Search'
 // option: show search engine names instead of icons only
 // option: select search engine by scrolling mouse wheel over searchbars button
+// option: hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine
 //
 // [!] Old search engine selection popup: 'add engines' menuitems is not present!
 //     Use default popup instead by hitting 'DOWN' key or typing into text field.
@@ -35,6 +36,7 @@ var show_search_engine_names = false; // show search engine names (true) or not 
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
 var searchsettingslabel = "Search Settings";
+var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine (true) or not (false)
 // Configuration area - end
 
 
@@ -228,7 +230,7 @@ var searchsettingslabel = "Search Settings";
 	};
 	
 	// override selectEngine function and remove automatic popup opening
-	searchbar.selectEngine = function(aEvent, isNextEngine) {
+	if(hide_popup_when_selecting_engine_with_hotkeys) searchbar.selectEngine = function(aEvent, isNextEngine) {
       // Find the new index
       let newIndex = this.engines.indexOf(this.currentEngine);
       newIndex += isNextEngine ? 1 : -1;
