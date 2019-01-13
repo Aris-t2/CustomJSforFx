@@ -13,6 +13,7 @@
 // Option: hide 'add engines' '+' indicator
 // Option: hide oneoff search engines
 // Option: hide placeholder text 'Search'
+// Option: switch icons off engine button and go button
 // Option: show search engine names instead of icons only
 // Option: select search engine by scrolling mouse wheel over search bars button
 // Option: hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine
@@ -33,6 +34,7 @@ var select_engine_by_scrolling_over_button = false; // select search engine by s
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var hide_addengines_plus_indicator = false; // hide add engines '+' sign (true) or not (false)
 var hide_placeholder = false; // hide placeholder (true) or not (false)
+var switch_glass_and_engine_icon = false; // switch icons off engine button and go button (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
@@ -247,6 +249,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	  var show_search_engine_names_code = '';
 	  var show_search_engine_names_with_scrollbar_code = '';
 	  var hide_addengines_plus_indicator_code = '';
+	  var switch_glass_and_engine_icon_code = '';
 	
 	  if(hide_oneoff_search_engines)
 		hide_oneoff_search_engines_code=' \
@@ -312,6 +315,27 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		} \
 		\
 		';
+		
+	  if(switch_glass_and_engine_icon)
+	   switch_glass_and_engine_icon_code=' \
+		.search-go-button { \
+		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
+		  transform: scaleX(1) !important; \
+		} \
+		.searchbar-search-button .searchbar-search-icon { \
+		  list-style-image: url(chrome://browser/skin/search-glass.svg) !important; \
+		  -moz-context-properties: fill, fill-opacity !important; \
+		  fill-opacity: 1.0 !important; \
+		  fill: #3683ba !important; \
+		} \
+		.searchbar-search-button:hover .searchbar-search-icon { \
+		  fill: #1d518c !important; \
+		} \
+		.searchbar-search-button:active .searchbar-search-icon { \
+		  fill: #00095d !important; \
+		} \
+		\
+		';
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		\
@@ -369,6 +393,7 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 		'+hide_oneoff_search_engines_code+' \
 		'+show_search_engine_names_code+' \
 		'+show_search_engine_names_with_scrollbar_code+' \
+		'+switch_glass_and_engine_icon_code+' \
 		\
 	  '), null, null);
 
