@@ -11,9 +11,9 @@
 // Option: revert to first search engine in list after search
 // Option: old search engine selection popup ([!] FIREFOX 64+ only [!])
 // Option: hide 'add engines' '+' indicator
-// Option: hide oneoff search engines
+// Option: hide 'oneoff' search engines (engines at popups bottom)
 // Option: hide placeholder text 'Search'
-// Option: switch icons off engine button and go button
+// Option: swap the icons of search engine button and go button
 // Option: show search engine names instead of icons only
 // Option: select search engine by scrolling mouse wheel over search bars button
 // Option: hide popup when using 'CTRL or MOUSE WHEEL + UP&DOWN keys' to switch engine
@@ -34,7 +34,7 @@ var select_engine_by_scrolling_over_button = false; // select search engine by s
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var hide_addengines_plus_indicator = false; // hide add engines '+' sign (true) or not (false)
 var hide_placeholder = false; // hide placeholder (true) or not (false)
-var switch_glass_and_engine_icon = false; // switch icons off engine button and go button (true) or not (false)
+var switch_glass_and_engine_icon = false; // swap icons of search engine button and go button (true) or not (false)
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
