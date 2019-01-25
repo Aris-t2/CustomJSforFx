@@ -26,6 +26,11 @@ setTimeout(function(){
 	function classicAcpopup(event){
 	
 	  var urlbar_width = Math.round(document.getElementById("urlbar").getBoundingClientRect().width);
+	  var urlbar_results = 10;
+	  
+	  try{
+	    urlbar_results = Services.prefs.getBranch("browser.urlbar.").getIntPref("maxRichResults");
+	  } catch(e){}
 	  
 	  var visit_searchwith_hidden = '';
 	  
@@ -83,7 +88,7 @@ setTimeout(function(){
 		} \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
 		  height: auto !important; \
-		  max-height: calc(47.5px * 12) !important; \
+		  max-height: calc(47.5px * '+urlbar_results+') !important; \
 		} \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  position: relative !important; \
