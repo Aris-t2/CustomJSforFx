@@ -119,6 +119,35 @@ var hide_popup_when_selecting_engine_with_hotkeys = true; // hide popup when usi
 	
 	  document.getElementById("mainPopupSet").appendChild(searchbuttonpopup);
 	  
+	  /* adjust popup width*/
+	  setTimeout(function(){
+		document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").firstChild.nextSibling.getBoundingClientRect().width);
+	  },1000);
+	  
+	  var observer = new MutationObserver(function(mutations) {
+		mutations.forEach(function(mutation) {
+		 try {
+		  document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").firstChild.nextSibling.getBoundingClientRect().width );
+		 } catch(e){}
+		});    
+	  });
+	
+	  try {
+		observer.observe(document.getElementById('search-container'), { attributes: true, attributeFilter: ['width'] });
+	  } catch(e){}
+	
+  	  var observer2 = new MutationObserver(function(mutations) {
+		mutations.forEach(function(mutation) {
+		 try {
+		  document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").firstChild.nextSibling.getBoundingClientRect().width );
+		 } catch(e){}
+		});    
+	  });
+	
+	  try {
+		observer2.observe(document.getElementById('main-window'), { attributes: true, attributeFilter: ['sizemode'] });
+	  } catch(e){}
+	  
 	  // attach new popup to search bars search button
 	  document.getAnonymousElementByAttribute(searchbar.firstChild.nextSibling, "class", "searchbar-search-button").setAttribute("popup", "searchbuttonpopup");
 
