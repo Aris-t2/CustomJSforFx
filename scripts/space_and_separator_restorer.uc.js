@@ -23,7 +23,7 @@ var AddSeparator = {
 	var tb_spacer_label = "Space";
 	var tb_sep_label = "Separator";
 	var tb_spring_label = "Flexible Space";
-  
+	  
 	try {
 		
 	  if(appversion <= 62) var tb_config = document.createElement("toolbar");
@@ -43,6 +43,16 @@ var AddSeparator = {
 	  CustomizableUI.registerArea("configuration_toolbar", {legacy: true});
 	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_config);
 	  
+	  // thx to aborix for the fix
+	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+		let tabbar = document.getElementById('TabsToolbar');     
+		let tab = gBrowser.selectedTab;
+		tabbar.style.display = '-moz-box';
+		let tab2 = gBrowser.duplicateTab(tab);
+		gBrowser.moveTabTo(tab2, tab._tPos + 1);
+		gBrowser.removeTab(tab);
+		tabbar.style.display = '';
+	  }
 	  
 	  if(appversion <= 62) var tb_label = document.createElement("label");
 	  else var tb_label = document.createXULElement("label");
@@ -85,8 +95,7 @@ var AddSeparator = {
 	  tb_spring.setAttribute("label", tb_spring_label);
 	  	  
 	  tb_config.appendChild(tb_spring);
-
-	  
+	    
 	  // CSS
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 

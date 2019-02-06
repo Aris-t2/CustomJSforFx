@@ -119,6 +119,17 @@ var AddonbarVertical = {
 	  key.setAttribute('oncommand',
 		'var newvAddonBar = document.getElementById("addonbar_v"); setToolbarVisibility(newvAddonBar, newvAddonBar.collapsed);');
 	  document.getElementById('mainKeyset').appendChild(key);
+	  
+	  // thx to aborix for the fix
+	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+		let tabbar = document.getElementById('TabsToolbar');     
+		let tab = gBrowser.selectedTab;
+		tabbar.style.display = '-moz-box';
+		let tab2 = gBrowser.duplicateTab(tab);
+		gBrowser.moveTabTo(tab2, tab._tPos + 1);
+		gBrowser.removeTab(tab);
+		tabbar.style.display = '';
+	  }
 
 	  
 	} catch(e) {}

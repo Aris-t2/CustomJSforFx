@@ -15,7 +15,7 @@ var AddAddonbar = {
   init: function() {
 	  
 	var addonbar_label = "Add-on Bar";
-	
+
 	// style sheet
 	Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService).loadAndRegisterSheet(
 	  Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
@@ -43,7 +43,6 @@ var AddAddonbar = {
 	try {
 	  var tb_addonbar = document.createXULElement("toolbar");
 	  if(appversion <= 62) tb_addonbar = document.createElement("toolbar");
-	  //var tb_addonbar = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "toolbar");
 	  tb_addonbar.setAttribute("id","addonbar");
 	  tb_addonbar.setAttribute("collapsed", "false");
 	  tb_addonbar.setAttribute("toolbarname", addonbar_label);
@@ -60,6 +59,17 @@ var AddAddonbar = {
 	  //CustomizableUI.registerArea("addonbar", {type: CustomizableUI.TYPE_TOOLBAR, defaultPlacements: ["#customizableui-special-spring777", "#customizableui-special-spring778"], legacy: true});
 	  CustomizableUI.registerArea("addonbar", {legacy: true});
 	  
+	  // thx to aborix for the fix
+	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+		let tabbar = document.getElementById('TabsToolbar');     
+		let tab = gBrowser.selectedTab;
+		tabbar.style.display = '-moz-box';
+		let tab2 = gBrowser.duplicateTab(tab);
+		gBrowser.moveTabTo(tab2, tab._tPos + 1);
+		gBrowser.removeTab(tab);
+		tabbar.style.display = '';
+	  }
+   
 	  if(appversion >= 65) {
 		CustomizableUI.registerToolbarNode(tb_addonbar);
 		// broken tab workaround

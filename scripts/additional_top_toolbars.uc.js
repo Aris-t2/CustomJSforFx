@@ -41,12 +41,23 @@ var AdditionalTopToolbars = {
 		  
 		  CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
 		  if(appversion >= 65) CustomizableUI.registerToolbarNode(toptoolbar);
+	  
+		  // thx to aborix for the fix
+		  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+			let tabbar = document.getElementById('TabsToolbar');     
+			let tab = gBrowser.selectedTab;
+			tabbar.style.display = '-moz-box';
+			let tab2 = gBrowser.duplicateTab(tab);
+			gBrowser.moveTabTo(tab2, tab._tPos + 1);
+			gBrowser.removeTab(tab);
+			tabbar.style.display = '';
+		  }
 		  
 		  i++;
 		
 	    }
 	  }
-
+	  
 	  // CSS
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
