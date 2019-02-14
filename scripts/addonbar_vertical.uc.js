@@ -9,6 +9,9 @@
 // toolbar can be on the left or on the right
 // toolbar is display horizontally in customizing mode
 
+// [!] BUG: WebExtensions with own windows > fix by aborix
+// [!] - use fix in one script file only, if using multiple scripts, that create toolbars (remove the code in that case)
+
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
@@ -120,19 +123,21 @@ var AddonbarVertical = {
 		'var newvAddonBar = document.getElementById("addonbar_v"); setToolbarVisibility(newvAddonBar, newvAddonBar.collapsed);');
 	  document.getElementById('mainKeyset').appendChild(key);
 	  
-	  // thx to aborix for the fix
-	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+	} catch(e) {}
+	
+
+	// thx to aborix for the fix
+	if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+		if (window.__SSi == 'window0')
+		  return;
 		let tabbar = document.getElementById('TabsToolbar');     
 		let tab = gBrowser.selectedTab;
 		tabbar.style.display = '-moz-box';
-		let tab2 = gBrowser.duplicateTab(tab);
-		gBrowser.moveTabTo(tab2, tab._tPos + 1);
+		duplicateTabIn(tab, 'tab');
+		gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
 		gBrowser.removeTab(tab);
-		tabbar.style.display = '';
-	  }
-
-	  
-	} catch(e) {}
+		tabbar.style.display = ''; 
+	}
 
 	// style toolbar & toggle button
 	var addonbar_v_style = '';

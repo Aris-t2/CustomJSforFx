@@ -9,7 +9,10 @@
 // - configuration toolbar is not visible outside customizing mode
 // - default "Flexible Space" item is hidden from palette and added to configuration toolbar
 // [!] BUG: do not move spaces, flexible spaces or separator to configuration toolbar or it will cause glitches
-// [!] BUG: do not move 'main space' item to palette or it will get lost until next time customizing mode gets opened
+// [!] BUG: do not move main 'space'-item to palette or it will be hidden until customizing mode gets reopened
+
+// [!] BUG: WebExtensions with own windows > fix by aborix
+// [!] - use fix in one script file only, if using multiple scripts, that create toolbars (remove the code in that case)
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -42,17 +45,6 @@ var AddSeparator = {
 	  
 	  CustomizableUI.registerArea("configuration_toolbar", {legacy: true});
 	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_config);
-	  
-	  // thx to aborix for the fix
-	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
-		let tabbar = document.getElementById('TabsToolbar');     
-		let tab = gBrowser.selectedTab;
-		tabbar.style.display = '-moz-box';
-		let tab2 = gBrowser.duplicateTab(tab);
-		gBrowser.moveTabTo(tab2, tab._tPos + 1);
-		gBrowser.removeTab(tab);
-		tabbar.style.display = '';
-	  }
 	  
 	  if(appversion <= 62) var tb_label = document.createElement("label");
 	  else var tb_label = document.createXULElement("label");
@@ -161,7 +153,21 @@ var AddSeparator = {
 
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
-	} catch(e){}	
+	} catch(e){}
+	
+
+	// thx to aborix for the fix
+	if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
+		if (window.__SSi == 'window0')
+		  return;
+		let tabbar = document.getElementById('TabsToolbar');     
+		let tab = gBrowser.selectedTab;
+		tabbar.style.display = '-moz-box';
+		duplicateTabIn(tab, 'tab');
+		gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
+		gBrowser.removeTab(tab);
+		tabbar.style.display = ''; 
+	}
 
   }
 
