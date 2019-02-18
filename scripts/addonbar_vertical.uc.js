@@ -26,6 +26,7 @@ var AddonbarVertical = {
 	var addonbar_v_on_the_left = true; // display vertical toolbar on the left (true) or the right (false)
 	var insert_before_borders = false; // may not always offer a visible change
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
+	var addonbar_v_width = "30px"; // toolbar width
 
 	try {
 	  if(appversion <= 62) var toolbox_abv = document.createElement("toolbox");
@@ -165,6 +166,9 @@ var AddonbarVertical = {
 		  background-image: var(--toolbar-bgimage); \
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
+		  min-width: '+addonbar_v_width+'; \
+		  width: '+addonbar_v_width+'; \
+		  max-width: '+addonbar_v_width+'; \
 		} \
 		#main-window[customizing] #addonbar_v { \
 		  outline: 1px dashed !important; \
