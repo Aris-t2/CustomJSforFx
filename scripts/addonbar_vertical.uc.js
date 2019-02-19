@@ -166,6 +166,9 @@ var AddonbarVertical = {
 		  background-image: var(--toolbar-bgimage); \
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
+		} \
+		#main-window:not([customizing]) #toolbox_abv, \
+		#main-window:not([customizing]) #addonbar_v { \
 		  min-width: '+addonbar_v_width+'; \
 		  width: '+addonbar_v_width+'; \
 		  max-width: '+addonbar_v_width+'; \
