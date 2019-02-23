@@ -6,8 +6,9 @@
 //
 // flexible spaces on add-on bar behave like on old Firefox versions
 
-// [!] BUG: WebExtensions with own windows > fix by aborix
-// [!] - use fix in one script file only, if using multiple scripts, that create toolbars (remove the code in that case)
+// [!] BUG: WebExtensions with own windows
+// - fix by aborix
+// - fix for usage of multiple scripts by 黒仪大螃蟹
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -16,6 +17,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AddAddonbar = {
   init: function() {
+	  
+	if (window.__SSi && window.__SSi !== 'window0')	{
+	  return gBrowser.selectedBrowser.removeAttribute('blank');
+	}
 	  
 	var addonbar_label = "Add-on Bar";
 

@@ -3,8 +3,9 @@
 // - "tb_label": set a toolbar name
 // - use toolbar[id^="additional_top_toolbar"] {...} to affect all toolbars at once in CSS
 
-// [!] BUG: WebExtensions with own windows > fix by aborix
-// [!] - use fix in one script file only, if using multiple scripts, that create toolbars (remove the code in that case)
+// [!] BUG: WebExtensions with own windows
+// - fix by aborix
+// - fix for usage of multiple scripts by 黒仪大螃蟹
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -13,6 +14,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AdditionalTopToolbars = {
   init: function() {
+	  
+	if (window.__SSi && window.__SSi !== 'window0')	{
+	  return gBrowser.selectedBrowser.removeAttribute('blank');
+	}
 	  
 	var number_of_additional_top_toolbars = 1;
 	var tb_label = "Top Toolbar";

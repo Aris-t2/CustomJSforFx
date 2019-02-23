@@ -11,8 +11,9 @@
 // [!] BUG: do not move spaces, flexible spaces or separator to configuration toolbar or it will cause glitches
 // [!] BUG: do not move main 'space'-item to palette or it will be hidden until customizing mode gets reopened
 
-// [!] BUG: WebExtensions with own windows > fix by aborix
-// [!] - use fix in one script file only, if using multiple scripts, that create toolbars (remove the code in that case)
+// [!] BUG: WebExtensions with own windows
+// - fix by aborix
+// - fix for usage of multiple scripts by 黒仪大螃蟹
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -21,6 +22,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AddSeparator = {
   init: function() {
+	  
+	if (window.__SSi && window.__SSi !== 'window0')	{
+	  return gBrowser.selectedBrowser.removeAttribute('blank');
+	}
 	  
 	var tb_config_label = "Configuration Toolbar";
 	var tb_spacer_label = "Space";
