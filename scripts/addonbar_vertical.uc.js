@@ -21,7 +21,7 @@ var appversion = parseInt(Services.appinfo.version);
 var AddonbarVertical = {
   init: function() {
 	  
-	if (window.__SSi && window.__SSi !== 'window0')	{
+	if (document.getElementById('main-window').getAttribute('chromehidden')) {
 	  return gBrowser.selectedBrowser.removeAttribute('blank');
 	}
 	  

@@ -18,10 +18,10 @@ var appversion = parseInt(Services.appinfo.version);
 var AddAddonbar = {
   init: function() {
 	  
-	if (window.__SSi && window.__SSi !== 'window0')	{
+	if (document.getElementById('main-window').getAttribute('chromehidden')) {
 	  return gBrowser.selectedBrowser.removeAttribute('blank');
 	}
-	  
+
 	var addonbar_label = "Add-on Bar";
 
 	// style sheet
