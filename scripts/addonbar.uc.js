@@ -6,9 +6,7 @@
 //
 // flexible spaces on add-on bar behave like on old Firefox versions
 
-// [!] BUG: WebExtensions with own windows
-// - fix by aborix
-// - fix for usage of multiple scripts by 黒仪大螃蟹
+// [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -66,20 +64,6 @@ var AddAddonbar = {
 	  
 	  //CustomizableUI.registerArea("addonbar", {type: CustomizableUI.TYPE_TOOLBAR, defaultPlacements: ["#customizableui-special-spring777", "#customizableui-special-spring778"], legacy: true});
 	  CustomizableUI.registerArea("addonbar", {legacy: true});
-	  
-	  // thx to aborix for the fix
-	  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
-		if (window.__SSi == 'window0')
-		  return;
-		let tabbar = document.getElementById('TabsToolbar');     
-		let tab = gBrowser.selectedTab;
-		tabbar.style.display = '-moz-box';
-		duplicateTabIn(tab, 'tab');
-		gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
-		gBrowser.removeTab(tab);
-		tabbar.style.display = ''; 
-	  }
-
   
 	  if(appversion >= 65) {
 		CustomizableUI.registerToolbarNode(tb_addonbar);

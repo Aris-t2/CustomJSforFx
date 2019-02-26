@@ -11,9 +11,7 @@
 // [!] BUG: do not move spaces, flexible spaces or separator to configuration toolbar or it will cause glitches
 // [!] BUG: do not move main 'space'-item to palette or it will be hidden until customizing mode gets reopened
 
-// [!] BUG: WebExtensions with own windows
-// - fix by aborix
-// - fix for usage of multiple scripts by 黒仪大螃蟹
+// [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -159,20 +157,6 @@ var AddSeparator = {
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
 	} catch(e){}
-	
-
-	// thx to aborix for the fix
-	if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
-		if (window.__SSi == 'window0')
-		  return;
-		let tabbar = document.getElementById('TabsToolbar');     
-		let tab = gBrowser.selectedTab;
-		tabbar.style.display = '-moz-box';
-		duplicateTabIn(tab, 'tab');
-		gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
-		gBrowser.removeTab(tab);
-		tabbar.style.display = ''; 
-	}
 
   }
 

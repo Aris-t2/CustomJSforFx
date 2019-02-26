@@ -3,9 +3,7 @@
 // - "tb_label": set a toolbar name
 // - use toolbar[id^="additional_top_toolbar"] {...} to affect all toolbars at once in CSS
 
-// [!] BUG: WebExtensions with own windows
-// - fix by aborix
-// - fix for usage of multiple scripts by 黒仪大螃蟹
+// [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -50,19 +48,6 @@ var AdditionalTopToolbars = {
 		  
 		  CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
 		  if(appversion >= 65) CustomizableUI.registerToolbarNode(toptoolbar);
-	  
-		  // thx to aborix for the fix
-		  if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
-			if (window.__SSi == 'window0')
-			  return;
-			let tabbar = document.getElementById('TabsToolbar');     
-			let tab = gBrowser.selectedTab;
-			tabbar.style.display = '-moz-box';
-			duplicateTabIn(tab, 'tab');
-			gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
-			gBrowser.removeTab(tab);
-			tabbar.style.display = ''; 
-		  }
 		  
 		  i++;
 		

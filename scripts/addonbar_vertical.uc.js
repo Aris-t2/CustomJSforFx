@@ -9,9 +9,7 @@
 // toolbar can be on the left or on the right
 // toolbar is display horizontally in customizing mode
 
-// [!] BUG: WebExtensions with own windows
-// - fix by aborix
-// - fix for usage of multiple scripts by 黒仪大螃蟹
+// [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -131,20 +129,6 @@ var AddonbarVertical = {
 	  
 	} catch(e) {}
 	
-
-	// thx to aborix for the fix
-	if(document.getElementById("main-window").getAttribute("chromehidden") != "") {
-		if (window.__SSi == 'window0')
-		  return;
-		let tabbar = document.getElementById('TabsToolbar');     
-		let tab = gBrowser.selectedTab;
-		tabbar.style.display = '-moz-box';
-		duplicateTabIn(tab, 'tab');
-		gBrowser.moveTabTo(gBrowser.selectedTab, tab._tPos);
-		gBrowser.removeTab(tab);
-		tabbar.style.display = ''; 
-	}
-
 	// style toolbar & toggle button
 	var addonbar_v_style = '';
 	var tooglebutton_addonbar_v_style = '';
