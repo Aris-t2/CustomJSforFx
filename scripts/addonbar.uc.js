@@ -4,6 +4,8 @@
 // 'toggle' toolbar with 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS
 // no 'Add-on Bar' entry in toolbar context menu
 //
+// option: smaller buttons / reduced toolbar button height
+//
 // flexible spaces on add-on bar behave like on old Firefox versions
 
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
@@ -13,6 +15,8 @@ Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
+var compact_buttons = false; // reduced toolbar height and smaller buttons
+
 var AddAddonbar = {
   init: function() {
 	  
@@ -21,6 +25,28 @@ var AddAddonbar = {
 	}
 
 	var addonbar_label = "Add-on Bar";
+	var compact_buttons_code = "";
+	
+	if(compact_buttons)
+	  compact_buttons_code = "\
+		#addonbar toolbarbutton .toolbarbutton-icon { \
+		  padding: 0 !important; \
+		  width: 16px !important; \
+		  height: 16px !important; \
+		} \
+		#addonbar .toolbarbutton-badge-stack { \
+		  padding: 0 !important; \
+		  margin: 0 !important; \
+		  width: 16px !important; \
+		  min-width: 16px !important; \
+		  height: 16px !important; \
+		  min-height: 16px !important; \
+		} \
+		#addonbar toolbarbutton .toolbarbutton-badge { \
+		  margin-top: 0px !important; \
+		  font-size: 8px !important; \
+		} \
+	  ";
 
 	// style sheet
 	Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService).loadAndRegisterSheet(
@@ -40,7 +66,7 @@ var AddAddonbar = {
 		  #addonbar { \
 			border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
 		  } \
-		  \
+		  '+compact_buttons_code+'\
 	  '), null, null),
 	  Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET
 	);
@@ -62,7 +88,6 @@ var AddAddonbar = {
 
 	  document.getElementById("browser-bottombox").appendChild(tb_addonbar);
 	  
-	  //CustomizableUI.registerArea("addonbar", {type: CustomizableUI.TYPE_TOOLBAR, defaultPlacements: ["#customizableui-special-spring777", "#customizableui-special-spring778"], legacy: true});
 	  CustomizableUI.registerArea("addonbar", {legacy: true});
   
 	  if(appversion >= 65) {
