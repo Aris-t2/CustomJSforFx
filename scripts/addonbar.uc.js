@@ -20,9 +20,11 @@ var compact_buttons = false; // reduced toolbar height and smaller buttons
 var AddAddonbar = {
   init: function() {
 	  
-	if (document.getElementById('main-window').getAttribute('chromehidden')) {
-	  return gBrowser.selectedBrowser.removeAttribute('blank');
-	}
+	try {
+	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
+		return gBrowser.selectedBrowser.removeAttribute('blank');
+	  }
+	} catch(e) {}
 
 	var addonbar_label = "Add-on Bar";
 	var compact_buttons_code = "";

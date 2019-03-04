@@ -12,11 +12,12 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AdditionalTopToolbars = {
   init: function() {
-	  
-	
-	if (document.getElementById('main-window').getAttribute('chromehidden')) {
-	  return gBrowser.selectedBrowser.removeAttribute('blank');
-	}
+
+	try {
+	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
+		return gBrowser.selectedBrowser.removeAttribute('blank');
+	  }
+	} catch(e) {}
 	  
 	var number_of_additional_top_toolbars = 1;
 	var tb_label = "Top Toolbar";

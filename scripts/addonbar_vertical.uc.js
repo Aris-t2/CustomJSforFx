@@ -19,9 +19,11 @@ var appversion = parseInt(Services.appinfo.version);
 var AddonbarVertical = {
   init: function() {
 	  
-	if (document.getElementById('main-window').getAttribute('chromehidden')) {
-	  return gBrowser.selectedBrowser.removeAttribute('blank');
-	}
+	try {
+	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
+		return gBrowser.selectedBrowser.removeAttribute('blank');
+	  }
+	} catch(e) {}
 	  
 	var addonbar_v_label = "Vertical Add-on Bar"; // toolbar name
 	var button_label = "Toggle vertical Add-on Bar"; // Toggle button name
@@ -89,6 +91,7 @@ var AddonbarVertical = {
 	  try {
 		Services.prefs.getDefaultBranch("browser.vaddonbar.").setBoolPref("enabled",true);
 		setToolbarVisibility(document.getElementById("addonbar_v"), Services.prefs.getBranch("browser.vaddonbar.").getBoolPref("enabled"));
+		setToolbarVisibility(document.getElementById("toolbox_abv"), Services.prefs.getBranch("browser.vaddonbar.").getBoolPref("enabled"));
 	  } catch(e) {}
 	  
 	  if(addonbar_v_togglebutton) {
@@ -102,6 +105,9 @@ var AddonbarVertical = {
 			onClick: function(event) {
 			  var vAddonBar = document.getElementById("addonbar_v");
 			  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
+			  
+			  var vAddonBarBox = document.getElementById("toolbox_abv");
+			  setToolbarVisibility(vAddonBarBox, vAddonBarBox.collapsed);
 			  
 			  Services.prefs.getBranch("browser.vaddonbar.").setBoolPref("enabled",!vAddonBar.collapsed)
 			  
@@ -124,7 +130,11 @@ var AddonbarVertical = {
 	  key.setAttribute('key', '/');
 	  key.setAttribute('modifiers', 'accel,alt');
 	  key.setAttribute('oncommand',
-		'var newvAddonBar = document.getElementById("addonbar_v"); setToolbarVisibility(newvAddonBar, newvAddonBar.collapsed);');
+		'	var newvAddonBar = document.getElementById("addonbar_v");\
+			setToolbarVisibility(newvAddonBar, newvAddonBar.collapsed);\
+			var newvAddonBarBox = document.getElementById("toolbox_abv");\
+			setToolbarVisibility(newvAddonBarBox, newvAddonBarBox.collapsed);\
+		');
 	  document.getElementById('mainKeyset').appendChild(key);
 	  
 	} catch(e) {}
@@ -156,8 +166,8 @@ var AddonbarVertical = {
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
 		} \
-		#main-window:not([customizing]) #toolbox_abv, \
-		#main-window:not([customizing]) #addonbar_v { \
+		#main-window:not([customizing]) #toolbox_abv:not([collapsed="true"]), \
+		#main-window:not([customizing]) #addonbar_v:not([collapsed="true"]) { \
 		  min-width: '+addonbar_v_width+'; \
 		  width: '+addonbar_v_width+'; \
 		  max-width: '+addonbar_v_width+'; \

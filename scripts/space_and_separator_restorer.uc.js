@@ -21,9 +21,11 @@ var appversion = parseInt(Services.appinfo.version);
 var AddSeparator = {
   init: function() {
 	  
-	if (document.getElementById('main-window').getAttribute('chromehidden')) {
-	  return gBrowser.selectedBrowser.removeAttribute('blank');
-	}
+	try {
+	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
+		return gBrowser.selectedBrowser.removeAttribute('blank');
+	  }
+	} catch(e) {}
 	  
 	var tb_config_label = "Configuration Toolbar";
 	var tb_spacer_label = "Space";
