@@ -26,7 +26,7 @@ From this projects <code>\method 3\profile\</code> folder copy <code>userChrome<
 </br>
 From this projects <code>\method 3\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
-<b>Edit <code>userChrome.uc.js</code> file to add custom scripts.</b>
+<b>Edit <code>userChrome.uc.js</code> file to add custom scripts or delete <code>userChrome.uc.js</code> file and add scripts directly into <code> /chrome/ </code> folder.</b>
 </br>
 <h2>Script/startup cache must be deleted after every change!</h2>
 Where to find <code>startupCache</code> folder?</br>
