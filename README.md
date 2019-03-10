@@ -15,7 +15,7 @@ From this projects <code>\method 2\profile\</code> folder copy <code>userChrome<
 </br>
 From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
-<b>Edit <code>userChrome.js</code> file to add custom scripts.</br></b>
+<b>Edit <code>userChrome.js</code> file to add custom scripts.</b></br>
 </br>
 With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". </br>
 </br>
@@ -26,20 +26,20 @@ From this projects <code>\method 3\profile\</code> folder copy <code>userChrome<
 </br>
 From this projects <code>\method 3\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
-<b>Edit <code>userChrome.uc.js</code> file to add custom scripts.</b></br>
+<b>Edit <code>userChrome.uc.js</code> file to add custom scripts.</b>
 </br>
 <h2>Script/startup cache must be deleted after every change!</h2>
 Where to find <code>startupCache</code> folder?</br>
 <code>about:profiles > Local Directory > Open Folder</code>, close Firefox and delete all files in <code>startupCache</code> folder.</br>
 </br>
-This is not the same profile folder custom scripts and styles are stored in!</br>
+This is not the same 'profile' folder custom scripts and styles are stored in!</br>
 </br>
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 <h2>Where to find Firefox profile folder?</h2>
 <code>about:profiles > Root Directory > Open Folder</code></br>
 or <code>about:support > Profile Folder > Open Folder</code></br>
-or <code>Shift+F2</code> to open Firefox's command line, then enter the command <code>folder openprofile</code></br>
+or <code>Shift+F2</code> to open Firefox's command line, then enter the command <code>folder openprofile</code>.
 </br>
 <h2>Script collections</h2>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
