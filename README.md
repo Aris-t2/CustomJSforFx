@@ -17,7 +17,7 @@ From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</c
 </br>
 <b>Edit <code>userChrome.js</code> file to add custom scripts.</b></br>
 </br>
-With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". </br>
+With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". 
 </br>
 <h2>Method 3 - files for Firefox installation folder and Firefox profile folder</h2>
 M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
