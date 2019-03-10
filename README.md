@@ -37,8 +37,8 @@ This is not the same 'profile' folder custom scripts and styles are stored in!</
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 <h2>Where to find Firefox profile folder?</h2>
-<code>about:profiles > Root Directory > Open Folder</code></br>
-or <code>about:support > Profile Folder > Open Folder</code></br>
+<code>about:profiles > Root Directory > Open Folder</code> or </br>
+<code>about:support > Profile Folder > Open Folder</code></br>
 </br>
 <h2>Script collections</h2>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
