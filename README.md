@@ -3,7 +3,9 @@
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
 M1 will stop working when Mozilla drops XBL support.</br>
 </br>
-From this projects <code>\method 1\</code> folder copy <code>userChrome</code> folder and <code>userChrome.css</code> file to <code>\ PROFILENAME \chrome\ </code> or add code from <code>userChrome.css</code> file to an existing <code>userChrome.css</code> file.</br>
+From this projects <code>\method 1\</code> folder copy <code>userChrome</code> folder and <code>userChrome.css</code> file to <code>\ PROFILENAME \chrome\</code> or add code from <code>userChrome.css</code> file to an existing <code>userChrome.css</code> file.</br>
+</br>
+Edit <code>userChrome\userChrome.xml</code> file to add custom scripts.
 </br>
 <h2>Method 2 - files for Firefox installation folder and Firefox profile folder</h2>
 M2 is based on this project by ardiman: https://github.com/ardiman/userChrome.js </br>
@@ -13,36 +15,34 @@ From this projects <code>\method 2\profile\</code> folder copy <code>userChrome<
 </br>
 From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
+Edit <code>userChrome.js</code> file to add custom scripts.
+</br>
 With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". </br>
+</br>
+<h2>Method 3 - files for Firefox installation folder and Firefox profile folder</h2>
+M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
+</br>
+From this projects <code>\method 3\profile\</code> folder copy <code>userChrome</code> folder, <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
+</br>
+From this projects <code>\method 3\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
+</br>
+Edit <code>userChrome.uc.js</code> file to add custom scripts.
 </br>
 <h2>Script/startup cache must be deleted after every change!</h2>
 Where to find <code>startupCache</code> folder?</br>
 <code>about:profiles > Local Directory > Open Folder</code>, close Firefox and delete all files in <code>startupCache</code> folder.</br>
 </br>
-Location on WINDOWS: <code>C:\Users\ NAME \AppData\Local\Mozilla\Firefox\Profiles\ PROFILE \startupCache</code></br>
-Location on LINUX location: <code>\home\ NAME \.cache\mozilla\firefox\ PROFILE \startupCache</code></br>
-</br>
 This is not the same profile folder custom scripts and styles are stored in!</br>
 </br>
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
-<h2>Where to find Firefox profile folder for styles and scripts?</h2>
-<b>1.</b> Find your profile folder.</br>
+<h2>Where to find Firefox profile folder?</h2>
 <code>about:profiles > Root Directory > Open Folder</code></br>
 or <code>about:support > Profile Folder > Open Folder</code></br>
 or <code>Shift+F2</code> to open Firefox's command line, then enter the command <code>folder openprofile</code></br>
 </br>
-<b>2.</b> User styles belong into <code>\chrome\</code> folder. Create it, if there is none yet.</br>
-<code>\ PROFILENAME \chrome\ </code></br>
-</br>
-<b>3.</b> Copy files and folders into <code>\chrome\</code> sub-folder so the results look like this:</br>
-<code>\ PROFILENAME \chrome\userChrome\</code> (method 1 and 2)</br>
-<code>\ PROFILENAME \chrome\userChrome.css</code> (method 1)</br>
-<code>\ PROFILENAME \chrome\userChrome.js</code> (method 2)</br>
-</br>
-<b>3.</b> Copy files and folders into <code>\chrome\</code> sub-folder so the results look like this:</br>
-</br>
 <h2>Script collections</h2>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
 Script collection by Endor8: https://github.com/Endor8/userChrome.js</br>
+Script collection by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts/tree/master/chrome</br>
 </br>
