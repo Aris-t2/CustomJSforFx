@@ -33,6 +33,7 @@ var AddSeparator = {
 	var tb_spring_label = "Flexible Space";
 	  
 	try {
+	 if(document.getElementById('configuration_toolbar') == null) {
 		
 	  if(appversion <= 62) var tb_config = document.createElement("toolbar");
 	  else var tb_config = document.createXULElement("toolbar");
@@ -157,7 +158,7 @@ var AddSeparator = {
 	  '), null, null);
 
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
-	
+	 }
 	} catch(e){}
 
   }
@@ -166,4 +167,4 @@ var AddSeparator = {
 
 setTimeout(function(){
   AddSeparator.init();
-},500);
+},1000);
