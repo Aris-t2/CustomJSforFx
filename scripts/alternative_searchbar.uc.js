@@ -26,9 +26,6 @@
 //     search icon and selecting 'Set As Default Search Engine' menuitem
 
 
-
-
-
 // Configuration area - start
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
@@ -534,4 +531,4 @@ setTimeout(function(){
 
   } catch(e) {}
 
-},500);
+},1000);
