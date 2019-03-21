@@ -57,8 +57,20 @@ setTimeout(function(){
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) + richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) { \
 			  display: none !important; \
 			} \
-			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox { \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox { \
+			  overflow: auto !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox { \
+			  overflow-x: hidden !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox, \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox, \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > .autocomplete-richlistbox { \
 			  overflow-y: auto !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:first-of-type:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"]), \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem[anonid="type-icon-spacer"] { \
+			  display: none !important; \
 			} \
 		  \
 		  ';
@@ -79,10 +91,6 @@ setTimeout(function(){
 		  -moz-margin-start: 0 !important; \
 		  margin-top: -5px !important; \
 		} \
-		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:first-of-type:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"]), \
-		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem[anonid="type-icon-spacer"] { \
-		  display: none !important; \
-		} \ \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
 		  padding: 0 !important; \
 		} \
