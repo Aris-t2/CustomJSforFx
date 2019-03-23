@@ -2,13 +2,16 @@
 // CSS code based on https://github.com/Aris-t2/CustomCSSforFx/blob/master/classic/css/locationbar/ac_popup_classic_with_url_only_fx64.css
 // popup width gets adjusted automatically when switching between normal, maximized and fullscreen window modes
 // popup width does not get adjusted automatically when switchting between compact, normal and touch toolbar modes
-// type icons like star, switch to tabs etc. do not get moved to result items end
-// 'Visit...' and 'Search with...' items can be hidden using 'hide_visit_search_items' variable
+
+// [!] option: 'Visit...' and 'Search with...' items can be hidden using 'hide_visit_search_items' variable
+// [!] option: type icons like boomarks star, switch to tab etc. can be moved to the right using 'move_bookmarks_star_to_the_end' variable
+
 
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 var hide_visit_search_items = false;
+var move_bookmarks_star_to_the_end = false;
 
 setTimeout(function(){
   try{
@@ -32,10 +35,10 @@ setTimeout(function(){
 	    urlbar_results = Services.prefs.getBranch("browser.urlbar.").getIntPref("maxRichResults");
 	  } catch(e){}
 	  
-	  var visit_searchwith_hidden = '';
+	  var hide_visit_search_items_code = '';
 	  
 	  if(hide_visit_search_items)
-		  visit_searchwith_hidden = '\
+		hide_visit_search_items_code = '\
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
 			  min-height: 0 !important; \
 			  height: auto !important; \
@@ -73,10 +76,29 @@ setTimeout(function(){
 			  display: none !important; \
 			} \
 		  \
-		  ';
+		';
+	  
+	  var move_bookmarks_star_to_the_end_code = '';
+	  
+	  if(move_bookmarks_star_to_the_end)
+		 move_bookmarks_star_to_the_end_code = ' \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
+			  -moz-margin-start: '+ (urlbar_width-26) +'px !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-site-icon { \
+			  -moz-margin-start: -'+ (urlbar_width-10) +'px !important; \
+			} \
+			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
+			  margin-bottom: 20px !important; \
+			} \
+	 ';
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
+		  --item-padding-start: 0 !important; \
+		  --item-padding-end: 0 !important; \
+		} \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
 		  min-width: '+urlbar_width+'px !important; \
 		  width: '+urlbar_width+'px !important; \
@@ -177,15 +199,21 @@ setTimeout(function(){
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  border-inline-end: 0px solid transparent !important; \
 		} \
-		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox{ \
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox { \
+		  overflow-x: hidden !important; \
+		} \
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox, \
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox, \
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > .autocomplete-richlistbox { \
 		  overflow-y: auto !important; \
 		} \
-		'+visit_searchwith_hidden+' \
+		'+hide_visit_search_items_code+' \
+		'+move_bookmarks_star_to_the_end_code+' \
 	  '), null, null);
 	  
 
 	  if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) sss.unregisterSheet(uri,sss.AGENT_SHEET);
-		
+
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 
 	}
