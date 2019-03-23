@@ -44,4 +44,5 @@ More info about startup cache removal (in English [Google translation]): https:/
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
 Script collection by Endor8: https://github.com/Endor8/userChrome.js</br>
 Script collection by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts/tree/master/chrome</br>
+Script collection by Patchonn: https://github.com/Patchonn/firefox-theme/tree/master/userChrome</br>
 </br>
