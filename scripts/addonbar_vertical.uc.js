@@ -34,6 +34,7 @@ var AddonbarVertical = {
 	var addonbar_v_width = "30px"; // toolbar width
 
 	try {
+	 if(document.getElementById('toolbox_abv') == null) {
 	  if(appversion <= 62) var toolbox_abv = document.createElement("toolbox");
 	  else var toolbox_abv = document.createXULElement("toolbox");
 	  toolbox_abv.setAttribute("orient","horizontal");
@@ -137,6 +138,7 @@ var AddonbarVertical = {
 		');
 	  document.getElementById('mainKeyset').appendChild(key);
 	  
+	 }
 	} catch(e) {}
 	
 	// style toolbar & toggle button

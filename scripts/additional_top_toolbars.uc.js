@@ -23,6 +23,7 @@ var AdditionalTopToolbars = {
 	var tb_label = "Top Toolbar";
 
 	try {
+	 if(document.getElementById('additional_top_toolbar1') == null) {
 		
 	  if(number_of_additional_top_toolbars>0) {
 	
@@ -76,6 +77,7 @@ var AdditionalTopToolbars = {
 
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
+	 }
 	} catch(e){}	
 
   }

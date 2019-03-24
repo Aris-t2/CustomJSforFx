@@ -75,40 +75,41 @@ var AddAddonbar = {
 
 	// toolbar
 	try {
-	  var tb_addonbar = document.createXULElement("toolbar");
-	  if(appversion <= 62) tb_addonbar = document.createElement("toolbar");
-	  tb_addonbar.setAttribute("id","addonbar");
-	  tb_addonbar.setAttribute("collapsed", "false");
-	  tb_addonbar.setAttribute("toolbarname", addonbar_label);
-	  tb_addonbar.setAttribute("defaultset","spring,spring"); 
-	  tb_addonbar.setAttribute("customizable","true");
-	  tb_addonbar.setAttribute("mode","icons");
-	  tb_addonbar.setAttribute("iconsize","small");
-	  tb_addonbar.setAttribute("context","toolbar-context-menu");
-	  tb_addonbar.setAttribute("lockiconsize","true");
-	  tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");
+	  if(document.getElementById('addonbar') == null) {
+		var tb_addonbar = document.createXULElement("toolbar");
+		if(appversion <= 62) tb_addonbar = document.createElement("toolbar");
+		tb_addonbar.setAttribute("id","addonbar");
+		tb_addonbar.setAttribute("collapsed", "false");
+		tb_addonbar.setAttribute("toolbarname", addonbar_label);
+		tb_addonbar.setAttribute("defaultset","spring,spring"); 
+		tb_addonbar.setAttribute("customizable","true");
+		tb_addonbar.setAttribute("mode","icons");
+		tb_addonbar.setAttribute("iconsize","small");
+		tb_addonbar.setAttribute("context","toolbar-context-menu");
+		tb_addonbar.setAttribute("lockiconsize","true");
+		tb_addonbar.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");
 
-	  document.getElementById("browser-bottombox").appendChild(tb_addonbar);
+		document.getElementById("browser-bottombox").appendChild(tb_addonbar);
+		
+		CustomizableUI.registerArea("addonbar", {legacy: true});
 	  
-	  CustomizableUI.registerArea("addonbar", {legacy: true});
-  
-	  if(appversion >= 65) {
-		CustomizableUI.registerToolbarNode(tb_addonbar);
-		// broken tab workaround
-		let tab = gBrowser.selectedTab;
-		gBrowser.duplicateTab(tab);
-		gBrowser.removeTab(tab);
+		if(appversion >= 65) {
+			CustomizableUI.registerToolbarNode(tb_addonbar);
+			// broken tab workaround
+			let tab = gBrowser.selectedTab;
+			gBrowser.duplicateTab(tab);
+			gBrowser.removeTab(tab);
+		}
+		
+		// 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS to toggle add-on bar
+		var key = document.createElement('key');
+		key.id = 'key_toggleAddonBar';
+		key.setAttribute('key', '/');
+		key.setAttribute('modifiers', 'accel');
+		key.setAttribute('oncommand',
+		  'var newAddonBar = document.getElementById("addonbar"); setToolbarVisibility(newAddonBar, newAddonBar.collapsed);');
+		document.getElementById('mainKeyset').appendChild(key);
 	  }
-	
-	  // 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS to toggle add-on bar
-	  var key = document.createElement('key');
-	  key.id = 'key_toggleAddonBar';
-	  key.setAttribute('key', '/');
-	  key.setAttribute('modifiers', 'accel');
-	  key.setAttribute('oncommand',
-		'var newAddonBar = document.getElementById("addonbar"); setToolbarVisibility(newAddonBar, newAddonBar.collapsed);');
-	  document.getElementById('mainKeyset').appendChild(key);
-	  
 	} catch(e) {}
 
   }
