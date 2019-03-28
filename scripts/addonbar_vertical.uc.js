@@ -174,6 +174,12 @@ var AddonbarVertical = {
 		  width: '+addonbar_v_width+'; \
 		  max-width: '+addonbar_v_width+'; \
 		} \
+		#main-window[sizemode="fullscreen"] #toolbox_abv:not([collapsed="true"]), \
+		#main-window[sizemode="fullscreen"] #addonbar_v:not([collapsed="true"]) { \
+		  min-width: 0px; \
+		  width: 0px; \
+		  max-width: 0px; \
+		} \
 		#main-window[customizing] #addonbar_v { \
 		  outline: 1px dashed !important; \
 		  outline-offset: -2px !important; \
