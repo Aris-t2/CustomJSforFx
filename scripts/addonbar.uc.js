@@ -93,13 +93,7 @@ var AddAddonbar = {
 		
 		CustomizableUI.registerArea("addonbar", {legacy: true});
 	  
-		if(appversion >= 65) {
-			CustomizableUI.registerToolbarNode(tb_addonbar);
-			// broken tab workaround
-			let tab = gBrowser.selectedTab;
-			gBrowser.duplicateTab(tab);
-			gBrowser.removeTab(tab);
-		}
+		if(appversion >= 65) { CustomizableUI.registerToolbarNode(tb_addonbar); }
 		
 		// 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS to toggle add-on bar
 		var key = document.createElement('key');
