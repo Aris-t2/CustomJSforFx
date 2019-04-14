@@ -13,10 +13,9 @@ var appversion = parseInt(Services.appinfo.version);
 var AdditionalTopToolbars = {
   init: function() {
 
+	/* blank tab workaround */
 	try {
-	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
-		return gBrowser.selectedBrowser.removeAttribute('blank');
-	  }
+	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
 	  
 	var number_of_additional_top_toolbars = 1;
@@ -84,6 +83,10 @@ var AdditionalTopToolbars = {
 
 }
 
+/* initialization delay workaround */
+document.addEventListener("DOMContentLoaded", AdditionalTopToolbars.init(), false);
+/*
 setTimeout(function(){
   AdditionalTopToolbars.init();
 },500);
+*/

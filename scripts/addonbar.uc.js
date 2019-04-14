@@ -20,10 +20,9 @@ var compact_buttons = false; // reduced toolbar height and smaller buttons
 var AddAddonbar = {
   init: function() {
 	  
+	/* blank tab workaround */
 	try {
-	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
-		return gBrowser.selectedBrowser.removeAttribute('blank');
-	  }
+	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
 
 	var addonbar_label = "Add-on Bar";
@@ -110,6 +109,9 @@ var AddAddonbar = {
 
 }
 
+/* initialization delay workaround */
+document.addEventListener("DOMContentLoaded", AddAddonbar.init(), false);
+/*
 setTimeout(function(){
   AddAddonbar.init();
-},500);
+},2000);*/

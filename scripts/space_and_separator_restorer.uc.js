@@ -21,10 +21,9 @@ var appversion = parseInt(Services.appinfo.version);
 var AddSeparator = {
   init: function() {
 	  
+	/* blank tab workaround */
 	try {
-	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
-		return gBrowser.selectedBrowser.removeAttribute('blank');
-	  }
+	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
 	  
 	var tb_config_label = "Configuration Toolbar";
@@ -165,6 +164,10 @@ var AddSeparator = {
 
 }
 
+/* initialization delay workaround */
+document.addEventListener("DOMContentLoaded", AddSeparator.init(), false);
+/*
 setTimeout(function(){
   AddSeparator.init();
 },1000);
+*/

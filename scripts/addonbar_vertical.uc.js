@@ -19,10 +19,9 @@ var appversion = parseInt(Services.appinfo.version);
 var AddonbarVertical = {
   init: function() {
 	  
+	/* blank tab workaround */
 	try {
-	  if (document.getElementById('main-window').getAttribute('chromehidden')) {
-		return gBrowser.selectedBrowser.removeAttribute('blank');
-	  }
+	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
 	  
 	var addonbar_v_label = "Vertical Add-on Bar"; // toolbar name
@@ -174,6 +173,8 @@ var AddonbarVertical = {
 		  width: '+addonbar_v_width+'; \
 		  max-width: '+addonbar_v_width+'; \
 		} \
+		#main-window[chromehidden="menubar toolbar location directories status extrachrome "] #toolbox_abv:not([collapsed="true"]), \
+		#main-window[chromehidden="menubar toolbar location directories status extrachrome "] #addonbar_v:not([collapsed="true"]), \
 		#main-window[sizemode="fullscreen"] #toolbox_abv:not([collapsed="true"]), \
 		#main-window[sizemode="fullscreen"] #addonbar_v:not([collapsed="true"]) { \
 		  min-width: 0px; \
@@ -225,6 +226,12 @@ var AddonbarVertical = {
   }
 
 }
+
+/* initialization delay workaround */
+document.addEventListener("DOMContentLoaded", AddonbarVertical.init(), false);
+
+/*
 setTimeout(function(){
   AddonbarVertical.init();
 },500);
+*/
