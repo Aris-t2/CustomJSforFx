@@ -1,5 +1,5 @@
 <h1>Custom JS scripts for Firefox Quantum</h1>
-See <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> for feature overview (with screenshots).  
+The <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> contains a feature list (with screenshots).  
 <h2>Method 1 - files for Firefox profile folder only</h2>
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
 M1 will stop working when Mozilla drops XBL support.</br>
