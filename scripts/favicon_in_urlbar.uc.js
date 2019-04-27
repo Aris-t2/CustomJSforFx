@@ -3,6 +3,15 @@
 // This script restores current pages favicon inside urlbar (aka location bar, address bar or awesome bar).
 // [!] If a page does not offer a favicon, browser branches default icon is shown.
 // [!] In a multi-window environment pages without favicons might show wrong icons.
+// option: set icon for pages without favicon
+
+
+var i_icon = 'chrome://browser/skin/identity-icon.svg';
+var sheet = 'chrome://global/skin/icons/Portrait.png';
+var brand = 'chrome://branding/content/identity-icons-brand.svg';
+var globe = 'chrome://mozapps/skin/places/defaultFavicon.svg';
+
+var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
 
 
 var FaviconInUrlbar = {
@@ -23,9 +32,10 @@ var FaviconInUrlbar = {
 	  // get current tabs favicon
 	  var favicon_in_urlbar = gBrowser.selectedTab.image;
 	  
-	  // if current tab offers no icon, use default branch icon
+	  // if current tab offers no icon, use selected icon (icon_for_pages_without_favicon)
 	  if(!gBrowser.selectedTab.image || gBrowser.selectedTab.image == null)
-		favicon_in_urlbar = 'chrome://branding/content/identity-icons-brand.svg';
+		if(!icon_for_pages_without_favicon) favicon_in_urlbar = brand;
+		  else favicon_in_urlbar = icon_for_pages_without_favicon;
 	  
 	  document.querySelector('#identity-icon').style.listStyleImage = "url("+favicon_in_urlbar+")";
 	  
