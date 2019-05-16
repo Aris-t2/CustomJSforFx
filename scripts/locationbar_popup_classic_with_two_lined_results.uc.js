@@ -11,7 +11,7 @@ var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", 
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 var hide_visit_search_items = false;
-var move_bookmarks_star_to_the_end = false;
+var move_bookmarks_star_to_the_end = true;
 
 setTimeout(function(){
   try{
@@ -56,6 +56,8 @@ setTimeout(function(){
 			  height: 0 !important; \
 			  max-height: 0 !important; \
 			} \
+			#urlbar-results .urlbarView-row:not([collapsed="true"]) + .urlbarView-row:-moz-any([type*="heuristic"],[type="search"],[type="visiturl"],[type="keyword"],[type="switchtab"]), \
+			#urlbar-results .urlbarView-row:-moz-any([type*="heuristic"],[type="search"],[type="visiturl"],[type="keyword"],[type="switchtab"]) + .urlbarView-row:-moz-any([type*="heuristic"],[type="search"],[type="visiturl"],[type="keyword"],[type="switchtab"]), \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:not([collapsed="true"]) + richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]), \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) + richlistitem:-moz-any([type*="heuristic"],[actiontype="searchengine"],[actiontype="visiturl"],[actiontype="keyword"],[actiontype="switchtab"]) { \
 			  display: none !important; \
@@ -66,6 +68,7 @@ setTimeout(function(){
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox { \
 			  overflow-x: hidden !important; \
 			} \
+			#urlbar-results scrollbox, \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox, \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox, \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > .autocomplete-richlistbox { \
@@ -75,6 +78,23 @@ setTimeout(function(){
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] richlistitem[anonid="type-icon-spacer"] { \
 			  display: none !important; \
 			} \
+			#urlbar-results .urlbarView-body-outer { \
+			  min-height: 0 !important; \
+			  height: auto !important; \
+			} \
+			#urlbar-results .urlbarView-row:first-of-type:-moz-any([type*="heuristic"],[type="search"],[type="visiturl"],[type="keyword"],[type="switchtab"]), \
+			#urlbar-results .urlbarView-row:-moz-any([type*="heuristic"],[type="search"],[type="visiturl"],[type="keyword"],[type="switchtab"]), \
+			#urlbar-results .urlbarView-row[anonid="type-icon-spacer"], \
+			#urlbar-results .urlbarView-row:first-of-type[type="visiturl"] + .urlbarView-row[type="search"], \
+			#urlbar-results .urlbarView-row:first-of-type:last-of-type[type="search"] { \
+			  z-index: -1000000000 !important; \
+			  position: fixed !important; \
+			  opacity: 0 !important; \
+			  visibility: collapse !important; \
+			  min-height: 0 !important; \
+			  height: 0 !important; \
+			  max-height: 0 !important; \
+			} \
 		  \
 		';
 	  
@@ -82,6 +102,7 @@ setTimeout(function(){
 	  
 	  if(move_bookmarks_star_to_the_end)
 		 move_bookmarks_star_to_the_end_code = ' \
+			#urlbar-results .urlbarView-row .urlbarView-type-icon, \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
 			  -moz-margin-start: '+ (urlbar_width-26) +'px !important; \
 			} \
@@ -91,19 +112,32 @@ setTimeout(function(){
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
 			  margin-bottom: 20px !important; \
 			} \
+			#urlbar-results .urlbarView-row .urlbarView-type-icon { \
+			  top: 6px !important; \
+			  bottom: unset !important; \
+			} \
 	 ';
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
+		#urlbar-results, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
 		  --item-padding-start: 0 !important; \
 		  --item-padding-end: 0 !important; \
 		} \
+		#urlbar-results { \
+		  -moz-margin-start: 0 !important; \
+		  margin-top: -4px !important; \
+		  border: 1px solid ThreeDShadow !important; \
+		} \
+		#urlbar-results, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
 		  min-width: '+urlbar_width+'px !important; \
 		  width: '+urlbar_width+'px !important; \
 		  max-width: '+urlbar_width+'px !important; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-title,  \
+		#urlbar-results .urlbarView-row .urlbarView-url, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-title-text,  \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-url-text { \
 		  min-width: calc( '+urlbar_width+' - 50px) !important; \
@@ -113,13 +147,19 @@ setTimeout(function(){
 		  -moz-margin-start: 0 !important; \
 		  margin-top: -5px !important; \
 		} \
+		#urlbarView-results, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
 		  padding: 0 !important; \
 		} \
+		#urlbarView-results, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistbox { \
 		  height: auto !important; \
 		  max-height: calc(47.5px * '+urlbar_results+') !important; \
 		} \
+		#urlbar-results { \
+		  max-height: calc(47.5px * '+urlbar_results+') !important; \
+		} \
+		#urlbar-results .urlbarView-row, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  position: relative !important; \
 		  height: 44px !important; \
@@ -127,47 +167,62 @@ setTimeout(function(){
 		  -moz-margin-start: 0 !important; \
 		  -moz-padding-start: 0 !important; \
 		} \
+		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem { \
 		  left: 0 !important; \
 		} \
+		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem { \
 		  right: 0 !important; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-title,  \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-title { \
 		  position: absolute !important; \
 		  top: 1px; \
 		  font-size: 14px; \
 		} \
+		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row .urlbarView-title, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem .ac-title { \
 		  left: 30px; \
 		} \
+		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row .urlbarView-title, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem .ac-title { \
 		  right: 30px; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-url, \
+		#urlbar-results .urlbarView-row .urlbarView-action, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-url, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-action { \
 		  position: absolute !important; \
 		  top: 24px; \
 		  font-size: 12px; \
 		} \
+		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row .urlbarView-url, \
+		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row .urlbarView-action, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem .ac-url, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem .ac-action { \
 		  left: 30px; \
 		} \
+		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row .urlbarView-url, \
+		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row .urlbarView-action, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem .ac-url, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem .ac-action { \
 		  right: 30px; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-tags, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-tags { \
 		  position: absolute !important; \
 		  top: 3px; \
 		} \
+		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row .urlbarView-tags, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem .ac-tags { \
 		  right: 0px; \
 		} \
+		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row .urlbarView-tags, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem .ac-tags { \
 		  left: 0px; \
 		} \
+		#urlbar-results .urlbarView-title-separator, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem spacer, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-separator {  \
 		  display: none !important; \
@@ -175,13 +230,32 @@ setTimeout(function(){
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
 		  margin-bottom: -20px !important; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-type-icon { \
+		  position: absolute !important; \
+		  bottom: 12px !important; \
+		  left: 4px !important; \
+		} \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-site-icon { \
 		  -moz-margin-start: -22px !important; \
 		  margin-top: -20px !important; \
 		} \
+		#urlbar-results .urlbarView-row .urlbarView-favicon { \
+		  position: absolute !important; \
+		  top: 6px !important; \
+		  left: 4px !important; \
+		} \
+		#urlbar-results .urlbarView-row[selected=true], \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem[selected=true] { \
 		  background-color: Highlight !important; \
 		} \
+		#urlbarView-results .urlbarView-row[selected] .urlbarView-title,  \
+		#urlbarView-results .urlbarView-title[selected], \
+		#urlbarView-results .urlbarView-row[selected] .urlbarView-url,  \
+		#urlbarView-results .urlbarView-url[selected], \
+		#urlbarView-results .urlbarView-row[selected] .urlbarView-action, \
+		#urlbarView-results .urlbarView-action[selected], \
+		#urlbarView-results .urlbarView-row[selected] .ac-separator, \
+		#urlbarView-results .ac-separator[selected], \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem[selected=true] .ac-action-text, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem[selected=true] .ac-title,  \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .ac-title[selected], \
@@ -193,15 +267,23 @@ setTimeout(function(){
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .ac-separator[selected] { \
 		  color: HighlightText !important; \
 		} \
+		#urlbar-results .urlbarView-row[type="search"] .urlbarView-action,  \
+		#urlbar-results .urlbarView-row[type="search"]:not([selected]):not(:hover) .urlbarView-action, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem:not([selected]):not(:hover) > .ac-action[actiontype=searchengine] { \
 		  display: block !important; \
+		  visibility: visible !important; \
 		} \
+		#urlbar-results .urlbarView-row , \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  border-inline-end: 0px solid transparent !important; \
 		} \
+		#urlbar-results > .urlbarView-body-outer, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox { \
 		  overflow-x: hidden !important; \
 		} \
+		#urlbar-results > .urlbarView-body-outer, \
+		#urlbar-results scrollbox, \
+		#urlbar-results > .urlbarView-body-outer, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > richlistbox, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] scrollbox, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] > .autocomplete-richlistbox { \
