@@ -95,7 +95,8 @@ var AddAddonbar = {
 		if(appversion >= 65) { CustomizableUI.registerToolbarNode(tb_addonbar); }
 		
 		// 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS to toggle add-on bar
-		var key = document.createElement('key');
+		var key = document.createXULElement('key');
+		if(appversion < 69) key = document.createElement("key");
 		key.id = 'key_toggleAddonBar';
 		key.setAttribute('key', '/');
 		key.setAttribute('modifiers', 'accel');

@@ -125,7 +125,8 @@ var AddonbarVertical = {
 	  }
 
 	  // 'Ctr + Alt + /' on Windows/Linux or 'Cmd + Alt + /' on macOS to toggle vertical add-on bar
-	  var key = document.createElement('key');
+	  var key = document.createXULElement('key');
+	  if(appversion < 69) key = document.createElement("key");
 	  key.id = 'key_toggleVAddonBar';
 	  key.setAttribute('key', '/');
 	  key.setAttribute('modifiers', 'accel,alt');
@@ -233,5 +234,5 @@ document.addEventListener("DOMContentLoaded", AddonbarVertical.init(), false);
 /*
 setTimeout(function(){
   AddonbarVertical.init();
-},500);
+},1000);
 */
