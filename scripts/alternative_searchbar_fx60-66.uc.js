@@ -205,8 +205,6 @@ var AltSearchbar = {
 	if(appversion >= 63) searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
 	  let textBox = this._textbox;
 	  
-	  console.log("dsafdafadsfasfasdf");
-
 	  if (aData && !PrivateBrowsingUtils.isWindowPrivate(window) && this.FormHistory.enabled) {
 		this.FormHistory.update({
 			op: "bump",
@@ -227,16 +225,9 @@ var AltSearchbar = {
 		telemetrySearchDetails = null;
 	  }
 	  
-	  //var all_engines = Services.search.getDefaultEngines(); //searchbar.getEngines();
-	  
-	  //var all_engines =  await searchbar.getEngines();
-	  
-	  
 	  gEngineView = new EngineView(new EngineStore());
 	  var all_engines = gEngineView._engineStore._engines;
 	  
-	  console.log(all_engines);
-	  console.log(Services.search.defaultEngine.name);
 
 	  const details = {
 		isOneOff: aOneOff,
