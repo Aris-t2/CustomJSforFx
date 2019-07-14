@@ -8,7 +8,7 @@ From this projects <code>\method 1\</code> folder copy <code>userChrome</code> f
 </br>
 <b>Edit <code>userChrome\userChrome.xml</code> file to add custom scripts.</b>
 </br>
-<h2>Method 2 - files for Firefox installation folder and Firefox profile folder</h2>
+<h2>Method 2 - files for Firefox installation profile folders</h2>
 M2 is based on this project by ardiman: https://github.com/ardiman/userChrome.js </br>
 M2 is also based on the modified files by Endor8: https://github.com/Endor8/userChrome.js/ </br>
 </br>
@@ -20,7 +20,7 @@ From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</c
 </br>
 With beta and release versions of Firefox 62+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". 
 </br>
-<h2>Method 3 - files for Firefox installation folder and Firefox profile folder</h2>
+<h2>Method 3 - files for Firefox installation and profile folders (Fx60-68 only!)</h2>
 M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
 </br>
 From this projects <code>\method 3\profile\</code> folder copy <code>userChrome</code> folder, <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
