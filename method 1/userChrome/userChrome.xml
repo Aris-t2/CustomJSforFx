@@ -5,7 +5,7 @@
   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:xbl="http://www.mozilla.org/xbl">
 
-  <binding id="execute_javascript_code" extends="extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-badged">
+  <binding id="execute_javascript_code" extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-badged">
 	<implementation>
 	  <constructor>
 		<![CDATA[
