@@ -1,4 +1,8 @@
 // 'Open Password Manager' button for Firefox 60+ by Aris
+//
+// left-click on password manager button: opens 'chrome://passwordmgr/content/passwordManager.xul' in a popup
+// middle-click on password manager button: fill current (non-chrome) domain/host into input field
+// right-click on password manager button: default context menu
 
 (function() {
 
@@ -22,8 +26,10 @@ try {
 		} catch (e) {}
 	  } else if(event.button=='1') {
 		try {
-		  LoginHelper.openPasswordManager(window, gBrowser.currentURI.host);
-		} catch (e) {}
+		  LoginHelper.openPasswordManager(window, { filterString: gBrowser.currentURI.host, entryPoint: 'mainmenu' });
+		} catch (e) {
+		  LoginHelper.openPasswordManager(window, { entryPoint: 'mainmenu' });
+		}
 	  }
 	  
 	},
