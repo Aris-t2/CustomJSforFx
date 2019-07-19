@@ -39,11 +39,15 @@ try {
 		
   });
   
+  /* set icon */
+  var button_icon = 'chrome://browser/skin/login.svg';
+  if (parseInt(Services.appinfo.version) < 68) button_icon = 'chrome://browser/skin/connection-secure.svg';
+  
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #pw_manager_button .toolbarbutton-icon {\
-		list-style-image: url("chrome://browser/skin/connection-secure.svg"); /* icon / path to icon */ \
+		list-style-image: url("'+button_icon+'"); /* icon / path to icon */ \
 		fill: red; /* icon color name/code */\
 	  }\
 	\
