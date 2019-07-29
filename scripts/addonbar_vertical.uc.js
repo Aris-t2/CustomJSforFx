@@ -16,6 +16,8 @@ Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
+
+
 var AddonbarVertical = {
   init: function() {
 	  
@@ -31,6 +33,7 @@ var AddonbarVertical = {
 	var insert_before_borders = false; // may not always offer a visible change
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
 	var addonbar_v_width = "30px"; // toolbar width
+	var compact_buttons = false; // compact button size (true) or default button size (false)
 
 	try {
 	 if(document.getElementById('toolbox_abv') == null && document.getElementById('addonbar_v') == null) {
@@ -230,10 +233,34 @@ var AddonbarVertical = {
 		}*/ \
 	  ';
 	}
+	
+	var compact_buttons_code = "";
+	
+	if(compact_buttons)
+	  compact_buttons_code = "\
+		#addonbar_v toolbarbutton .toolbarbutton-icon { \
+		  padding: 0 !important; \
+		  width: 16px !important; \
+		  height: 16px !important; \
+		} \
+		#addonbar_v .toolbarbutton-badge-stack { \
+		  padding: 0 !important; \
+		  margin: 0 !important; \
+		  width: 16px !important; \
+		  min-width: 16px !important; \
+		  height: 16px !important; \
+		  min-height: 16px !important; \
+		} \
+		#addonbar_v toolbarbutton .toolbarbutton-badge { \
+		  margin-top: 0px !important; \
+		  font-size: 8px !important; \
+		} \
+	  ";
 	  
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  '+addonbar_v_style+' \
 	  '+tooglebutton_addonbar_v_style+' \
+	  '+compact_buttons_code+' \
 	'), null, null);
 	  
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
