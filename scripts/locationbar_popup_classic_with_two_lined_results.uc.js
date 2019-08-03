@@ -117,6 +117,32 @@ setTimeout(function(){
 			  bottom: unset !important; \
 			} \
 	 ';
+	 
+	 var fx70plus_fixes_code = '';
+	 
+	 if(parseInt(Services.appinfo.version) >= 70)
+		fx70plus_fixes_code = ' \
+		   #urlbar-results { \
+			 -moz-margin-start: 5px !important; \
+			 margin-top: -6px !important; \
+			left: unset !important; \
+			right: unset !important; \
+		   } \
+		   #urlbar-results .urlbarView-row { \
+			  border-radius: 0px !important; \
+		   }\
+			#urlbar-results .urlbarView-body-outer { \
+			  border: 1px solid ThreeDShadow !important; \
+			} \
+			#urlbar-results .search-one-offs { \
+			  margin-top: -1px !important; \
+			  border: 1px solid ThreeDShadow !important; \
+			  background-color: hsla(0,0%,100%,1.0) !important; \
+			} \
+			.search-setting-button-compact { \
+			  margin-left: -2px !important; \
+			} \
+		';
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
@@ -126,9 +152,9 @@ setTimeout(function(){
 		  --item-padding-end: 0 !important; \
 		} \
 		#urlbar-results { \
-		  -moz-margin-start: 0 !important; \
+		  -moz-margin-start: 0px !important; \
 		  margin-top: -4px !important; \
-		  border: 1px solid ThreeDShadow !important; \
+		  border-block: 0px !important; \
 		} \
 		#urlbar-results, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
@@ -291,6 +317,7 @@ setTimeout(function(){
 		} \
 		'+hide_visit_search_items_code+' \
 		'+move_bookmarks_star_to_the_end_code+' \
+		'+fx70plus_fixes_code+' \
 	  '), null, null);
 	  
 
