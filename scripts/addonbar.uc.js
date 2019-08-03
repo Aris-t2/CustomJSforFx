@@ -67,6 +67,10 @@ var AddAddonbar = {
 		  #addonbar { \
 			border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
 		  } \
+		  #addonbar {\
+			background: var(--lwt-header-image) !important; \
+			background-position: 0vw 50vh !important; \
+		  } \
 		  '+compact_buttons_code+'\
 	  '), null, null),
 	  Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET
