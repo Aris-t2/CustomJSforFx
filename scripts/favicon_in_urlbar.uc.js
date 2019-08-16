@@ -4,6 +4,7 @@
 // [!] If a page does not offer a favicon, browser branches default icon is shown.
 // [!] In a multi-window environment pages without favicons might show wrong icons.
 // option: set icon for pages without favicon
+// Fx 70+: add favicon item to identiy box without replacing connection or tracking protection icons
 
 
 var i_icon = 'chrome://browser/skin/identity-icon.svg';
@@ -14,9 +15,22 @@ var globe = 'chrome://mozapps/skin/places/defaultFavicon.svg';
 var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
 
 
+var appversion = parseInt(Services.appinfo.version);
+
 var FaviconInUrlbar = {
  init: function() {
    try {
+	   
+	// on Fx 70+: add favicon to identity box without replacing existing icons
+	if(appversion >= 70) {
+	  var favimginurlbar = document.createXULElement("image");
+	  favimginurlbar.setAttribute("id","favimginurlbar");
+	  favimginurlbar.style.width = "16px";
+	  favimginurlbar.style.height = "16px";
+	  favimginurlbar.style.marginRight = "4px";
+	  document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
+	}
+	
 	// update script every time tab attributes get modified (switch/open tabs/windows)
 	document.addEventListener("TabAttrModified", updateIcon, false);
 	document.addEventListener('TabSelect', updateIcon, false);
@@ -24,6 +38,7 @@ var FaviconInUrlbar = {
 	document.addEventListener('TabClose', updateIcon, false);
 	document.addEventListener('load', updateIcon, false);
 	document.addEventListener("DOMContentLoaded", updateIcon, false);
+	
 
 	function updateIcon() {
 		
@@ -36,8 +51,11 @@ var FaviconInUrlbar = {
 	  if(!gBrowser.selectedTab.image || gBrowser.selectedTab.image == null)
 		if(!icon_for_pages_without_favicon) favicon_in_urlbar = brand;
 		  else favicon_in_urlbar = icon_for_pages_without_favicon;
-	  
-	  document.querySelector('#identity-icon').style.listStyleImage = "url("+favicon_in_urlbar+")";
+		  
+	  // on Fx 60-69: replace globe icon with favicon 
+	  // on Fx 70+: modify favicon item
+	  if(appversion >= 70) document.querySelector('#favimginurlbar').style.listStyleImage = "url("+favicon_in_urlbar+")";
+	  else document.querySelector('#identity-icon').style.listStyleImage = "url("+favicon_in_urlbar+")";
 	  
 	 },100);
 
