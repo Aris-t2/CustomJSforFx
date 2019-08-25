@@ -29,7 +29,10 @@ setTimeout(function(){
 	function classicAcpopup(event){
 	
 	  var urlbar_width = Math.round(document.getElementById("urlbar").getBoundingClientRect().width);
-	  var urlbar_results = 10;
+	  var urlbar_results = 8;
+	  
+	  if(parseInt(Services.appinfo.version) >= 70)
+	    urlbar_width = urlbar_width - 2;
 	  
 	  try{
 	    urlbar_results = Services.prefs.getBranch("browser.urlbar.").getIntPref("maxRichResults");
@@ -122,15 +125,31 @@ setTimeout(function(){
 	 
 	 if(parseInt(Services.appinfo.version) >= 70)
 		fx70plus_fixes_code = ' \
-		   #urlbar-results { \
-			 -moz-margin-start: 5px !important; \
-			 margin-top: -6px !important; \
-			left: unset !important; \
-			right: unset !important; \
-		   } \
-		   #urlbar-results .urlbarView-row { \
-			  border-radius: 0px !important; \
-		   }\
+			.urlbarView:not(.megabar) { \
+			  left: unset !important; \
+			  right: unset !important; \
+			  border: 1px solid ThreeDShadow !important; \
+			  -moz-margin-start: -1px !important; \
+			} \
+			#urlbar-input-container + .urlbarView:not(.megabar){ \
+			  margin-top: -6px !important; \
+			} \
+			#urlbar:not(.megabar) .search-one-offs { \
+			  padding-inline-start: unset !important; \
+			  padding-inline-end: unset !important; \
+			  background: #ededed !important; \
+			} \
+			#urlbar-input-container { \
+			  --item-padding-start: 0px !important; \
+			  --item-padding-end: 0px !important; \
+			} \
+			#urlbar-results { \
+			  left: unset !important; \
+			  right: unset !important; \
+			  border-block: 0px !important; \
+			  padding: 0 !important; \
+			  margin-top: 0px !important; \
+			} \
 			#urlbar-results .urlbarView-body-outer { \
 			  border: 1px solid ThreeDShadow !important; \
 			} \
@@ -140,7 +159,10 @@ setTimeout(function(){
 			  background-color: hsla(0,0%,100%,1.0) !important; \
 			} \
 			.search-setting-button-compact { \
-			  margin-left: -2px !important; \
+			  -moz-margin-start: -2px !important; \
+			} \
+			.urlbarView-results { \
+			   overflow: hidden !important; \
 			} \
 		';
 
@@ -162,12 +184,13 @@ setTimeout(function(){
 		  width: '+urlbar_width+'px !important; \
 		  max-width: '+urlbar_width+'px !important; \
 		} \
-		#urlbar-results .urlbarView-row .urlbarView-title,  \
+		#urlbar-results .urlbarView-row .urlbarView-title, \
 		#urlbar-results .urlbarView-row .urlbarView-url, \
-		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-title-text,  \
+		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-title-text, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-url-text { \
 		  min-width: calc( '+urlbar_width+' - 50px) !important; \
 		  width: calc( '+urlbar_width+' - 50px) !important; \
+		  max-width: calc( '+urlbar_width+' - 50px) !important; \
 		} \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] { \
 		  -moz-margin-start: 0 !important; \
@@ -188,7 +211,8 @@ setTimeout(function(){
 		#urlbar-results .urlbarView-row, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  position: relative !important; \
-		  height: 44px !important; \
+		  height: 36px !important; \
+		  border-radius: 0px !important; \
 		  border-bottom-color: transparent !important; \
 		  -moz-margin-start: 0 !important; \
 		  -moz-padding-start: 0 !important; \
