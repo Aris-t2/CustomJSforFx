@@ -107,7 +107,7 @@ setTimeout(function(){
 		 move_bookmarks_star_to_the_end_code = ' \
 			#urlbar-results .urlbarView-row .urlbarView-type-icon, \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-type-icon { \
-			  -moz-margin-start: '+ (urlbar_width-26) +'px !important; \
+			  -moz-margin-start: '+ (urlbar_width-40) +'px !important; \
 			} \
 			#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem .ac-site-icon { \
 			  -moz-margin-start: -'+ (urlbar_width-10) +'px !important; \
@@ -162,9 +162,13 @@ setTimeout(function(){
 			  -moz-margin-start: -2px !important; \
 			} \
 			.urlbarView-results { \
-			   overflow: hidden !important; \
+			  overflow: hidden !important; \
 			} \
 		';
+		
+	  var item_height = '47.5';
+	  
+	  if(parseInt(Services.appinfo.version) >= 69) item_height = '36';
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
@@ -211,7 +215,7 @@ setTimeout(function(){
 		#urlbar-results .urlbarView-row, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem { \
 		  position: relative !important; \
-		  height: 36px !important; \
+		  height: '+item_height+'px !important; \
 		  border-radius: 0px !important; \
 		  border-bottom-color: transparent !important; \
 		  -moz-margin-start: 0 !important; \
@@ -266,11 +270,11 @@ setTimeout(function(){
 		} \
 		#urlbar-results:-moz-locale-dir(ltr) .urlbarView-row .urlbarView-tags, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(ltr) .autocomplete-richlistitem .ac-tags { \
-		  right: 0px; \
+		  right: 40px; \
 		} \
 		#urlbar-results:-moz-locale-dir(rtl) .urlbarView-row .urlbarView-tags, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"]:-moz-locale-dir(rtl) .autocomplete-richlistitem .ac-tags { \
-		  left: 0px; \
+		  left: 40px; \
 		} \
 		#urlbar-results .urlbarView-title-separator, \
 		#PopupAutoCompleteRichResult[autocompleteinput="urlbar"] .autocomplete-richlistitem spacer, \
