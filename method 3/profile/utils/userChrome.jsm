@@ -3,11 +3,16 @@ let EXPORTED_SYMBOLS = [];
 const {Services} = ChromeUtils.import('resource://gre/modules/Services.jsm');
 const {xPref} = ChromeUtils.import('chrome://userchromejs/content/xPref.jsm');
 
+var browser_chrome = 'chrome://browser/content/browser.xul';
+
+if(parseInt(Services.appinfo.version) >= 69)
+  browser_chrome = 'chrome://browser/content/browser.xhtml';
+
 let UC = {};
 
 let _uc = {
   ALWAYSEXECUTE: 'rebuild_userChrome.uc.js',
-  BROWSERCHROME: 'chrome://browser/content/browser.xul',
+  BROWSERCHROME: browser_chrome,
   PREF_ENABLED: 'userChromeJS.enabled',
   PREF_SCRIPTSDISABLED: 'userChromeJS.scriptsDisabled',
 
