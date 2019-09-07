@@ -23,7 +23,7 @@ With beta and release versions of Firefox 62+ an additional preference <code>pre
 <h2>Method 3 - files for Firefox installation and profile folders</h2>
 M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
 </br>
-From this projects <code>\method 3\profile\</code> folder copy <code>userChrome</code> folder, <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
+From this projects <code>\method 3\profile\</code> folder copy <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
 </br>
 From this projects <code>\method 3\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
 </br>
