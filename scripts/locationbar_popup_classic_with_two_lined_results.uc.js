@@ -130,11 +130,11 @@ setTimeout(function(){
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 		\
 		:root { \
-		  --ac_popup_width: '+urlbar_width+'px; \
-		  --ac_popup_number_of_results: '+urlbar_results+'; \
-		  --ac_popup_item_height: '+item_height+'px; \
-		  --ac_popup_maxheight: '+(window.innerHeight-150)+'px; \
-		  --ac_popup_height: auto; \
+		  --ac_jspopup_width: '+urlbar_width+'px; \
+		  --ac_jspopup_number_of_results: '+urlbar_results+'; \
+		  --ac_jspopup_item_height: '+item_height+'px; \
+		  --ac_jspopup_maxheight: '+(window.innerHeight-150)+'px; \
+		  --ac_jspopup_height: auto; \
 		} \
 		#urlbar-results { \
 		  --item-padding-start: 0 !important; \
@@ -187,24 +187,24 @@ setTimeout(function(){
 		} \
 		 \
 		#urlbarView-results { \
-		  height: var(--ac_popup_height) !important; \
-		  max-height: var(--ac_popup_maxheight) !important; \
+		  height: var(--ac_jspopup_height) !important; \
+		  max-height: var(--ac_jspopup_maxheight) !important; \
 		} \
 		#urlbar-results{ \
 		  overflow: hidden !important; \
 		  overflow-y: visible !important; \
-		  height: var(--ac_popup_height) !important; \
-		  max-height: var(--ac_popup_maxheight) !important; \
+		  height: var(--ac_jspopup_height) !important; \
+		  max-height: var(--ac_jspopup_maxheight) !important; \
 		} \
 		#urlbar-results { \
 		  min-width: 0px !important; \
-		  width: var(--ac_popup_width) !important; \
-		  max-width: var(--ac_popup_width) !important; \
+		  width: var(--ac_jspopup_width) !important; \
+		  max-width: var(--ac_jspopup_width) !important; \
 		} \
 		#urlbar-results .urlbarView-row .urlbarView-title,  \
 		#urlbar-results .urlbarView-row .urlbarView-url { \
-		  min-width: calc( var(--ac_popup_width) - 50px) !important; \
-		  width: calc( var(--ac_popup_width) - 50px) !important; \
+		  min-width: calc( var(--ac_jspopup_width) - 50px) !important; \
+		  width: calc( var(--ac_jspopup_width) - 50px) !important; \
 		} \
 		#urlbar-results .urlbarView-row { \
 		  position: relative !important; \
