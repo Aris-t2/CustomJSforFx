@@ -303,6 +303,8 @@ setTimeout(function(){
 		#urlbar .search-one-offs { \
 		  padding-top: 0px !important; \
 		  padding-bottom: 0px !important; \
+		  width: var(--ac_jspopup_width) !important; \
+		  max-width: var(--ac_jspopup_width) !important; \
 		} \
 		 \
 		'+hide_visit_search_items_code+' \
