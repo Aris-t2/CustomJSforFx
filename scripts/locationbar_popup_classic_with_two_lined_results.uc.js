@@ -10,6 +10,7 @@
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
+var fx70_workaround = true; // fixes issues with large amounts for search engines
 var hide_visit_search_items = false;
 var move_bookmarks_star_to_the_end = true;
 
@@ -20,7 +21,9 @@ setTimeout(function(){
 	
 	var observer = new MutationObserver(function(mutations) {
 	  mutations.forEach(function(mutation) {
-		classicAcpopup();
+		setTimeout(function(){
+		  classicAcpopup();
+		},500);
 	  });    
 	});
 	
@@ -37,6 +40,26 @@ setTimeout(function(){
 	  try{
 	    urlbar_results = Services.prefs.getBranch("browser.urlbar.").getIntPref("maxRichResults");
 	  } catch(e){}
+	  
+	  
+	  var fx70_workaround_code = '';
+	  
+	  if(fx70_workaround && parseInt(Services.appinfo.version) == 70)
+		fx70_workaround_code = ' \
+			#urlbar .search-one-offs { \
+			  display: block !important; \
+			} \
+			#urlbar .search-panel-header { \
+			  display: none !important; \
+			} \
+			#urlbar .search-panel-one-offs { \
+			  display: unset !important; \
+			  padding-inline-start: unset !important; \
+			  padding-inline-end: unset !important; \
+			  margin-inline-start: unset !important; \
+			  margin-inline-end: unset !important; \
+			} \
+		';
 	  
 	  var hide_visit_search_items_code = '';
 	  
@@ -307,6 +330,7 @@ setTimeout(function(){
 		  max-width: var(--ac_jspopup_width) !important; \
 		} \
 		 \
+		'+fx70_workaround_code+' \
 		'+hide_visit_search_items_code+' \
 		'+move_bookmarks_star_to_the_end_code+' \
 	  '), null, null);
