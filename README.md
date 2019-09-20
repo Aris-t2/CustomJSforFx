@@ -36,9 +36,9 @@ Where to find Firefox <code>startupCache</code> folder?</br>
 This is not the same 'profile' folder custom scripts and styles are stored in!</br>
 Where to find Thunderbird <code>startupCache</code> folder?</br>
 <b>Windows</b></br>
-<code>C:\Users\ USERNAME \AppData\Local\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code>
+<code>C:\Users\ USERNAME \AppData\Local\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code></br>
 <b>Linux/macOS</b></br>
-Search for <code>startupCache</code> folder on your hard drive.
+Search for <code>startupCache</code> folder on your hard drive.</br>
 </br>
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
@@ -48,15 +48,15 @@ More info about startup cache removal (in English [Google translation]): https:/
 </br>
 <h2>Where to find Thunderbird profile folder?</h2>
 <b>Windows</b></br>
-<code>C:\Users\ USERNAME \AppData\Roaming\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code>
-Hidden files must be visible to see <code>AppData</code> folder. Alternatively open <code>%APPDATA%\Mozilla\Firefox\Profiles\</code> from explorers location bar.  
+<code>C:\Users\ USERNAME \AppData\Roaming\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code></br>
+Hidden files must be visible to see <code>AppData</code> folder. Alternatively open <code>%APPDATA%\Mozilla\Firefox\Profiles\</code> from explorers location bar.</br></br>
 <b>Linux</b></br>
-<code>/home/ username /.mozilla/thunderbird/ profile folder name /</code>
-Hidden files must be visible to see <code>.mozilla</code> folder.  
+<code>/home/ username /.mozilla/thunderbird/ profile folder name /</code></br>
+Hidden files must be visible to see <code>.mozilla</code> folder.</br></br>
 <b>Mac OS X</b></br>
-<code>~\Library\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code> or
-<code>~\Library\Application Support\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code>
-<code>\Users\ USERNAME \Library\Application\Support\Thunderbird\Profiles\</code>
+<code>~\Library\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code> or</br>
+<code>~\Library\Application Support\Mozilla\Thunderbird\Profiles\ PROFILE FOLDER NAME \</code></br>
+<code>\Users\ USERNAME \Library\Application\Support\Thunderbird\Profiles\</code></br>
 </br>
 <h2>Script collections</h2>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
