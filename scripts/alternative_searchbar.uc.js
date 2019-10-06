@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 67+ by Aris
+// 'Alternative search bar' script for Firefox 69+ by Aris
 //
 // Based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
