@@ -1,5 +1,10 @@
 <h1>Custom JS scripts for Firefox 60+ and Thunderbird 68+</h1>
 The <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> contains a feature list (with screenshots).  
+<h1>Unlock custom CSS usage in Firefox 69 and newer</h1>  
+<code>about:config</code> > <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> > <code>true</code>  
+<h1>Unlock custom CSS usage in Thunderbird 69 and newer</h1>  
+<code>Settings/Options</code> > <code>Advanced</code> > <code>General</code> > <code>Config Editor...</code> </br>
+<code>toolkit.legacyUserProfileCustomizations.stylesheets</code> > <code>true</code>  
 <h2>Method 1 - files in profile folder only</h2>
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
 M1 will stop working when Mozilla drops XBL support.</br>
