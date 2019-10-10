@@ -130,6 +130,73 @@ var AltSearchbar = {
 		console.log("Exception AltSearchbar: " + exc);
 	  }
 
+
+	  var observer3 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			  try {
+				  
+				    searchbuttonpopup = document.getElementById("searchbuttonpopup");
+					var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
+				  
+					if(native_popup_search_add_item.hasChildNodes()) {
+					  
+						var add_engine_menuitem;
+					  
+						while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+						}
+						
+						if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
+							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+						}
+					
+						native_popup_search_add_item.childNodes.forEach(function(child_node) {
+							
+							menuitem = document.createXULElement("menuitem");
+							menuitem.setAttribute("label", child_node.label);
+							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
+							menuitem.setAttribute("tooltiptext", child_node.tooltiptext);
+							menuitem.setAttribute("crop", "end");
+							menuitem.setAttribute("uri", child_node.uri);
+							menuitem.setAttribute("title", child_node.title);
+							menuitem.setAttribute("badged", "true");
+							menuitem.setAttribute("oncommand", "document.getElementById(\""+child_node.id+"\").click();");
+							
+							if(child_node.image)
+								menuitem.setAttribute("image",child_node.image);
+							
+							searchbuttonpopup.appendChild(menuitem);
+							
+						});
+						
+					}
+					else {
+						
+						while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+						}
+						
+						while(searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
+							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+						
+					}
+
+					
+			  }
+			  catch(exc) {
+				  console.log("custom addengine exc: " + exc);
+			  }
+
+
+		  });
+
+	  });
+	  
+	  try {
+		var search_add_engines_element = document.getElementsByClassName("search-add-engines")[0];
+		observer3.observe(search_add_engines_element, { childList: true });
+	  }catch(exc) { console.log("observer 3: " + exc); }
+
 	  document.getElementById("mainPopupSet").appendChild(searchbuttonpopup);
 
 	  // adjust popup width
