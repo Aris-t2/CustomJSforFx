@@ -722,6 +722,20 @@ var AltSearchbar = {
 		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay { \
 		  visibility: visible !important; \
 		} \
+		 \
+		.custom-addengine-item > .menu-iconic-left::after { \
+		  position: absolute !important; \
+		  display: block; !important; \
+		  content: "" !important; \
+		  background: url(chrome://browser/skin/search-indicator-badge-add.svg) no-repeat center !important; \
+		  box-shadow: none  !important; \
+		  margin-top: -12px !important; \
+		  margin-inline-start: -4px !important; \
+		  width: 11px; !important; \
+		  height: 11px; !important; \
+		  min-width: 11px; !important; \
+		  min-height: 11px; !important; \
+		} \
 		'+hide_addengines_plus_indicator_code+' \
 		'+hide_oneoff_search_engines_code+' \
 		'+show_search_engine_names_code+' \
