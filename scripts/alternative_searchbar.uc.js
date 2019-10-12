@@ -3,7 +3,7 @@
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ fixes and tweaks 
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
 //
-// Based on 'search revert' script by '2002Andreas':
+// Initial scripts was based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
 //
@@ -18,14 +18,14 @@
 // Option: hide 'oneoff' search engines (engines at popups bottom)
 // Option: hide placeholder text 'Search'
 // Option: swap the icons of search engine button and go button
-// Option: show search engine names instead of icons only
+// Option: show icons and search engine names instead of only icons
 // Option: select search engine by scrolling mouse wheel over search bars button
 
 // [!] Default browser feature: search engine can be changed inside default/modern popup by right-clicking
 //     search icon and selecting 'Set As Default Search Engine' menuitem
 
 
-// Configuration area - start (all false beside last by default)
+// Configuration area - start
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
@@ -37,8 +37,8 @@ var switch_glass_and_engine_icon = false; // swap icons of search engine button 
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
-var searchsettingslabel = "Change Search Settings..."; // Set label of search settings menuitem
-var initialization_delay_value = 1000; // some systems might require a higher value than 1 second (1000ms)
+var searchsettingslabel = "Change Search Settings..."; // set label of search settings menuitem
+var initialization_delay_value = 1000; // some systems might require a higher value than 1 second (1000ms) and on some '0' is enough
 // Configuration area - end
 
 var AltSearchbar = {
@@ -191,7 +191,6 @@ var AltSearchbar = {
 						
 						if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
 							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-							//searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
 						}
 					
 						native_popup_search_add_item.childNodes.forEach(function(child_node) {
