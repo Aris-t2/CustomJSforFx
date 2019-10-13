@@ -7,9 +7,9 @@
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
 //
-// Feature: search glass is always visible at search bars end (like with old search)
-// Feature: search button shows current search engines icon (like with old search)
-// Feature: search buttons dropmarker is always visible (like with old search)
+// Feature (not optional): search glass is always visible at search bars end (like with "old" search)
+// Feature (not optional): search button shows current search engines icon (like with "old" search)
+// Feature (not optional): search buttons dropmarker is always visible (like with "old" search)
 //
 // Option: clear search input after search
 // Option: revert to first search engine in list after search
@@ -22,7 +22,7 @@
 // Option: select search engine by scrolling mouse wheel over search bars button
 
 // [!] Default browser feature: search engine can be changed inside default/modern popup by right-clicking
-//     search icon and selecting 'Set As Default Search Engine' menuitem
+//     search icon and selecting 'Set As Default Search Engine' menuitem.
 
 
 // Configuration area - start
@@ -37,8 +37,8 @@ var switch_glass_and_engine_icon = false; // swap icons of search engine button 
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
-var searchsettingslabel = "Change Search Settings..."; // set label of search settings menuitem
-var initialization_delay_value = 1000; // some systems might require a higher value than 1 second (1000ms) and on some '0' is enough
+var searchsettingslabel = "Change Search Settings"; // set label of search settings menuitem
+var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (1000ms) and on some even '0' is enough
 // Configuration area - end
 
 var AltSearchbar = {
@@ -97,7 +97,7 @@ var AltSearchbar = {
 				(engines) => 
 				
 				{
-			
+
 					searchbar.engines = engines;
 			
 					var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
@@ -162,7 +162,8 @@ var AltSearchbar = {
 		observer.observe(document.getElementById('search-container'), { attributes: true, attributeFilter: ['width'] });
 	  } catch(e){}
 
-  	  var observer2 = new MutationObserver(function(mutations) {
+	  // adjust popup width when changing window modes
+	  var observer2 = new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
 		 try {
 		  document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").getBoundingClientRect().width );
@@ -174,6 +175,7 @@ var AltSearchbar = {
 		observer2.observe(document.getElementById('main-window'), { attributes: true, attributeFilter: ['sizemode'] });
 	  } catch(e){}
 	  
+	  // restore "add search engine" menuitem
 	  var observer3 = new MutationObserver(function(mutations) {
 		  mutations.forEach(function(mutation) {
 			  try {
@@ -190,6 +192,7 @@ var AltSearchbar = {
 						}
 						
 						if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
+							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
 							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
 						}
 					
@@ -246,6 +249,7 @@ var AltSearchbar = {
 		
 	  }catch(exc) { console.log("observer 3: " + exc); }
 	  
+	  // update search engine list after adding a new search engine
 	  var observer4 = new MutationObserver(function(mutations) {
 		  try {
 			  
@@ -253,9 +257,9 @@ var AltSearchbar = {
 			  
 			Services.search.getVisibleEngines().then(
 				(engines) => 
-				
+
 				{
-					
+
 					try {
 			
 						searchbar.engines = engines;
@@ -304,26 +308,26 @@ var AltSearchbar = {
 	  });
 	  
 	  try {
-	  
+
 		  var observed_item = document.getElementsByClassName("search-panel-one-offs");
 		  
 		  if(observed_item.length == 1)
 			  observed_item = observed_item[0];
 		  else {
-			  
+
 			  var i = 0;
-			  
+
 			  while(
 				i < observed_item.length &&
 				!(observed_item[i].getAttribute("role") == "group")
 			  )
 				i++;
-				
+
 			  if(i == observed_item.length)
 				  throw("Could not find native popup engines list");
 			  else
 				  observed_item = observed_item[i];
-			  
+
 		  }
 		  
 		  observer4.observe(observed_item,{ childList: true });
@@ -353,6 +357,7 @@ var AltSearchbar = {
 	  }, true);
 
 	}; //createOldSelectionPopup
+	
 	
 	// doSearch function taken from Firefox 64s internal 'searchbar.js' file and added modifications
 	searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
@@ -403,13 +408,15 @@ var AltSearchbar = {
 			updateStyleSheet();
 		}
 	};
+	
 
-	// setIcon function taken from browsers internal 'searchbar.js' file and added modifications
-	// required to update icon, if search engine is changed (and old search popup is disabled)
+	// setIcon function taken from browsers internal 'searchbar.js' file and added modifications.
+	// Required to update icon, if search engine is changed, but old search popup disabled.
 	if(!old_search_engine_selection_popup)  searchbar.setIcon = function(element, uri) {
 	  element.setAttribute("src", uri);
 	  updateStyleSheet();
 	};
+	
 
 	// main style sheet
 	function updateStyleSheet() {
@@ -863,6 +870,3 @@ Services.search.getVisibleEngines().then(
 	  },initialization_delay_value);
 	}
 );
-
-/* old/outdated - initialization delay workaround  */
-//document.addEventListener("DOMContentLoaded", AltSearchbar.init(), false);
