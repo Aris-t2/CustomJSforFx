@@ -236,16 +236,22 @@ var AltSearchbar = {
 	  
 	  try {
 
-		new Promise(function(resolve) {
+		new Promise(function(resolve,reject) {
 			var return_value = document.getElementsByClassName("search-add-engines");
-			while(return_value.length == 0)
+			var attempts = 0;
+			while(return_value.length == 0 && attempts < 20) {
 				setTimeout(function() {
 					return_value = document.getElementsByClassName("search-add-engines");
-				},1000);
-			resolve(return_value);
+				},2000);
+				attempts++;
+			}
+			if(attempts < 20)
+				resolve(return_value);
+			else
+				reject();
 		}).then(function(search_add_engines_element) {
 			observer3.observe(search_add_engines_element[0], { childList: true });
-		});
+		}, () => console.log("observer3 didn't load"));
 		
 	  }catch(exc) { console.log("observer 3: " + exc); }
 	  
