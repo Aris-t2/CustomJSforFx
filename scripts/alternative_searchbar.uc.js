@@ -25,7 +25,7 @@
 //     search icon and selecting 'Set As Default Search Engine' menuitem.
 
 
-// Configuration area - start
+// Configuration area - start (all 'false' by default)
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
@@ -49,7 +49,8 @@ var AltSearchbar = {
 	var searchbar = document.getElementById("searchbar");
 	var appversion = parseInt(Services.appinfo.version);
 
-	if(!old_search_engine_selection_popup) updateStyleSheet();
+	if(!old_search_engine_selection_popup)
+	  updateStyleSheet();
 	
 	if(hide_placeholder)
 	  hideSearchbarsPlaceholder();
@@ -97,7 +98,7 @@ var AltSearchbar = {
 				(engines) => 
 				
 				{
-
+			
 					searchbar.engines = engines;
 			
 					var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
@@ -109,6 +110,7 @@ var AltSearchbar = {
 						
 							menuitem = document.createXULElement("menuitem");;
 							menuitem.setAttribute("label", engines[i].name);
+							menuitem.setAttribute("tooltiptext", engines[i].name);
 							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
 			
 							if (engines[i] == searchbar.currentEngine)
@@ -130,6 +132,7 @@ var AltSearchbar = {
 
 					menuitem_om = document.createXULElement("menuitem");
 					menuitem_om.setAttribute("label", searchsettingslabel);
+					menuitem_om.setAttribute("tooltiptext", searchsettingslabel);
 					menuitem_om.setAttribute("class", "open-engine-manager");
 					menuitem_om.setAttribute("oncommand", "openPreferences('search');");
 					searchbuttonpopup.appendChild(menuitem_om);	
@@ -150,122 +153,110 @@ var AltSearchbar = {
 		document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").getBoundingClientRect().width);
 	  },1000);
 
-	  var observer = new MutationObserver(function(mutations) {
-		mutations.forEach(function(mutation) {
-		 try {
+	  var observer_width = new MutationObserver(function(mutations,observer) {
+		observer.disconnect();
+		try {
 		  document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").getBoundingClientRect().width );
-		 } catch(e){}
-		});
-	  });
-
-	  try {
+		} catch(e){}
 		observer.observe(document.getElementById('search-container'), { attributes: true, attributeFilter: ['width'] });
-	  } catch(e){}
-
-	  // adjust popup width when changing window modes
-	  var observer2 = new MutationObserver(function(mutations) {
-		mutations.forEach(function(mutation) {
-		 try {
-		  document.getElementById('searchbuttonpopup').setAttribute("width", document.getElementById("searchbar").getBoundingClientRect().width );
-		 } catch(e){}
-		});
+		observer.observe(document.getElementById('main-window'), { attributes: true, attributeFilter: ['sizemode'] });
 	  });
 
 	  try {
-		observer2.observe(document.getElementById('main-window'), { attributes: true, attributeFilter: ['sizemode'] });
+		observer_width.observe(document.getElementById('search-container'), { attributes: true, attributeFilter: ['width'] });
+		observer_width.observe(document.getElementById('main-window'), { attributes: true, attributeFilter: ['sizemode'] });
 	  } catch(e){}
 	  
 	  // restore "add search engine" menuitem
-	  var observer3 = new MutationObserver(function(mutations) {
-		  mutations.forEach(function(mutation) {
-			  try {
+	  var observer_add_search = new MutationObserver(function(mutations,observer) {
+		  observer.disconnect();
+		  try {
+			  
+				searchbuttonpopup = document.getElementById("searchbuttonpopup");
+				var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
+			  
+				if(native_popup_search_add_item.hasChildNodes()) {
 				  
-				    searchbuttonpopup = document.getElementById("searchbuttonpopup");
-					var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
+					var add_engine_menuitem;
 				  
-					if(native_popup_search_add_item.hasChildNodes()) {
-					  
-						var add_engine_menuitem;
-					  
-						while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-						}
-						
-						if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
-							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-							searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-						}
-					
-						native_popup_search_add_item.childNodes.forEach(function(child_node) {
-							
-							menuitem = document.createXULElement("menuitem");
-							menuitem.setAttribute("label", child_node.label);
-							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
-							menuitem.setAttribute("tooltiptext", child_node.tooltiptext);
-							menuitem.setAttribute("crop", "end");
-							menuitem.setAttribute("uri", child_node.uri);
-							menuitem.setAttribute("title", child_node.title);
-							menuitem.setAttribute("badged", "true");
-							menuitem.setAttribute("oncommand", "document.getElementById(\""+child_node.id+"\").click();");
-							
-							if(child_node.image)
-								menuitem.setAttribute("image",child_node.image);
-							
-							searchbuttonpopup.appendChild(menuitem);
-							
-						});
-						
-					}
-					else {
-						
-						while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-						}
-						
-						while(searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
-							searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-						
+					while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
 					}
 					
-			  }
-			  catch(exc) {
-				  console.log("custom addengine exc: " + exc);
-			  }
-		  });
+					if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
+						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+					}
+				
+					native_popup_search_add_item.childNodes.forEach(function(child_node) {
+						
+						menuitem = document.createXULElement("menuitem");
+						menuitem.setAttribute("label", child_node.label);
+						menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
+						menuitem.setAttribute("tooltiptext", child_node.label);
+						menuitem.setAttribute("oncommand", "document.getElementById(\""+child_node.id+"\").click();");
+						
+						if(child_node.image)
+							menuitem.setAttribute("image",child_node.image);
+						
+						searchbuttonpopup.appendChild(menuitem);
+						
+					});
+					
+				}
+				else {
+					
+					while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+					}
+					
+					while(searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
+						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+					
+				}
+				
+				observer.observe(document.getElementsByClassName("search-add-engines")[0], { childList: true });
+				
+		  }
+		  catch(exc) {
+			  console.log("custom addengine exc: " + exc);
+		  }
+	
 	  });
 	  
 	  try {
-
-		new Promise(function(resolve,reject) {
-			var return_value = document.getElementsByClassName("search-add-engines");
-			var attempts = 0;
-			while(return_value.length == 0 && attempts < 20) {
-				setTimeout(function() {
-					return_value = document.getElementsByClassName("search-add-engines");
-				},2000);
-				attempts++;
-			}
-			if(attempts < 20)
-				resolve(return_value);
-			else
-				reject();
-		}).then(function(search_add_engines_element) {
-			observer3.observe(search_add_engines_element[0], { childList: true });
-		}, () => console.log("observer3 didn't load"));
+		  
+		  var search_add_engines_candidates = document.getElementsByClassName("search-add-engines");
+		  
+		  if(search_add_engines_candidates.length == 0) {
+			  new MutationObserver(function(mutations,local_observer) {
+				  if(search_add_engines_candidates.length != 0) {
+					  observer_add_search.observe(search_add_engines_candidates[0], { childList: true });
+					  local_observer.disconnect();
+				  }								  
+			  }).observe(document, { childList : true, attributes : true, attributeFilter : [ "class" ] , subtree : true });
+		  }
+		  else {
+			observer_add_search.observe(search_add_engines_candidates[0], { childList: true });
+		  }
 		
-	  }catch(exc) { console.log("observer 3: " + exc); }
+		
+	  }catch(exc) { console.log("observer_add_search: " + exc); }
 	  
 	  // update search engine list after adding a new search engine
-	  var observer4 = new MutationObserver(function(mutations) {
+	  var observer_engines_list = new MutationObserver(function(mutations,observer) {
+		  
+		  observer.disconnect();
+		  
 		  try {
 			  
 			searchbuttonpopup = document.getElementById("searchbuttonpopup");
 			  
 			Services.search.getVisibleEngines().then(
 				(engines) => 
-
+				
 				{
-
+					
 					try {
 			
 						searchbar.engines = engines;
@@ -285,6 +276,7 @@ var AltSearchbar = {
 								menuitem = document.createXULElement("menuitem");;
 								menuitem.setAttribute("label", engines[i].name);
 								menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
+								menuitem.setAttribute("tooltiptext", engines[i].name);
 				
 								if (engines[i] == searchbar.currentEngine)
 									menuitem.setAttribute("selected", "true");
@@ -306,39 +298,65 @@ var AltSearchbar = {
 		
 				}
 			);
+			
+		    var search_panel_one_offs_candidates = document.getElementsByClassName("search-panel-one-offs");
+		  
+		    var i = 0;
+		    while(!(search_panel_one_offs_candidates[i].getAttribute("role") == "group"))
+			  i++;
+		  
+		    observer.observe(search_panel_one_offs_candidates[i],{ childList: true });
 				
 		  }
 		  catch(exc) {
 			  console.log("update altbar exc: " + exc);
 		  }
+		  
 	  });
 	  
 	  try {
-
-		  var observed_item = document.getElementsByClassName("search-panel-one-offs");
 		  
-		  if(observed_item.length == 1)
-			  observed_item = observed_item[0];
+		  var search_panel_one_offs_candidates = document.getElementsByClassName("search-panel-one-offs");
+		  
+		  if(search_panel_one_offs_candidates.length == 0) {
+			  new MutationObserver(function(mutations,local_observer) {
+				  if(search_panel_one_offs_candidates.length > 0) {
+					  
+					  var i = 0;
+					  
+					  while(
+						i < search_panel_one_offs_candidates.length &&
+						!(search_panel_one_offs_candidates[i].getAttribute("role") == "group")
+					  )
+						i++;
+						
+					  if(i != search_panel_one_offs_candidates.length) {
+						  observer_engines_list.observe(search_panel_one_offs_candidates[i],{ childList: true });	
+						  local_observer.disconnect();
+					  }
+					  
+				  }
+			  }).observe(document, { childList : true, attributes : true, attributeFilter : [ "class" ] , subtree : true });
+		  }
+		  else
+		  if(search_panel_one_offs_candidates.length == 1 && search_panel_one_offs_candidates[0].getAttribute("role") == "group")
+			  observer_engines_list.observe(search_panel_one_offs_candidates[0],{ childList: true });
 		  else {
-
-			  var i = 0;
-
+			  
+			  var i = 1;
+			  
 			  while(
-				i < observed_item.length &&
-				!(observed_item[i].getAttribute("role") == "group")
+				i < search_panel_one_offs_candidates.length &&
+				!(search_panel_one_offs_candidates[i].getAttribute("role") == "group")
 			  )
 				i++;
-
-			  if(i == observed_item.length)
-				  throw("Could not find native popup engines list");
-			  else
-				  observed_item = observed_item[i];
-
+				
+			  if(i != search_panel_one_offs_candidates.length)
+				  observer_engines_list.observe(search_panel_one_offs_candidates[i],{ childList: true });	
+			  
 		  }
-		  
-		  observer4.observe(observed_item,{ childList: true });
 
-	  }catch(exc) { console.log("observer 4: " + exc); }
+	  }catch(exc) { console.log("observer_engines_list: " + exc); }
 
 	  // attach new popup to search bars search button
 	  try {
@@ -363,7 +381,6 @@ var AltSearchbar = {
 	  }, true);
 
 	}; //createOldSelectionPopup
-	
 	
 	// doSearch function taken from Firefox 64s internal 'searchbar.js' file and added modifications
 	searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
@@ -426,7 +443,6 @@ var AltSearchbar = {
 
 	// main style sheet
 	function updateStyleSheet() {
-		
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 	  var hide_oneoff_search_engines_code = '';
@@ -837,7 +853,7 @@ var AltSearchbar = {
 		  position: absolute !important; \
 		  display: block; !important; \
 		  content: "" !important; \
-		  background: url(chrome://browser/skin/search-indicator-badge-add.svg) no-repeat center !important; \
+		  background: url("chrome://browser/skin/search-indicator-badge-add.svg") no-repeat center !important; \
 		  box-shadow: none  !important; \
 		  margin-top: -12px !important; \
 		  margin-inline-start: -4px !important; \
@@ -860,7 +876,7 @@ var AltSearchbar = {
 	  }
 
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
-	
+
 	};
 
    } catch(e) {} 
@@ -868,7 +884,8 @@ var AltSearchbar = {
  }
 }
 
-/* wait for searchbar loading and then initialize 'alternative search' (with delay) */
+/* if search is not hidden on current window, wait for searchbar loading and then initialize 'alternative search' (with delay) */
+if(!document.firstElementChild.hasAttribute("chromehidden") || !document.firstElementChild.getAttribute("chromehidden").includes("toolbar"))
 Services.search.getVisibleEngines().then(
 	(engines) => {
 	  setTimeout(function(){
