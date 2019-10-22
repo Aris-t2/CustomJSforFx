@@ -47,8 +47,13 @@ try {
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #pw_manager_button .toolbarbutton-icon {\
-		list-style-image: url("'+button_icon+'"); /* icon / path to icon */ \
-		fill: red; /* icon color name/code */\
+		list-style-image: url("'+button_icon+'") !important; /* icon / path to icon */ \
+		fill: red !important; /* icon color name/code */\
+	  }\
+	  #customization-content-container #pw_manager_button .toolbarbutton-icon, \
+	  panelmultiview #pw_manager_button .toolbarbutton-icon {\
+		width: 18px !important; \
+		height: 18px !important; \
 	  }\
 	\
   '), null, null);
