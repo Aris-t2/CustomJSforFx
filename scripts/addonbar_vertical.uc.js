@@ -204,7 +204,7 @@ var AddonbarVertical = {
 		  outline: 1px dashed !important; \
 		  outline-offset: -2px !important; \
 		} \
-		#addonbar_v { \
+		#addonbar_v:-moz-lwtheme { \
 		  background: var(--lwt-header-image) !important; \
 		  background-position: 100vw 50vh !important; \
 		} \

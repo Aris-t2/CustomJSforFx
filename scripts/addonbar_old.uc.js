@@ -24,10 +24,6 @@ var AddAddonbar = {
 	try {
 	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
-	
-	try {
-	  Services.prefs.getDefaultBranch("browser.addonbar.").setBoolPref("enabled",true);
-	} catch(e) {}
 
 	var addonbar_label = "Add-on Bar";
 	var compact_buttons_code = "";
@@ -109,14 +105,8 @@ var AddAddonbar = {
 		key.setAttribute('key', '/');
 		key.setAttribute('modifiers', 'accel');
 		key.setAttribute('oncommand',
-		  'var newAddonBar = document.getElementById("addonbar"); setToolbarVisibility(newAddonBar, newAddonBar.collapsed);Services.prefs.getBranch("browser.addonbar.").setBoolPref("enabled",!newAddonBar.collapsed)');
+		  'var newAddonBar = document.getElementById("addonbar"); setToolbarVisibility(newAddonBar, newAddonBar.collapsed);');
 		document.getElementById('mainKeyset').appendChild(key);
-		
-		
-		try {
-		  setToolbarVisibility(document.getElementById("addonbar"), Services.prefs.getBranch("browser.addonbar.").getBoolPref("enabled"));
-		} catch(e) {}
-	  
 	  }
 	} catch(e) {}
 
@@ -126,10 +116,7 @@ var AddAddonbar = {
 
 /* initialization delay workaround */
 document.addEventListener("DOMContentLoaded", AddAddonbar.init(), false);
-
-// not needed anymore, but just in case someone prefers initialization that way
 /*
 setTimeout(function(){
-  AdditionalTopToolbars.init();
-},2000);
-*/
+  AddAddonbar.init();
+},2000);*/

@@ -4,6 +4,9 @@
 // - use toolbar[id^="additional_top_toolbar"] {...} to affect all toolbars at once in CSS
 
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
+//
+// workaround on Fx 71 to save/restore toolbar visibility
+// creating an observer array always fails, so observers are created manually atm.
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -18,13 +21,13 @@ var AdditionalTopToolbars = {
 	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
 	} catch(e) {}
 	  
-	var number_of_additional_top_toolbars = 1;
+	var number_of_additional_top_toolbars = 1; // max 5 to save toolbar state on Fx 71+ (add additional code at the bottom for more)
 	var tb_label = "Top Toolbar";
 
 	try {
 	 if(document.getElementById('additional_top_toolbar1') == null) {
 		
-	  if(number_of_additional_top_toolbars>0) {
+	  if(number_of_additional_top_toolbars>0 && number_of_additional_top_toolbars<6) {
 	
 	    var i=1;
 
@@ -49,6 +52,14 @@ var AdditionalTopToolbars = {
 		  
 		  CustomizableUI.registerArea("additional_top_toolbar"+i+"", {legacy: true});
 		  if(appversion >= 65) CustomizableUI.registerToolbarNode(toptoolbar);
+		  
+		  // top toolbars 'collapsed' on startup
+		  //setToolbarVisibility(toptoolbar, false);
+		  
+		  try {
+			Services.prefs.getDefaultBranch("browser.additional_top_toolbar"+i+".").setBoolPref("enabled",true);
+			setToolbarVisibility(document.getElementById("additional_top_toolbar"+i+""), Services.prefs.getBranch("browser.additional_top_toolbar"+i+".").getBoolPref("enabled"));
+		  } catch(e) {}	  
 		  
 		  i++;
 		
@@ -77,6 +88,49 @@ var AdditionalTopToolbars = {
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
 	 }
+	 
+	 
+	 if(number_of_additional_top_toolbars>=1) {
+		var observer1 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			Services.prefs.getBranch("browser.additional_top_toolbar1.").setBoolPref("enabled",!document.querySelector("#additional_top_toolbar1").collapsed);
+		  });    
+		});			 
+		observer1.observe(document.querySelector("#additional_top_toolbar1"), { attributes: true, childList: true, characterData: true });
+	  }
+	  if(number_of_additional_top_toolbars>=2) {
+		var observer2 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			Services.prefs.getBranch("browser.additional_top_toolbar2.").setBoolPref("enabled",!document.querySelector("#additional_top_toolbar2").collapsed);
+		  });    
+		});			 
+		observer2.observe(document.querySelector("#additional_top_toolbar2"), { attributes: true, childList: true, characterData: true });
+	  }
+	  if(number_of_additional_top_toolbars>=3) {
+		var observer3 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			Services.prefs.getBranch("browser.additional_top_toolbar3.").setBoolPref("enabled",!document.querySelector("#additional_top_toolbar3").collapsed);
+		  });    
+		});			 
+		observer3.observe(document.querySelector("#additional_top_toolbar3"), { attributes: true, childList: true, characterData: true });
+	  }
+	  if(number_of_additional_top_toolbars>=4) {
+		var observer4 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			Services.prefs.getBranch("browser.additional_top_toolbar4.").setBoolPref("enabled",!document.querySelector("#additional_top_toolbar4").collapsed);
+		  });    
+		});			 
+		observer4.observe(document.querySelector("#additional_top_toolbar4"), { attributes: true, childList: true, characterData: true });
+	  }
+	  if(number_of_additional_top_toolbars>=5) {
+		var observer5 = new MutationObserver(function(mutations) {
+		  mutations.forEach(function(mutation) {
+			Services.prefs.getBranch("browser.additional_top_toolbar5.").setBoolPref("enabled",!document.querySelector("#additional_top_toolbar5").collapsed);
+		  });    
+		});			 
+		observer5.observe(document.querySelector("#additional_top_toolbar5"), { attributes: true, childList: true, characterData: true });
+	  }
+
 	} catch(e){}	
 
   }
@@ -85,6 +139,8 @@ var AdditionalTopToolbars = {
 
 /* initialization delay workaround */
 document.addEventListener("DOMContentLoaded", AdditionalTopToolbars.init(), false);
+
+// not needed anymore, but just in case someone prefers initialization that way
 /*
 setTimeout(function(){
   AdditionalTopToolbars.init();
