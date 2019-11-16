@@ -130,6 +130,6 @@ document.addEventListener("DOMContentLoaded", AddAddonbar.init(), false);
 // not needed anymore, but just in case someone prefers initialization that way
 /*
 setTimeout(function(){
-  AdditionalTopToolbars.init();
+  AddAddonbar.init();
 },2000);
 */
