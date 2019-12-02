@@ -38,11 +38,15 @@ var show_search_engine_names = false; // show search engine names (true) or not 
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
 var searchsettingslabel = "Change Search Settings"; // set label of search settings menuitem
-var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (1000ms) and on some even '0' is enough
+var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (=1000ms) and on some even '0' is enough
 // Configuration area - end
+
+var isInCustomize = 1; //start at 1 to set it once at startup
 
 var AltSearchbar = {
  init: function() {
+
+   window.removeEventListener("load", AltSearchbar.init, false);
 
    try {
 	   
@@ -75,10 +79,21 @@ var AltSearchbar = {
 	  searchbar.getElementsByClassName('searchbar-textbox')[0].removeAttribute("placeholder");
 	};
 
-	// old search selection popup
-	function createOldSelectionPopup() {
+	function attachOldPopupToButton(e) {
+		if(isInCustomize == 1) {
+			setTimeout(function () { searchbar.getElementsByClassName("searchbar-search-button")[0].setAttribute("popup", "searchbuttonpopup"); }, initialization_delay_value);
+		}
+		if(isInCustomize > 0)
+			isInCustomize--;
+	}
 
-		var engines_promise = Services.search.getVisibleEngines();
+	// old search selection popup
+	async function createOldSelectionPopup() {
+
+		searchbar.engines = await Services.search.getVisibleEngines();
+		
+		window.addEventListener("beforecustomization", function(e) { isInCustomize++; }, false);
+		window.addEventListener("aftercustomization", attachOldPopupToButton, false);		
 
 		// set new search engine
 		searchbar.setNewSearchEngine = function(index) {
@@ -94,30 +109,23 @@ var AltSearchbar = {
 	  
 		try {
 			
-			engines_promise.then(
-				(engines) => 
-				
-				{
-			
-					searchbar.engines = engines;
-			
-					var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
-					hidden_list =  hidden_list ? hidden_list.split(",") : [];					
+			var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
+			hidden_list =  hidden_list ? hidden_list.split(",") : [];					
 
-					for (var i = 0; i <= engines.length - 1; ++i) {
+			for (var i = 0; i <= searchbar.engines.length - 1; ++i) {
 						
-						if(!hidden_list.includes(engines[i].name)) {
+				if(!hidden_list.includes(searchbar.engines[i].name)) {
 						
 							menuitem = document.createXULElement("menuitem");;
-							menuitem.setAttribute("label", engines[i].name);
-							menuitem.setAttribute("tooltiptext", engines[i].name);
+					menuitem.setAttribute("label", searchbar.engines[i].name);
+					menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
 							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
 			
-							if (engines[i] == searchbar.currentEngine)
+					if (searchbar.engines[i] == searchbar.currentEngine)
 								menuitem.setAttribute("selected", "true");
 			
-							if (engines[i].iconURI)
-								menuitem.setAttribute("image",engines[i].iconURI.spec);
+					if (searchbar.engines[i].iconURI)
+						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
 							
 							menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 
@@ -139,12 +147,9 @@ var AltSearchbar = {
 
 					updateStyleSheet();
 		
-				}
-			);
-	  }
-	  catch(exc) {
+		} catch(exc) {
 		  console.log("Exception AltSearchbar: " + exc);
-	  }
+		}
 
 	  document.getElementById("mainPopupSet").appendChild(searchbuttonpopup);
 
@@ -244,64 +249,57 @@ var AltSearchbar = {
 	  }catch(exc) { console.log("observer_add_search: " + exc); }
 	  
 	  // update search engine list after adding a new search engine
-	  var observer_engines_list = new MutationObserver(function(mutations,observer) {
+	  var observer_engines_list = new MutationObserver(async function(mutations,observer) {
 		  
+		  var i;
 		  observer.disconnect();
 		  
 		  try {
 			  
 			searchbuttonpopup = document.getElementById("searchbuttonpopup");
 			  
-			Services.search.getVisibleEngines().then(
-				(engines) => 
-				
-				{
+			searchbar.engines = await Services.search.getVisibleEngines();
 					
-					try {
+			try {
 			
-						searchbar.engines = engines;
-						
-						while(searchbuttonpopup.childNodes[0].tagName.toLowerCase() != "menuseparator")
-							searchbuttonpopup.removeChild(searchbuttonpopup.firstChild);
-						
-						var separator = searchbuttonpopup.childNodes[0];
-						
-						var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
-						hidden_list =  hidden_list ? hidden_list.split(",") : [];
+				while(searchbuttonpopup.childNodes[0].tagName.toLowerCase() != "menuseparator")
+					searchbuttonpopup.removeChild(searchbuttonpopup.firstChild);
 
-						for (var i = 0; i <= engines.length - 1; ++i) {
+				var separator = searchbuttonpopup.childNodes[0];
+
+				var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
+				  hidden_list = hidden_list ? hidden_list.split(",") : [];
+
+				for (i = 0; i <= searchbar.engines.length - 1; ++i) {
 							
-							if(!hidden_list.includes(engines[i].name)) {
+					if(!hidden_list.includes(searchbar.engines[i].name)) {
 							
 								menuitem = document.createXULElement("menuitem");;
-								menuitem.setAttribute("label", engines[i].name);
+						menuitem.setAttribute("label", searchbar.engines[i].name);
 								menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
-								menuitem.setAttribute("tooltiptext", engines[i].name);
+						menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
 				
-								if (engines[i] == searchbar.currentEngine)
+						if (searchbar.engines[i] == searchbar.currentEngine)
 									menuitem.setAttribute("selected", "true");
 				
-								if (engines[i].iconURI)
-									menuitem.setAttribute("image",engines[i].iconURI.spec);
+						if (searchbar.engines[i].iconURI)
+							menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
 								
-								menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
+						menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 
-								searchbuttonpopup.insertBefore(menuitem,separator);
+						searchbuttonpopup.insertBefore(menuitem,separator);
 							
-							}
+					}
 		  
-						}
+				}
 
 						updateStyleSheet();
 					
-					}catch(exc) { console.log("error spotted: " + exc); }
-		
-				}
-			);
+			} catch(exc) { console.log("observer_engines_list mutation observer error:"); console.log(exc); }
 			
 		    var search_panel_one_offs_candidates = document.getElementsByClassName("search-panel-one-offs");
 		  
-		    var i = 0;
+		    i = 0;
 		    while(!(search_panel_one_offs_candidates[i].getAttribute("role") == "group"))
 			  i++;
 		  
@@ -360,7 +358,7 @@ var AltSearchbar = {
 
 	  // attach new popup to search bars search button
 	  try {
-		searchbar.getElementsByClassName("searchbar-search-button")[0].setAttribute("popup", "searchbuttonpopup");
+		attachOldPopupToButton();	
 	  }
 	  catch(e) {
 		  console.log("AltSearchbar: Failed to attach new popup to search bar search button");
@@ -885,11 +883,11 @@ var AltSearchbar = {
 }
 
 /* if search is not hidden on current window, wait for searchbar loading and then initialize 'alternative search' (with delay) */
-if(!document.firstElementChild.hasAttribute("chromehidden") || !document.firstElementChild.getAttribute("chromehidden").includes("toolbar"))
-Services.search.getVisibleEngines().then(
-	(engines) => {
-	  setTimeout(function(){
-		AltSearchbar.init();
-	  },initialization_delay_value);
+if(!document.firstElementChild.hasAttribute("chromehidden") || !document.firstElementChild.getAttribute("chromehidden").includes("toolbar")) {
+	if (document.readyState === "complete") {
+		setTimeout(AltSearchbar.init, initialization_delay_value);
 	}
-);
+	else {
+		window.addEventListener("load", AltSearchbar.init, false);
+	}
+}
