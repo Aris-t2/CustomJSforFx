@@ -5,9 +5,9 @@ The <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> contains a 
 <h1>Unlock custom CSS usage in Thunderbird 69 and newer</h1>  
 <code>Settings/Options</code> > <code>Advanced</code> > <code>General</code> > <code>Config Editor...</code> </br>
 <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> > <code>true</code>  
-<h2>Method 1 - files in profile folder only</h2>
+<h2>Method 1 - files in profile folder only (Fx60-71)</h2>
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
-M1 will stop working when Mozilla drops XBL support.</br>
+M1 stoped working in Firefox 72! XBL support got dropped.</br>
 </br>
 From this projects <code>\method 1\</code> folder copy <code>userChrome</code> folder and <code>userChrome.css</code> file to <code>\ PROFILENAME \chrome\</code> or add code from <code>userChrome.css</code> file to an existing <code>userChrome.css</code> file.</br>
 </br>
