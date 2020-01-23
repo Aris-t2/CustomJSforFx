@@ -558,7 +558,7 @@ var AltSearchbar = {
 		} \
 		';
 
-	  if(show_search_engine_names && !hide_oneoff_search_engines && appversion == 70)
+	  if(show_search_engine_names && !hide_oneoff_search_engines && appversion >= 70 && appversion < 72)
 	   show_search_engine_names_code=' \
 		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item { \
 		  -moz-appearance:none !important; \
@@ -574,6 +574,7 @@ var AltSearchbar = {
 		} \
 		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box { \
 		  position: absolute !important; \
+		  display:block !important; \
 		  -moz-padding-start: 4px !important; \
 		  margin-top: 3px !important; \
 		} \
@@ -583,7 +584,7 @@ var AltSearchbar = {
 		  content: attr(tooltiptext) !important; \
 		  position: relative !important; \
 		  top: -9px !important; \
-		  -moz-padding-start: 25px !important;\
+		  -moz-padding-start: 25px !important; \
 		  min-width: 0 !important; \
 		  width: 100% !important; \
 		  white-space: nowrap !important; \
@@ -660,7 +661,7 @@ var AltSearchbar = {
 		} \
    		';
 		
-	  if(show_search_engine_names && !hide_oneoff_search_engines && appversion >= 71)
+	  if(show_search_engine_names && !hide_oneoff_search_engines && appversion >= 72)
 	   show_search_engine_names_code=' \
 		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item { \
 		  -moz-appearance:none !important; \
@@ -675,7 +676,7 @@ var AltSearchbar = {
 		  display: none !important; \
 		} \
 		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box { \
-		  position: absolute !important; \
+		  display: block !important; \
 		  -moz-padding-start: 4px !important; \
 		  margin-top: 3px !important; \
 		} \
@@ -684,8 +685,8 @@ var AltSearchbar = {
 		  display: inline !important; \
 		  content: attr(tooltiptext) !important; \
 		  position: relative !important; \
-		  top: -3px !important; \
-		  -moz-padding-start: 5px !important;\
+		  top: -9px !important; \
+		  -moz-padding-start: 25px !important; \
 		  min-width: 0 !important; \
 		  width: 100% !important; \
 		  white-space: nowrap !important; \
@@ -694,71 +695,6 @@ var AltSearchbar = {
 		  min-height: unset !important; \
 		  height: unset !important; \
 		  max-height: unset !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree:not([collapsed="true"]) { \
-		  width: 100% !important; \
-		  display: block !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree:not([collapsed="true"]) > * { \
-		  width: 100%; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="18"] { \
-		  min-height: 18px !important; \
-		  height: 18px !important; \
-		  max-height: 18px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="36"] { \
-		  min-height: 36px !important; \
-		  height: 36px !important; \
-		  max-height: 36px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="54"] { \
-		  min-height: 54px !important; \
-		  height: 54px !important; \
-		  max-height: 54px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="72"] { \
-		  min-height: 72px !important; \
-		  height: 72px !important; \
-		  max-height: 72px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="90"] { \
-		  min-height: 90px !important; \
-		  height: 90px !important; \
-		  max-height: 90px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="108"] { \
-		  min-height: 108px !important; \
-		  height: 108px !important; \
-		  max-height: 108px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="126"] { \
-		  min-height: 126px !important; \
-		  height: 126px !important; \
-		  max-height: 126px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="144"] { \
-		  min-height: 144px !important; \
-		  height: 144px !important; \
-		  max-height: 144px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="162"] { \
-		  min-height: 162px !important; \
-		  height: 162px !important; \
-		  max-height: 162px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree[height="180"] { \
-		  min-height: 180px !important; \
-		  height: 180px !important; \
-		  max-height: 180px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree scrollbar { \
-		  display: none !important; \
-		  visibility: collapse !important; \
-		  opacity: 0 !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-tree { \
-		  overflow-y: hidden !important; \
 		} \
    		';
 
