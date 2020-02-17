@@ -1,8 +1,9 @@
 // 'Open Password Manager' button for Firefox 60+ by Aris
 //
-// left-click on password manager button: opens 'chrome://passwordmgr/content/passwordManager.xul' in a popup
-// middle-click on password manager button: fill current (non-chrome) domain/host into input field
-// right-click on password manager button: default context menu
+// option: 'leftclick_opens_old_pw_manager' (true) or the new one (false)
+// option: 'middleclick_opens_old_pw_manager' (true) or the new one (false)
+// default: left-click on password manager button opens new password manager in a tab and adds current (non-chrome) domain/host into input field
+// default: middle-click on password manager button opens 'chrome://passwordmgr/content/passwordManager.xul/xhtml' in a popup
 
 (function() {
 
@@ -11,6 +12,10 @@ try {
   Components.utils.import("resource://gre/modules/LoginHelper.jsm");
   var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+  var appversion = parseInt(Services.appinfo.version);
+  
+  var leftclick_opens_old_pw_manager = false;
+  var middleclick_opens_old_pw_manager = true;
   
   CustomizableUI.createWidget({
 	id: "pw_manager_button", // button id
@@ -19,17 +24,38 @@ try {
 	label: "Open Password Manager", // button title
 	tooltiptext: "Open Password Manager", // tooltip title
 	onClick: function(event) {
-			
+		
+	  var old_pw_manager = 'chrome://passwordmgr/content/passwordManager.xhtml';
+	  if(appversion < 73) old_pw_manager = 'chrome://passwordmgr/content/passwordManager.xul';
+  
 	  if(event.button=='0') {
-		try {
-		  window.open('chrome://passwordmgr/content/passwordManager.xul','', 'chrome');
-		} catch (e) {}
-	  } else if(event.button=='1') {
-		try {
-		  LoginHelper.openPasswordManager(window, { filterString: gBrowser.currentURI.host, entryPoint: 'mainmenu' });
-		} catch (e) {
-		  LoginHelper.openPasswordManager(window, { entryPoint: 'mainmenu' });
+		
+		if(leftclick_opens_old_pw_manager)
+		  try {
+			window.open(old_pw_manager ,'', 'chrome', "width=400,height=400");
+		  } catch (e) {}
+		else {
+		  try {
+			LoginHelper.openPasswordManager(window, { filterString: gBrowser.currentURI.host, entryPoint: 'mainmenu' });
+		  } catch (e) {
+			LoginHelper.openPasswordManager(window, { entryPoint: 'mainmenu' });
+		  }
 		}
+
+	  } else if(event.button=='1') {
+		
+		if(middleclick_opens_old_pw_manager)
+		  try {
+			window.open(old_pw_manager ,'', 'chrome', "width=400,height=400");
+		  } catch (e) {}
+		else {
+		  try {
+			LoginHelper.openPasswordManager(window, { filterString: gBrowser.currentURI.host, entryPoint: 'mainmenu' });
+		  } catch (e) {
+			LoginHelper.openPasswordManager(window, { entryPoint: 'mainmenu' });
+		  }
+		}
+
 	  }
 	  
 	},
