@@ -32,7 +32,7 @@ try {
 		
 		if(leftclick_opens_old_pw_manager)
 		  try {
-			window.open(old_pw_manager ,'', 'chrome', "width=400,height=400");
+			window.open(old_pw_manager ,'', 'chrome, resizable', "width=400,height=400");
 		  } catch (e) {}
 		else {
 		  try {
@@ -46,7 +46,7 @@ try {
 		
 		if(middleclick_opens_old_pw_manager)
 		  try {
-			window.open(old_pw_manager ,'', 'chrome', "width=400,height=400");
+			window.open(old_pw_manager ,'', 'chrome, resizable', "width=400,height=400");
 		  } catch (e) {}
 		else {
 		  try {
