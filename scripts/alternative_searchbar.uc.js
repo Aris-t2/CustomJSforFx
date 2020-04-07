@@ -37,7 +37,6 @@ var switch_glass_and_engine_icon = false; // swap icons of search engine button 
 var show_search_engine_names = false; // show search engine names (true) or not (false)
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
-var searchsettingslabel = "Change Search Settings"; // set label of search settings menuitem
 var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (=1000ms) and on some even '0' is enough
 // Configuration area - end
 
@@ -139,8 +138,7 @@ var AltSearchbar = {
 					searchbuttonpopup.appendChild(menuseparator_om);
 
 					menuitem_om = document.createXULElement("menuitem");
-					menuitem_om.setAttribute("label", searchsettingslabel);
-					menuitem_om.setAttribute("tooltiptext", searchsettingslabel);
+					menuitem_om.setAttribute("data-l10n-id", "search-one-offs-change-settings-button");
 					menuitem_om.setAttribute("class", "open-engine-manager");
 					menuitem_om.setAttribute("oncommand", "openPreferences('search');");
 					searchbuttonpopup.appendChild(menuitem_om);	
@@ -363,19 +361,24 @@ var AltSearchbar = {
 	  catch(e) {
 		  console.log("AltSearchbar: Failed to attach new popup to search bar search button");
 	  }
-
-	  // hide default popup when clicking on search button
+	  
 	  searchbar.addEventListener("mousedown", (event) => {
-	   if (event.originalTarget.classList.contains("searchbar-search-button")) {
-		document.getElementById('PopupSearchAutoComplete').hidePopup();
-		document.getElementById("PopupSearchAutoComplete").style.visibility="collapse";
 
-		setTimeout(function() {
-		 document.getElementById("PopupSearchAutoComplete").style.visibility="visible";
-		 document.getElementById('PopupSearchAutoComplete').hidePopup();
-		}, 1000);
+		var searchButton = document.getElementsByClassName("searchbar-search-button")[0];
+		var hasAddEnginesAttribute = searchButton.hasAttribute("addengines");
+		var searchAddEngines = document.getElementsByClassName("search-add-engines")[0];
 
-	   }
+		document.getElementById("PopupSearchAutoComplete").style.visibility = "visible";
+
+		if (event.originalTarget.getAttribute("class") != "anonymous-div") {
+			document.getElementById('PopupSearchAutoComplete').hidePopup();
+
+			if ((hasAddEnginesAttribute && searchAddEngines.firstChild) || (!hasAddEnginesAttribute && !searchAddEngines.firstChild))
+				event.stopPropagation();
+			else
+				document.getElementById("PopupSearchAutoComplete").style.visibility = "collapse";
+		}
+
 	  }, true);
 
 	}; //createOldSelectionPopup
