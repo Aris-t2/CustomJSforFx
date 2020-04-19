@@ -1,13 +1,15 @@
-// 'Alternative search bar' script for Firefox 69+ by Aris
+// 'Alternative search bar' script for Firefox 68+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
 //
-// Thanks to samehb (aka Sameh Barakat) for Fx 75+ improvements 
+// Thanks to samehb (aka Sameh Barakat) for Fx 68-75+ improvements 
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
 //
-// Initial scripts was based on 'search revert' script by '2002Andreas':
+// Initial search modification script was based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
+//
+// Initial "old search" script ported from old Firefox versions by Aris
 //
 //
 // Feature (not optional): search glass is always visible at search bars end (like with "old" search)
@@ -41,6 +43,7 @@ var show_search_engine_names = false; // show search engine names (true) or not 
 var show_search_engine_names_with_scrollbar = false; // show search engine names with scrollbars (true) or not (false)
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
 var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (=1000ms) and on some even '0' is enough
+var searchsettingslabel = "Change Search Settings";
 // Configuration area - end
 
 var isInCustomize = 1; //start at 1 to set it once at startup
@@ -143,7 +146,10 @@ var AltSearchbar = {
 					searchbuttonpopup.appendChild(menuseparator_om);
 
 					menuitem_om = document.createXULElement("menuitem");
-					menuitem_om.setAttribute("data-l10n-id", "search-one-offs-change-settings-button");
+					if(appversion > 71)
+						menuitem_om.setAttribute("data-l10n-id", "search-one-offs-change-settings-button");
+					else
+						menuitem_om.setAttribute("label", searchsettingslabel);
 					menuitem_om.setAttribute("class", "open-engine-manager");
 					menuitem_om.setAttribute("oncommand", "openPreferences('search');");
 					searchbuttonpopup.appendChild(menuitem_om);	
@@ -272,20 +278,21 @@ function createAddEngineItem(e) {
                 searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
             }
 
-            native_popup_search_add_item.childNodes.forEach(function (child_node) {
+			native_popup_search_add_item.childNodes.forEach(function (child_node) {
+				menuitem = document.createXULElement("menuitem");
+				menuitem.setAttribute("label", child_node.getAttribute("label"));
+				menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
+				menuitem.setAttribute("tooltiptext", child_node.getAttribute("label"));
+				menuitem.setAttribute("uri", child_node.getAttribute("uri"));
+				menuitem.setAttribute("data-id", child_node.id);
+				menuitem.setAttribute("oncommand", "document.getElementById(\"" + child_node.id + "\").click();");
 
-                menuitem = document.createXULElement("menuitem");
-                menuitem.setAttribute("label", child_node.label);
-                menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
-                menuitem.setAttribute("tooltiptext", child_node.label);
-                menuitem.setAttribute("oncommand", "document.getElementById(\"" + child_node.id + "\").click();");
+				if (child_node.hasAttribute("image"))
+					menuitem.setAttribute("image", child_node.getAttribute("image"));
 
-                if (child_node.image)
-                    menuitem.setAttribute("image", child_node.image);
+				searchbuttonpopup.appendChild(menuitem);
 
-                searchbuttonpopup.appendChild(menuitem);
-
-            });
+			});
 
         } else {
 
@@ -339,7 +346,7 @@ function createAddEngineItem(e) {
 			// If there is no engine to be added, and there is no engine item, that also means that there are no changes needed.
 			// On the other hand, if hasAddEnginesAttribute and addEngineItem are not synchronized, we need to apply propagation
 			// to refresh the searchbuttonpopup. We set the addEngineItem visibility to collapse, and allow propagation.
-			if ((hasAddEnginesAttribute && addEngineItem) || (!hasAddEnginesAttribute && !addEngineItem))
+			if ((hasAddEnginesAttribute && addEngineItem && addEngineItem.hasAttribute("image") && document.getElementById(addEngineItem.getAttribute("data-id")) && gBrowser.currentURI.spec.includes(addEngineItem.getAttribute("uri").replace("/opensearch.xml", ""))) || (!hasAddEnginesAttribute && !addEngineItem))
 				event.stopPropagation();
 			else {
 				defaultPopup.style.visibility = "collapse";

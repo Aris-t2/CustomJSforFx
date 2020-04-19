@@ -1,6 +1,9 @@
 // 'Alternative search bar' script for Firefox 69+ by Aris
 //
-// Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ fixes and tweaks 
+// Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
+// https://github.com/Aris-t2/CustomJSforFx/issues/11
+//
+// Thanks to samehb (aka Sameh Barakat) for Fx 75+ improvements 
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
 //
 // Initial scripts was based on 'search revert' script by '2002Andreas':
@@ -41,6 +44,8 @@ var initialization_delay_value = 1000; // some systems might require a higher va
 // Configuration area - end
 
 var isInCustomize = 1; //start at 1 to set it once at startup
+
+Cu.import('resource://gre/modules/Services.jsm');
 
 var AltSearchbar = {
  init: function() {
@@ -171,188 +176,10 @@ var AltSearchbar = {
 	  } catch(e){}
 	  
 	  // restore "add search engine" menuitem
-	  var observer_add_search = new MutationObserver(function(mutations,observer) {
-		  observer.disconnect();
-		  try {
-			  
-				searchbuttonpopup = document.getElementById("searchbuttonpopup");
-				var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
-			  
-				if(native_popup_search_add_item.hasChildNodes()) {
-				  
-					var add_engine_menuitem;
-				  
-					while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-					}
-					
-					if(searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
-						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-					}
-				
-					native_popup_search_add_item.childNodes.forEach(function(child_node) {
-						
-						menuitem = document.createXULElement("menuitem");
-						menuitem.setAttribute("label", child_node.label);
-						menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
-						menuitem.setAttribute("tooltiptext", child_node.label);
-						menuitem.setAttribute("oncommand", "document.getElementById(\""+child_node.id+"\").click();");
-						
-						if(child_node.image)
-							menuitem.setAttribute("image",child_node.image);
-						
-						searchbuttonpopup.appendChild(menuitem);
-						
-					});
-					
-				}
-				else {
-					
-					while(searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-					}
-					
-					while(searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
-						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-					
-				}
-				
-				observer.observe(document.getElementsByClassName("search-add-engines")[0], { childList: true });
-				
-		  }
-		  catch(exc) {
-			  console.log("custom addengine exc: " + exc);
-		  }
-	
-	  });
+
 	  
-	  try {
-		  
-		  var search_add_engines_candidates = document.getElementsByClassName("search-add-engines");
-		  
-		  if(search_add_engines_candidates.length == 0) {
-			  new MutationObserver(function(mutations,local_observer) {
-				  if(search_add_engines_candidates.length != 0) {
-					  observer_add_search.observe(search_add_engines_candidates[0], { childList: true });
-					  local_observer.disconnect();
-				  }								  
-			  }).observe(document, { childList : true, attributes : true, attributeFilter : [ "class" ] , subtree : true });
-		  }
-		  else {
-			observer_add_search.observe(search_add_engines_candidates[0], { childList: true });
-		  }
-		
-		
-	  }catch(exc) { console.log("observer_add_search: " + exc); }
+
 	  
-	  // update search engine list after adding a new search engine
-	  var observer_engines_list = new MutationObserver(async function(mutations,observer) {
-		  
-		  var i;
-		  observer.disconnect();
-		  
-		  try {
-			  
-			searchbuttonpopup = document.getElementById("searchbuttonpopup");
-			  
-			searchbar.engines = await Services.search.getVisibleEngines();
-					
-			try {
-			
-				while(searchbuttonpopup.childNodes[0].tagName.toLowerCase() != "menuseparator")
-					searchbuttonpopup.removeChild(searchbuttonpopup.firstChild);
-
-				var separator = searchbuttonpopup.childNodes[0];
-
-				var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
-				  hidden_list = hidden_list ? hidden_list.split(",") : [];
-
-				for (i = 0; i <= searchbar.engines.length - 1; ++i) {
-							
-					if(!hidden_list.includes(searchbar.engines[i].name)) {
-							
-								menuitem = document.createXULElement("menuitem");;
-						menuitem.setAttribute("label", searchbar.engines[i].name);
-								menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
-						menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
-				
-						if (searchbar.engines[i] == searchbar.currentEngine)
-									menuitem.setAttribute("selected", "true");
-				
-						if (searchbar.engines[i].iconURI)
-							menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
-								
-						menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
-
-						searchbuttonpopup.insertBefore(menuitem,separator);
-							
-					}
-		  
-				}
-
-						updateStyleSheet();
-					
-			} catch(exc) { console.log("observer_engines_list mutation observer error:"); console.log(exc); }
-			
-		    var search_panel_one_offs_candidates = document.getElementsByClassName("search-panel-one-offs");
-		  
-		    i = 0;
-		    while(!(search_panel_one_offs_candidates[i].getAttribute("role") == "group"))
-			  i++;
-		  
-		    observer.observe(search_panel_one_offs_candidates[i],{ childList: true });
-				
-		  }
-		  catch(exc) {
-			  console.log("update altbar exc: " + exc);
-		  }
-		  
-	  });
-	  
-	  try {
-		  
-		  var search_panel_one_offs_candidates = document.getElementsByClassName("search-panel-one-offs");
-		  
-		  if(search_panel_one_offs_candidates.length == 0) {
-			  new MutationObserver(function(mutations,local_observer) {
-				  if(search_panel_one_offs_candidates.length > 0) {
-					  
-					  var i = 0;
-					  
-					  while(
-						i < search_panel_one_offs_candidates.length &&
-						!(search_panel_one_offs_candidates[i].getAttribute("role") == "group")
-					  )
-						i++;
-						
-					  if(i != search_panel_one_offs_candidates.length) {
-						  observer_engines_list.observe(search_panel_one_offs_candidates[i],{ childList: true });	
-						  local_observer.disconnect();
-					  }
-					  
-				  }
-			  }).observe(document, { childList : true, attributes : true, attributeFilter : [ "class" ] , subtree : true });
-		  }
-		  else
-		  if(search_panel_one_offs_candidates.length == 1 && search_panel_one_offs_candidates[0].getAttribute("role") == "group")
-			  observer_engines_list.observe(search_panel_one_offs_candidates[0],{ childList: true });
-		  else {
-			  
-			  var i = 1;
-			  
-			  while(
-				i < search_panel_one_offs_candidates.length &&
-				!(search_panel_one_offs_candidates[i].getAttribute("role") == "group")
-			  )
-				i++;
-				
-			  if(i != search_panel_one_offs_candidates.length)
-				  observer_engines_list.observe(search_panel_one_offs_candidates[i],{ childList: true });	
-			  
-		  }
-
-	  }catch(exc) { console.log("observer_engines_list: " + exc); }
 
 	  // attach new popup to search bars search button
 	  try {
@@ -362,21 +189,162 @@ var AltSearchbar = {
 		  console.log("AltSearchbar: Failed to attach new popup to search bar search button");
 	  }
 	  
+// Refresh the script's search popup (searchbuttonpopup) with any changes made to search engines/options.
+async function updateEngines() {
+    var i;
+
+    try {
+
+        searchbuttonpopup = document.getElementById("searchbuttonpopup");
+
+        searchbar.engines = await Services.search.getVisibleEngines();
+
+        try {
+
+            while (searchbuttonpopup.childNodes[0].tagName.toLowerCase() != "menuseparator")
+                searchbuttonpopup.removeChild(searchbuttonpopup.firstChild);
+
+            var separator = searchbuttonpopup.childNodes[0];
+
+            var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
+            hidden_list = hidden_list ? hidden_list.split(",") : [];
+
+            for (i = 0; i <= searchbar.engines.length - 1; ++i) {
+
+                if (!hidden_list.includes(searchbar.engines[i].name)) {
+
+                    menuitem = document.createXULElement("menuitem");;
+                    menuitem.setAttribute("label", searchbar.engines[i].name);
+                    menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
+                    menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
+
+                    if (searchbar.engines[i] == searchbar.currentEngine)
+                        menuitem.setAttribute("selected", "true");
+
+                    if (searchbar.engines[i].iconURI)
+                        menuitem.setAttribute("image", searchbar.engines[i].iconURI.spec);
+
+                    menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine(" + i + ")");
+
+                    searchbuttonpopup.insertBefore(menuitem, separator);
+
+                }
+
+            }
+
+            updateStyleSheet();
+
+        } catch (exc) {
+            console.log(exc);
+        }
+
+    } catch (exc) {
+        console.log("update altbar exc: " + exc);
+    }
+}
+
+// Used to observe modifications made to search engines. We are only interested in the addition and removal of engines.
+Services.obs.addObserver(function observer(subject, topic, data) {
+    // If a search engine/option is added or removed, we need to refresh the script's popup. We use updateEngines() to do that.
+    if (data == "engine-added" || data == "engine-removed")
+        updateEngines();
+}, "browser-search-engine-modified");
+
+// Used to create an add engine item and append it into the script's search popup (searchbuttonpopup). This is the option
+// that is displayed as "Add enginename" e.g. Add DuckDuckGo.
+function createAddEngineItem(e) {
+    try {
+        e.target.removeEventListener(e.type, arguments.callee);
+
+        searchbuttonpopup = document.getElementById("searchbuttonpopup");
+        var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
+
+        if (native_popup_search_add_item.hasChildNodes()) {
+
+            var add_engine_menuitem;
+
+            while (searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+            }
+
+            if (searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
+                searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+                searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+            }
+
+            native_popup_search_add_item.childNodes.forEach(function (child_node) {
+
+                menuitem = document.createXULElement("menuitem");
+                menuitem.setAttribute("label", child_node.label);
+                menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
+                menuitem.setAttribute("tooltiptext", child_node.label);
+                menuitem.setAttribute("oncommand", "document.getElementById(\"" + child_node.id + "\").click();");
+
+                if (child_node.image)
+                    menuitem.setAttribute("image", child_node.image);
+
+                searchbuttonpopup.appendChild(menuitem);
+
+            });
+
+        } else {
+
+            while (searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+            }
+
+            while (searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
+                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+
+        }
+
+    } catch (exc) {
+        console.log("custom addengine exc: " + exc);
+    }
+}
+
 	  searchbar.addEventListener("mousedown", (event) => {
-
+		var defaultPopup = document.getElementById("PopupSearchAutoComplete"); // Browser's default search popup.
+		var scriptPopup = document.getElementById("searchbuttonpopup");
+		var addEngineItem = document.getElementsByClassName("custom-addengine-item")[0];
 		var searchButton = document.getElementsByClassName("searchbar-search-button")[0];
+
+		// hasAddEnginesAttribute == true means there is a search engine provided by the page, for us to add using "Add enginename."
+		// You will see a green plus badge on the search button icon, if that is the case.
 		var hasAddEnginesAttribute = searchButton.hasAttribute("addengines");
-		var searchAddEngines = document.getElementsByClassName("search-add-engines")[0];
 
-		document.getElementById("PopupSearchAutoComplete").style.visibility = "visible";
+		// Skip clicks on the search button until searchbuttonpopup is available. Disable propagation, too.
+		if (!scriptPopup) {
+			event.stopPropagation();
+			return;
+		}
 
+		defaultPopup.style.visibility = "visible";
+
+		// If the user clicks on any element on the search bar except the search text.
 		if (event.originalTarget.getAttribute("class") != "anonymous-div") {
-			document.getElementById('PopupSearchAutoComplete').hidePopup();
 
-			if ((hasAddEnginesAttribute && searchAddEngines.firstChild) || (!hasAddEnginesAttribute && !searchAddEngines.firstChild))
+			// In case the default search popup is shown, hide it.
+			defaultPopup.hidePopup();
+
+			// Propagation causes PopupSearchAutoComplete to be shown, which in turn causes search-add-engines to be populated.
+			// We monitor the PopupSearchAutoComplete and after it is shown, we use createAddEngineItem() to create the add
+			// engine item and populate the script's popup (searchbuttonpopup). Propagation causes PopupSearchAutoComplete to be 
+			// displayed with searchbuttonpopup, at the same time (when the user clicks the search button). Displaying 
+			// PopupSearchAutoComplete with every search button click is inefficient. We allow propagation only when it is needed, 
+			// and we set the PopupSearchAutoComplete visibility to collapse, so we do not see it with the script's popup.
+
+			// If there are no changes to be done to the searchbuttonpopup, go ahead and skip propagation.
+			// If there is an engine to be added, and the engine item is already available on the script's popup, there are no changes.
+			// If there is no engine to be added, and there is no engine item, that also means that there are no changes needed.
+			// On the other hand, if hasAddEnginesAttribute and addEngineItem are not synchronized, we need to apply propagation
+			// to refresh the searchbuttonpopup. We set the addEngineItem visibility to collapse, and allow propagation.
+			if ((hasAddEnginesAttribute && addEngineItem) || (!hasAddEnginesAttribute && !addEngineItem))
 				event.stopPropagation();
-			else
-				document.getElementById("PopupSearchAutoComplete").style.visibility = "collapse";
+			else {
+				defaultPopup.style.visibility = "collapse";
+				defaultPopup.addEventListener("popupshown", createAddEngineItem, false);
+			}
 		}
 
 	  }, true);
