@@ -6,7 +6,10 @@
 // Thanks to samehb (aka Sameh Barakat) for Fx 68-75+ improvements 
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
 //
-// Initial search modification script was based on 'search revert' script by '2002Andreas':
+// Thanks to anomiex for the setIcon workaround on Fx 77+
+// https://github.com/Aris-t2/CustomJSforFx/issues/33
+//
+// Idea based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
 // Initial "old search" script ported from old Firefox versions by Aris
@@ -52,6 +55,10 @@ Cu.import('resource://gre/modules/Services.jsm');
 
 var AltSearchbar = {
  init: function() {
+
+
+   if (appversion >= 76 && location != 'chrome://browser/content/browser.xhtml')
+    return;
 
    window.removeEventListener("load", AltSearchbar.init, false);
 
@@ -183,10 +190,6 @@ var AltSearchbar = {
 	  
 	  // restore "add search engine" menuitem
 
-	  
-
-	  
-
 	  // attach new popup to search bars search button
 	  try {
 		attachOldPopupToButton();	
@@ -252,9 +255,15 @@ async function updateEngines() {
 // Used to observe modifications made to search engines. We are only interested in the addition and removal of engines.
 Services.obs.addObserver(function observer(subject, topic, data) {
     // If a search engine/option is added or removed, we need to refresh the script's popup. We use updateEngines() to do that.
-    if (data == "engine-added" || data == "engine-removed")
+    if (data == "engine-added" || data == "engine-removed" || data == "engine-changed") {
         updateEngines();
+	}
 }, "browser-search-engine-modified");
+
+// Observe the enabling and disabling of search engines, and update the search popup.
+Services.prefs.addObserver("browser.search.hiddenOneOffs", function observer(subject, topic, data) {
+   updateEngines();
+});
 
 // Used to create an add engine item and append it into the script's search popup (searchbuttonpopup). This is the option
 // that is displayed as "Add enginename" e.g. Add DuckDuckGo.
@@ -329,7 +338,7 @@ function createAddEngineItem(e) {
 		defaultPopup.style.visibility = "visible";
 
 		// If the user clicks on any element on the search bar except the search text.
-		if (event.originalTarget.getAttribute("class") != "anonymous-div") {
+		if (event.target.getAttribute("class") != "searchbar-textbox") {
 
 			// In case the default search popup is shown, hide it.
 			defaultPopup.hidePopup();
@@ -346,7 +355,7 @@ function createAddEngineItem(e) {
 			// If there is no engine to be added, and there is no engine item, that also means that there are no changes needed.
 			// On the other hand, if hasAddEnginesAttribute and addEngineItem are not synchronized, we need to apply propagation
 			// to refresh the searchbuttonpopup. We set the addEngineItem visibility to collapse, and allow propagation.
-			if ((hasAddEnginesAttribute && addEngineItem && addEngineItem.hasAttribute("image") && document.getElementById(addEngineItem.getAttribute("data-id")) && gBrowser.currentURI.spec.includes(addEngineItem.getAttribute("uri").replace("/opensearch.xml", ""))) || (!hasAddEnginesAttribute && !addEngineItem))
+			if ((hasAddEnginesAttribute && addEngineItem && addEngineItem.hasAttribute("image") && document.getElementById(addEngineItem.getAttribute("data-id")) && gBrowser.currentURI.spec.includes(addEngineItem.getAttribute("uri").match(/.+:\/\/([^\/]+)\//)[1])) || (!hasAddEnginesAttribute && !addEngineItem))
 				event.stopPropagation();
 			else {
 				defaultPopup.style.visibility = "collapse";
@@ -408,15 +417,13 @@ function createAddEngineItem(e) {
 		}
 	};
 	
-
-	// setIcon function taken from browsers internal 'searchbar.js' file and added modifications.
-	// Required to update icon, if search engine is changed, but old search popup disabled.
-	if(!old_search_engine_selection_popup)  searchbar.setIcon = function(element, uri) {
-	  element.setAttribute("src", uri);
+	// Workaround for the deprecated setIcon funtion
+	var oldUpdateDisplay = searchbar.updateDisplay;
+	searchbar.updateDisplay = function() {
+	  oldUpdateDisplay.call(this);
 	  updateStyleSheet();
 	};
 	
-
 	// main style sheet
 	function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
