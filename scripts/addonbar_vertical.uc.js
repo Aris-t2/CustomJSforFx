@@ -20,7 +20,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AddonbarVertical = {
   init: function() {
-	  
+
+	if (appversion >= 76 && location != 'chrome://browser/content/browser.xhtml')
+      return;
+
 	/* blank tab workaround */
 	try {
 	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
@@ -276,3 +279,10 @@ var AddonbarVertical = {
 
 /* initialization delay workaround */
 document.addEventListener("DOMContentLoaded", AddonbarVertical.init(), false);
+/* Use the below code instead of the one above this line, if issues occur */
+/*
+setTimeout(function(){
+  AddonbarVertical.init();
+},2000);
+*/
+

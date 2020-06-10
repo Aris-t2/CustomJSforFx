@@ -20,7 +20,10 @@ var appversion = parseInt(Services.appinfo.version);
 
 var AddSeparator = {
   init: function() {
-	  
+
+	if (appversion >= 76 && location != 'chrome://browser/content/browser.xhtml')
+      return;
+
 	/* blank tab workaround */
 	try {
 	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
@@ -89,6 +92,7 @@ var AddSeparator = {
 	  tb_spring.setAttribute("class","chromeclass-toolbar-additional");
 	  tb_spring.setAttribute("customizableui-areatype","toolbar");
 	  tb_spring.setAttribute("removable","false");
+	  tb_spring.setAttribute("flex","1"); 
 	  tb_spring.setAttribute("label", tb_spring_label);
 	  	  
 	  tb_config.appendChild(tb_spring);
@@ -153,6 +157,9 @@ var AddSeparator = {
 		#customization-palette-container :-moz-any(#spring,#wrapper-spring) { \
 		  display: none !important; \
 		}\
+		#main-window:not([customizing]) toolbar:not(#configuration_toolbar) toolbarspring {\
+		  max-width: 100% !important; \
+		}\
 	  \
 	  '), null, null);
 
@@ -166,8 +173,9 @@ var AddSeparator = {
 
 /* initialization delay workaround */
 document.addEventListener("DOMContentLoaded", AddSeparator.init(), false);
+/* Use the below code instead of the one above this line, if issues occur */
 /*
 setTimeout(function(){
   AddSeparator.init();
-},1000);
+},2000);
 */

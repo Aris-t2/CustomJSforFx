@@ -19,6 +19,9 @@ var compact_buttons = false; // reduced toolbar height and smaller buttons
 
 var AddAddonbar = {
   init: function() {
+
+	if (appversion >= 76 && location != 'chrome://browser/content/browser.xhtml')
+      return;
 	  
 	/* blank tab workaround */
 	try {
@@ -70,11 +73,23 @@ var AddAddonbar = {
 		  } \
 		  #addonbar { \
 			border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
-		  } \
-		  #addonbar {\
 			background: var(--lwt-header-image) !important; \
 			background-position: 0vw 50vh !important; \
+			-moz-window-dragging: no-drag !important; \
+		  }\
+		  /* autohide add-on bar in fullscreen mode */ \
+		  /*#main-window[sizemode="fullscreen"]:not([inDOMFullscreen="true"]) #addonbar {\
+			visibility: visible !important; \
+			display: block !important; \
+			min-height: 1px !important; \
+			height: 1px !important; \
+			max-height: 1px !important; \
 		  } \
+		  #main-window[sizemode="fullscreen"]:not([inDOMFullscreen="true"]) #addonbar:hover {\
+			min-height: 24px !important; \
+			height: 24px !important; \
+			max-height: 24px !important; \
+		  }*/ \
 		  '+compact_buttons_code+'\
 	  '), null, null),
 	  Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET
@@ -126,8 +141,7 @@ var AddAddonbar = {
 
 /* initialization delay workaround */
 document.addEventListener("DOMContentLoaded", AddAddonbar.init(), false);
-
-// not needed anymore, but just in case someone prefers initialization that way
+/* Use the below code instead of the one above this line, if issues occur */
 /*
 setTimeout(function(){
   AddAddonbar.init();
