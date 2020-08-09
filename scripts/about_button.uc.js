@@ -21,12 +21,31 @@ try {
 	label: button_label, // button title
 	tooltiptext: button_label, // tooltip title
 	onClick: function(event) {
-	  if(event.button=='0') {
+		
+	  var win = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+		.getService(Components.interfaces.nsIWindowMediator)
+		.getMostRecentWindow("navigator:browser");
+		
+      if(event.button=='0') {
 		try {
-		  gBrowser.selectedTab = gBrowser.addTrustedTab('about:config');
+		  openAboutDialog();
 		} catch (e) {}
 	  } 
-
+	  
+	  if(event.button=='1') {
+		try {
+		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('chrome://global/content/config.xhtml');
+		} catch (e) {}
+	  } 
+	  if(event.button=='2') {
+		try {
+		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('about:config');
+		  setTimeout(function(){
+			document.querySelector("#toolbar-context-menu").hidePopup();
+		  },0);
+		} catch (e) {}
+	  }
+  
 	},
 	onCreated: function(button) {
 	  return button;
@@ -39,7 +58,7 @@ try {
 	\
 	  #about-button .toolbarbutton-icon {\
 		list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.svg"); /* icon / path to icon */ \
-		fill: blue; /* icon color name/code */\
+		fill: dimgray; /* icon color name/code */\
 	  }\
 	\
   '), null, null);
