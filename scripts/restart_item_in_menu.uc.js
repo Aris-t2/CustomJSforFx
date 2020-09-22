@@ -26,6 +26,7 @@ var RestartMenuFileAppItems = {
 	try {
 	  if(appversion <= 62) restartitem_filemenu = document.createElement("menuitem");
 	  else restartitem_filemenu = document.createXULElement("menuitem");
+	  restartitem_filemenu.setAttribute("class","menuitem-iconic");
 	  restartitem_filemenu.setAttribute("label", button_label);
 	  restartitem_filemenu.setAttribute("id","fileMenu-restart-item");
 	  restartitem_filemenu.setAttribute("key", "R");
@@ -57,16 +58,29 @@ var RestartMenuFileAppItems = {
 
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
-	// style button icon
+	// Style the icons (button/menu)
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
-	  #appMenu-restart-button {\
-		list-style-image: url("chrome://browser/skin/reload.svg"); /* icon / path to icon */ \
-	  }\
-	  #appMenu-restart-button .toolbarbutton-icon {\
-		transform: scaleX(-1); /* icon mirroring */\
-		color: red; /* icon color name/code */\
-	  }\
+	  #fileMenu-restart-item { \
+	  	 list-style-image: url("chrome://browser/skin/reload.svg") !important; /* File Menu Entry */ \
+	  } \
+	  #fileMenu-restart-item > hbox > image.menu-iconic-icon { /* Style the menuItem */ \
+		 margin-inline-start: 2px; \
+		 margin-top: 2px; \
+		-moz-context-properties: fill; \
+		 transform: scaleX(-1); \
+		 fill: red; \
+	  } \
+	  #appMenu-restart-button { \
+		list-style-image: url("chrome://browser/skin/reload.svg"); /* Button in appMenu */ \
+	  } \
+	  #appMenu-restart-button .toolbarbutton-icon { /* Style the Button */ \
+		transform: scaleX(-1); /* Icon mirroring */ \
+		color: red; /* Icon color name */ \
+	  } \
+	  #main-window:-moz-lwtheme:-moz-lwtheme-brighttext #appMenu-restart-button .toolbarbutton-icon { \
+		color: unset; /* in dark mode do not color the icon in the hamburger menu as red does not look very good over dark grey */ \
+	  } \
 	  \
 	'), null, null);
 
