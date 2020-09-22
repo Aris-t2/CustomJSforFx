@@ -47,12 +47,9 @@ var RestartMenuFileAppItems = {
 	  restartitem_appmenu.setAttribute("insertbefore", "appMenu-quit-button");
 	  restartitem_appmenu.setAttribute("onclick", "if (event.button == 0) {RestartMenuFileAppItems.restartApp(false);} else if (event.button == 1) {RestartMenuFileAppItems.restartApp(true)};");
 	  restartitem_appmenu.setAttribute("oncommand", "RestartMenuFileAppItems.restartApp(false);");
-	  
-	  var appMenuquitbutton = document.querySelector("#appMenu-viewCache")?.content.querySelector("#appMenu-mainView #appMenu-quit-button") || document.querySelector("#appMenu-mainView #appMenu-quit-button");
-	  appMenuquitbutton.before(restartitem_appmenu);
-	  
-	  /*if(document.getElementById("appMenu-quit-button").previousSibling.id != "appMenu-restart-button" )
-		document.getElementById("appMenu-quit-button").parentNode.insertBefore(restartitem_appmenu,document.getElementById("appMenu-quit-button"));*/
+
+	  if(document.getElementById("appMenu-quit-button").previousSibling.id != "appMenu-restart-button" )
+		document.getElementById("appMenu-quit-button").parentNode.insertBefore(restartitem_appmenu,document.getElementById("appMenu-quit-button"));
 	} catch(e) {}
 
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
