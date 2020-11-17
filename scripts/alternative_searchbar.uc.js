@@ -47,6 +47,7 @@ var show_search_engine_names_with_scrollbar = false; // show search engine names
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
 var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (=1000ms) and on some even '0' is enough
 var searchsettingslabel = "Change Search Settings";
+var select_engine_by_click_oneoffs_button = true;
 // Configuration area - end
 
 var isInCustomize = 1; //start at 1 to set it once at startup
@@ -79,6 +80,9 @@ var AltSearchbar = {
 	if(old_search_engine_selection_popup)
 	  createOldSelectionPopup();
 
+    if (select_engine_by_click_oneoffs_button)
+      selectEngineByClickOneoffsButton();
+
 	// select search engine by scrolling mouse wheel over search bars button
 	function selectEngineByScrollingOverButton() {
 	  searchbar.addEventListener("DOMMouseScroll", (event) => {
@@ -88,6 +92,37 @@ var AltSearchbar = {
 	  }, true);
 	};
 
+    // left click on off select engine
+    function selectEngineByClickOneoffsButton() {
+        var searchoneoffs = searchbar.textbox.popup.oneOffButtons;
+        searchoneoffs.container.addEventListener("click", (event) => {
+            if (!(event instanceof KeyboardEvent) && (event.button == 0)) {
+                event.stopPropagation();
+                event.target.classList.add("search-one-offs-context-set-default");
+                searchoneoffs._contextEngine = event.target.engine;
+                searchoneoffs._on_command(event);
+                searchoneoffs._contextEngine = null;
+                // let contextEngine = event.target.engine;
+                // let currentEngine = searchbar.currentEngine;
+                // if (!searchoneoffs.getAttribute("includecurrentengine")) {
+                // 	// Make the target button of the context menu reflect the current
+                // 	// search engine first. Doing this as opposed to rebuilding all the
+                // 	// one-off buttons avoids flicker.
+                // 	let button = searchoneoffs._buttonForEngine(contextEngine);
+                // 	button.id = searchoneoffs._buttonIDForEngine(currentEngine);
+                // 	let uri = "chrome://browser/skin/search-engine-placeholder.png";
+                // 	if (currentEngine.iconURI) {
+                // 		uri = currentEngine.iconURI.spec;
+                // 	}
+                // 	button.setAttribute("image", uri);
+                // 	button.setAttribute("tooltiptext", currentEngine.name);
+                // 	button.engine = currentEngine;
+                // }
+                // searchbar.currentEngine = contextEngine;
+            }
+        }, true);
+    };
+    
 	// hide placeholder
 	function hideSearchbarsPlaceholder() {
 	  searchbar.getElementsByClassName('searchbar-textbox')[0].removeAttribute("placeholder");
