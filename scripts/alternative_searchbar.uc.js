@@ -38,6 +38,7 @@ var clear_searchbar_after_search = false; // clear input after search (true) or 
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
+var select_engine_by_click_oneoffs_button = false;
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var hide_addengines_plus_indicator = false; // hide add engines '+' sign (true) or not (false)
 var hide_placeholder = false; // hide placeholder (true) or not (false)
@@ -47,7 +48,6 @@ var show_search_engine_names_with_scrollbar = false; // show search engine names
 var show_search_engine_names_with_scrollbar_height = '170px'; // higher values show more search engines
 var initialization_delay_value = 1000; // some systems might require a higher value than '1' second (=1000ms) and on some even '0' is enough
 var searchsettingslabel = "Change Search Settings";
-var select_engine_by_click_oneoffs_button = true;
 // Configuration area - end
 
 var isInCustomize = 1; //start at 1 to set it once at startup
