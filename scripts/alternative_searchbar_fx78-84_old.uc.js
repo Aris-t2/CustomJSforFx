@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 85+ by Aris
+// 'Alternative search bar' script for Firefox 68+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -402,64 +402,47 @@ function createAddEngineItem(e) {
 
 	}; //createOldSelectionPopup
 	
-	// doSearch function taken from Firefox 85+ internal 'searchbar.js' file and added modifications
-    searchbar.doSearch = function(aData, aWhere, aEngine, aParams, isOneOff = false) {
-      let textBox = this._textbox;
-      let engine = aEngine || this.currentEngine;
+	// doSearch function taken from Firefox 64s internal 'searchbar.js' file and added modifications
+	searchbar.doSearch = function(aData, aWhere, aEngine, aParams, aOneOff) {
+	  let textBox = this._textbox;
 
-      // Save the current value in the form history
-      if (
-        aData &&
-        !PrivateBrowsingUtils.isWindowPrivate(window) &&
-        this.FormHistory.enabled &&
-        aData.length <=
-          this.SearchSuggestionController.SEARCH_HISTORY_MAX_VALUE_LENGTH
-      ) {
-        this.FormHistory.update(
-          {
-            op: "bump",
-            fieldname: textBox.getAttribute("autocompletesearchparam"),
-            value: aData,
-            source: engine.name,
-          },
-          {
-            handleError(aError) {
-              Cu.reportError(
-                "Saving search to form history failed: " + aError.message
-              );
-            },
-          }
-        );
-      }
+	  if (aData && !PrivateBrowsingUtils.isWindowPrivate(window) && this.FormHistory.enabled) {
+		this.FormHistory.update({
+			op: "bump",
+			fieldname: textBox.getAttribute("autocompletesearchparam"),
+			value: aData,
+		}, {
+			handleError(aError) {
+			  Cu.reportError("Saving search to form history failed: " + aError.message);
+			},
+		});
+	  }
 
-      let submission = engine.getSubmission(aData, null, "searchbar");
+	  let engine = aEngine || this.currentEngine;
+	  let submission = engine.getSubmission(aData, null, "searchbar");
+	  let telemetrySearchDetails = this.telemetrySearchDetails;
+	  this.telemetrySearchDetails = null;
+	  if (telemetrySearchDetails && telemetrySearchDetails.index == -1) {
+		telemetrySearchDetails = null;
+	  }
 
-      // If we hit here, we come either from a one-off, a plain search or a suggestion.
-      const details = {
-        isOneOff,
-        isSuggestion: !isOneOff && this.telemetrySelectedIndex != -1,
-        url: submission.uri,
-      };
+	  const details = {
+		isOneOff: aOneOff,
+		isSuggestion: (!aOneOff && telemetrySearchDetails),
+		selection: telemetrySearchDetails,
+	  };
+	  BrowserSearch.recordSearchInTelemetry(engine, "searchbar", details);
 
-      this.telemetrySelectedIndex = -1;
+	  let params = {
+		postData: submission.postData,
+	  };
+	  if (aParams) {
+		for (let key in aParams) {
+		  params[key] = aParams[key];
+		}
+	  }
+	  openTrustedLinkIn(submission.uri.spec, aWhere, params);
 
-      BrowserSearchTelemetry.recordSearch(
-        gBrowser.selectedBrowser,
-        engine,
-        "searchbar",
-        details
-      );
-      // null parameter below specifies HTML response for search
-      let params = {
-        postData: submission.postData,
-      };
-      if (aParams) {
-        for (let key in aParams) {
-          params[key] = aParams[key];
-        }
-      }
-      openTrustedLinkIn(submission.uri.spec, aWhere, params);
-	  
 		if(clear_searchbar_after_search)
 			this.value = '';
 		  
@@ -467,8 +450,7 @@ function createAddEngineItem(e) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		}
-
-    };
+	};
 	
 	// Workaround for the deprecated setIcon funtion
 	var oldUpdateDisplay = searchbar.updateDisplay;
