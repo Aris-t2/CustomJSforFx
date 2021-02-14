@@ -165,13 +165,13 @@ var AltSearchbar = {
 						
 				if(!hidden_list.includes(searchbar.engines[i].name)) {
 						
-							menuitem = document.createXULElement("menuitem");;
+					menuitem = document.createXULElement("menuitem");;
 					menuitem.setAttribute("label", searchbar.engines[i].name);
 					menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
 							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
 			
 					if (searchbar.engines[i] == searchbar.currentEngine)
-								menuitem.setAttribute("selected", "true");
+							menuitem.setAttribute("selected", "true");
 			
 					if (searchbar.engines[i].iconURI)
 						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
@@ -233,8 +233,8 @@ var AltSearchbar = {
 		  console.log("AltSearchbar: Failed to attach new popup to search bar search button");
 	  }
 	  
-// Refresh the script's search popup (searchbuttonpopup) with any changes made to search engines/options.
-async function updateEngines() {
+	// Refresh the script's search popup (searchbuttonpopup) with any changes made to search engines/options.
+	async function updateEngines() {
     var i;
 
     try {
@@ -397,6 +397,8 @@ function createAddEngineItem(e) {
 				defaultPopup.addEventListener("popupshown", createAddEngineItem, false);
 			}
 		}
+
+		searchbar.focus();
 
 	  }, true);
 
