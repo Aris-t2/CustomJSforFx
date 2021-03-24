@@ -14,6 +14,7 @@ var globe = 'chrome://mozapps/skin/places/defaultFavicon.svg';
 
 var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
 
+var favicon_click_opens_page_info_window = false;
 
 var appversion = parseInt(Services.appinfo.version);
 
@@ -25,10 +26,26 @@ var FaviconInUrlbar = {
 	if(appversion >= 70) {
 	  var favimginurlbar = document.createXULElement("image");
 	  favimginurlbar.setAttribute("id","favimginurlbar");
+	  
+	  if(favicon_click_opens_page_info_window)
+		favimginurlbar.setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");	  
+	  
 	  favimginurlbar.style.width = "16px";
 	  favimginurlbar.style.height = "16px";
 	  favimginurlbar.style.marginRight = "4px";
+	  
+	  if(appversion >= 86) {
+		favimginurlbar.style.marginLeft = "4px";
+		favimginurlbar.style.marginRight = "4px";
+		favimginurlbar.style.marginTop = "6px";
+		favimginurlbar.style.marginBottom = "6px";
+	  } 
+	  
 	  document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
+	} else {
+		
+	  if(favicon_click_opens_page_info_window)
+		document.querySelector('#identity-icon').setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");
 	}
 	
 	// update script every time tab attributes get modified (switch/open tabs/windows)
@@ -60,6 +77,8 @@ var FaviconInUrlbar = {
 	 },100);
 
 	}
+	
+	
 	
 	/* restore icon badge for websites with granted permissions */
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
