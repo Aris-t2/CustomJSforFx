@@ -37,13 +37,21 @@ try {
 		transform: scaleX(-1); /* icon mirroring */\
 	  }\
 	  ';
+  } else if(appversion <= 86) {
+	  undoicon = '\
+	  #uc_undo_closetab_button .toolbarbutton-icon {\
+		list-style-image: url("chrome://browser/skin/undo.svg"); /* icon / path to icon */ \
+		fill: blue; /* icon color name/code */\
+	  }\
+	  ';
   }
   
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #uc_undo_closetab_button .toolbarbutton-icon {\
-		list-style-image: url("chrome://browser/skin/undo.svg"); /* icon / path to icon */ \
+		list-style-image: url("chrome://browser/skin/reload.svg"); /* icon / path to icon */ \
+		transform: scaleX(-1); /* icon mirroring */\
 		fill: blue; /* icon color name/code */\
 	  }\
 	  :-moz-any(#customization-palette,#widget-overflow-fixed-list) #uc_undo_closetab_button .toolbarbutton-icon {\

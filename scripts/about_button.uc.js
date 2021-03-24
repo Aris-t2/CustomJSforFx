@@ -32,11 +32,12 @@ try {
 		} catch (e) {}
 	  } 
 	  
-	  if(event.button=='1') {
+	  if(appversion <= 88 && event.button=='1') {
 		try {
 		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('chrome://global/content/config.xhtml');
 		} catch (e) {}
-	  } 
+	  }
+	  
 	  if(event.button=='2') {
 		try {
 		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('about:config');
@@ -53,13 +54,22 @@ try {
 		
   });
   
+  var abouticon = "";
+  if(appversion <= 88) {
+	  abouticon = '\
+	  #about-button .toolbarbutton-icon {\
+		list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.svg"); /* icon / path to icon */ \
+	  }\
+	  ';
+  }
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #about-button .toolbarbutton-icon {\
-		list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.svg"); /* icon / path to icon */ \
+		list-style-image: url("chrome://global/skin/icons/defaultFavicon.svg"); /* icon / path to icon */ \
 		fill: dimgray; /* icon color name/code */\
 	  }\
+	  '+abouticon+' \
 	\
   '), null, null);
   
