@@ -37,8 +37,8 @@ var FaviconInUrlbar = {
 	  if(appversion >= 86) {
 		favimginurlbar.style.marginLeft = "4px";
 		favimginurlbar.style.marginRight = "4px";
-		favimginurlbar.style.marginTop = "6px";
-		favimginurlbar.style.marginBottom = "6px";
+		favimginurlbar.style.marginTop = "4px";
+		favimginurlbar.style.marginBottom = "4px";
 	  } 
 	  
 	  document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
