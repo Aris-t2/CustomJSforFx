@@ -32,7 +32,7 @@ try {
 		} catch (e) {}
 	  } 
 	  
-	  if(appversion <= 88 && event.button=='1') {
+	  if(appversion < 88 && event.button=='1') {
 		try {
 		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('chrome://global/content/config.xhtml');
 		} catch (e) {}
@@ -55,7 +55,7 @@ try {
   });
   
   var abouticon = "";
-  if(appversion <= 88) {
+  if(appversion < 88) {
 	  abouticon = '\
 	  #about-button .toolbarbutton-icon {\
 		list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.svg"); /* icon / path to icon */ \
