@@ -41,6 +41,13 @@ var FaviconInUrlbar = {
 		favimginurlbar.style.marginBottom = "4px";
 	  } 
 	  
+	  if(appversion >= 89 && Services.prefs.getBoolPref("browser.proton.enabled")) {
+		favimginurlbar.style.marginLeft = "3px";
+		favimginurlbar.style.marginRight = "3px";
+		favimginurlbar.style.marginTop = "3px";
+		favimginurlbar.style.marginBottom = "3px";
+	  } 
+	  
 	  document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
 	} else {
 		
