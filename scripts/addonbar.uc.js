@@ -73,9 +73,16 @@ var AddAddonbar = {
 		  } \
 		  #addonbar { \
 			border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important; \
+			background-color: var(--toolbar-bgcolor); \
+			background-image: var(--toolbar-bgimage); \
+			-moz-window-dragging: no-drag !important; \
+		  }\
+		  #main-window:-moz-lwtheme #addonbar { \
+			background: var(--lwt-accent-color) !important; \
+		  }\
+		  #main-window[lwtheme-image="true"]:-moz-lwtheme #addonbar { \
 			background: var(--lwt-header-image) !important; \
 			background-position: 0vw 50vh !important; \
-			-moz-window-dragging: no-drag !important; \
 		  }\
 		  /* autohide add-on bar in fullscreen mode */ \
 		  /*#main-window[sizemode="fullscreen"]:not([inDOMFullscreen="true"]) #addonbar {\

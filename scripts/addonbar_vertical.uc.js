@@ -68,7 +68,7 @@ var AddonbarVertical = {
 	  if(appversion >= 65) CustomizableUI.registerToolbarNode(tb_addonbarv);
 	  
 	  if(addonbar_v_on_the_left) {
-	    if(insert_before_borders) document.getElementById("browser").insertBefore(toolbox_abv,document.getElementById("browser").firstChild);
+	    if(insert_before_borders || appversion >= 86) document.getElementById("browser").insertBefore(toolbox_abv,document.getElementById("browser").firstChild);
 	    else document.getElementById("browser").insertBefore(toolbox_abv,document.getElementById("browser").firstChild.nextSibling);
 	  }
 	  else {
@@ -189,6 +189,13 @@ var AddonbarVertical = {
 		  background-clip: padding-box; \
 		  color: var(--toolbar-color, inherit); \
 		} \
+		#main-window:-moz-lwtheme #addonbar_v { \
+		  background: var(--lwt-accent-color) !important; \
+		} \
+		#main-window[lwtheme-image="true"]:-moz-lwtheme #addonbar_v { \
+		  background: var(--lwt-header-image) !important; \
+		  background-position: 0vw 50vh !important; \
+		} \
 		#main-window:not([customizing]) #toolbox_abv:not([collapsed="true"]), \
 		#main-window:not([customizing]) #addonbar_v:not([collapsed="true"]) { \
 		  min-width: '+addonbar_v_width+'; \
@@ -210,6 +217,10 @@ var AddonbarVertical = {
 		#addonbar_v:-moz-lwtheme { \
 		  background: var(--lwt-header-image) !important; \
 		  background-position: 100vw 50vh !important; \
+		} \
+		#addonbar_v toolbarbutton, \
+		#addonbar_v toolbar .toolbarbutton-1 { \
+		  padding: 0 !important; \
 		} \
 		'+end_border+' \
 	  ';
