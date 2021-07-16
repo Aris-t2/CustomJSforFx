@@ -14,6 +14,7 @@ try {
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
   var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+  var appversion = parseInt(Services.appinfo.version);
   
   var button_label = "Restart";
 	
@@ -53,11 +54,15 @@ try {
 		
   });
   
+  var icon = "chrome://global/skin/icons/reload.svg";
+  
+  if(appversion < 92) icon = "chrome://browser/skin/reload.svg";
+  
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #uc-restart .toolbarbutton-icon {\
-		list-style-image: url("chrome://browser/skin/reload.svg"); /* icon / path to icon */ \
+		list-style-image: url("'+icon+'"); /* icon / path to icon */ \
 		transform: scaleX(-1); /* icon mirroring */\
 		fill: red; /* icon color name/code */\
 	  }\

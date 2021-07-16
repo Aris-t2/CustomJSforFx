@@ -29,8 +29,18 @@ try {
 		
   });
   
-  var undoicon = "";
-  if(appversion <= 62) {
+  var reloadicon = "chrome://global/skin/icons/reload.svg";
+  
+  if(appversion < 92) reloadicon = "chrome://browser/skin/reload.svg";
+  
+  var undoicon = '\
+	  #uc_undo_closetab_button .toolbarbutton-icon {\
+		list-style-image: url("chrome://global/skin/icons/reload.svg"); /* icon / path to icon */ \
+		fill: blue; /* icon color name/code */\
+	  }\
+	  ';
+	  
+  if(appversion < 92 && appversion > 86) {
 	  undoicon = '\
 	  #uc_undo_closetab_button .toolbarbutton-icon {\
 		list-style-image: url("chrome://browser/skin/reload.svg"); /* icon / path to icon */ \

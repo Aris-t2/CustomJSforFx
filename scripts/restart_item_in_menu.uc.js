@@ -57,12 +57,16 @@ var RestartMenuFileAppItems = {
 	} catch(e) {}
 
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+	
+	var icon = "chrome://global/skin/icons/reload.svg";
+  
+	if(appversion < 92) icon = "chrome://browser/skin/reload.svg";
 
 	// Style the icons (button/menu)
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
 	  #fileMenu-restart-item { \
-	  	 list-style-image: url("chrome://browser/skin/reload.svg") !important; /* File Menu Entry */ \
+	  	 list-style-image: url("'+icon+'") !important; /* File Menu Entry */ \
 	  } \
 	  #fileMenu-restart-item > hbox > image.menu-iconic-icon { /* Style the menuItem */ \
 		 margin-inline-start: 2px; \
