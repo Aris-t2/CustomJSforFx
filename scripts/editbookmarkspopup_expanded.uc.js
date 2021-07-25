@@ -6,23 +6,34 @@
 
 var folder_tree_height = "240px"; // increase folder tree height
 var hide_preview_image = false; // hide (true) or show (false) preview image
-var timeout_value = 30; // milliseconds - increase value, if popup does not extend: 100 > 500 > 1000 ...
+var timeout_value = 0; // milliseconds - increase value, if popup does not expand: 100 > 500 > 1000 ...
 
 
 var EditBookmarkPanelTweaks = {
  init: function() {
-	 
-	  
+
   try {
 
-	document.querySelector("#star-button").addEventListener("click", function(e){
-		
-	if(e.button==0) setTimeout(function(){
+	/* click only method */
+	/*document.querySelector("#star-button").addEventListener("click", function(e){
+	 if(e.button==0) setTimeout(function(){
 	  if(document.querySelector("#editBMPanel_folderTreeRow").getAttribute("collapsed"))
 		gEditItemOverlay.toggleFolderTreeVisibility();
 	 },timeout_value);
-	}, false);
+	}, false);*/
 	
+	/* general method to listen to panels 'open' status */
+	var BSObserver = new MutationObserver(function(mutations) {
+	  mutations.forEach(function(mutation) {
+		setTimeout(function(){
+		  if(document.querySelector("#editBMPanel_folderTreeRow").getAttribute("collapsed"))
+			gEditItemOverlay.toggleFolderTreeVisibility();
+		 },timeout_value);
+	  });    
+	});
+
+	BSObserver.observe(document.querySelector("#star-button-box"), { attributes: true, attributeFilter: ['open'] });
+
 	
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	
