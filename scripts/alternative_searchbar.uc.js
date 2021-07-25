@@ -756,7 +756,7 @@ function createAddEngineItem(e) {
 		  transform: scaleX(1) !important; \
 		} \
 		.searchbar-search-button .searchbar-search-icon { \
-		  list-style-image: url("chrome://browser/skin/search-glass.svg") !important; \
+		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important; \
 		  -moz-context-properties: fill, fill-opacity !important; \
 		  fill-opacity: 1.0 !important; \
 		  fill: #3683ba !important; \
@@ -772,6 +772,7 @@ function createAddEngineItem(e) {
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		\
+		#search-container{ min-width: 20px !important } \
 		#searchbuttonpopup {\
 		  -moz-margin-start: -1px; \
 		} \
@@ -779,7 +780,7 @@ function createAddEngineItem(e) {
 		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
 		} \
 		.search-go-button { \
-		  list-style-image: url("chrome://browser/skin/search-glass.svg") !important; \
+		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important; \
 		  -moz-context-properties: fill, fill-opacity !important; \
 		  fill-opacity: 1.0 !important; \
 		  fill: #3683ba !important; \
