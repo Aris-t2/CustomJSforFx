@@ -38,7 +38,7 @@ var clear_searchbar_after_search = false; // clear input after search (true) or 
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
 var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
-var select_engine_by_click_oneoffs_button = false; // select search engine by left-clicking search icon
+var select_engine_by_click_oneoffs_button = false; // select search engine by left-clicking search icon (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
 var hide_addengines_plus_indicator = false; // hide add engines '+' sign (true) or not (false)
 var hide_placeholder = false; // hide placeholder (true) or not (false)
@@ -188,9 +188,11 @@ var AltSearchbar = {
 					searchbuttonpopup.appendChild(menuseparator_om);
 
 					menuitem_om = document.createXULElement("menuitem");
-					if(appversion > 71)
+					/*if(appversion > 71)
 						menuitem_om.setAttribute("data-l10n-id", "search-one-offs-change-settings-button");
-					else
+					if(appversion > 88)
+						menuitem_om.setAttribute("data-l10n-id", "search-one-offs-change-settings-compact-button");
+					else*/
 						menuitem_om.setAttribute("label", searchsettingslabel);
 					menuitem_om.setAttribute("class", "open-engine-manager");
 					menuitem_om.setAttribute("oncommand", "openPreferences('search');");
@@ -398,7 +400,7 @@ function createAddEngineItem(e) {
 			}
 		}
 
-		searchbar.focus();
+		/*searchbar.focus();*/
 
 	  }, true);
 
