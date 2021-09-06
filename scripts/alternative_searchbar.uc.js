@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 85+ by Aris
+// 'Alternative search bar' script for Firefox 91+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -305,56 +305,64 @@ Services.prefs.addObserver("browser.search.hiddenOneOffs", function observer(sub
 // Used to create an add engine item and append it into the script's search popup (searchbuttonpopup). This is the option
 // that is displayed as "Add enginename" e.g. Add DuckDuckGo.
 function createAddEngineItem(e) {
-    try {
-        e.target.removeEventListener(e.type, arguments.callee);
+	    try {
 
-        searchbuttonpopup = document.getElementById("searchbuttonpopup");
-        var native_popup_search_add_item = document.getElementsByClassName("search-add-engines")[0];
+			e.target.removeEventListener(e.type, arguments.callee);
 
-        if (native_popup_search_add_item.hasChildNodes()) {
+			searchbuttonpopup = document.getElementById("searchbuttonpopup");
+			
+			while (searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
+				searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+			}
+			
+			setTimeout(function () { //setTimeout fix an issue where labels don't get displayed
+				
+				let native_popup_search_add_items_collection = document.getElementsByClassName("searchbar-engine-one-off-add-engine");
+				var native_popup_search_add_items = new Array();
+				
+				for(i = 0; i < native_popup_search_add_items_collection.length; i++) {
+					if(!native_popup_search_add_items_collection[i].parentElement.parentElement.parentElement.parentElement.hasAttribute("class")) {
+						native_popup_search_add_items.push(native_popup_search_add_items_collection[i]);
+					}
+				}
+				
+				if (native_popup_search_add_items.length != 0) {
 
-            var add_engine_menuitem;
+					if (searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
+						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+						searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
+					}
 
-            while (searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-            }
+					for(i = 0; i < native_popup_search_add_items.length; i++) {
+						
+						menuitem = document.createXULElement("menuitem");
+						menuitem.setAttribute("label", native_popup_search_add_items[i].getAttribute("label"));
+						menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
+						menuitem.setAttribute("tooltiptext", native_popup_search_add_items[i].getAttribute("label"));
+						menuitem.setAttribute("uri", native_popup_search_add_items[i].getAttribute("uri"));
+						menuitem.setAttribute("data-id", native_popup_search_add_items[i].id);
+						menuitem.setAttribute("oncommand", "document.getElementById(\"" + native_popup_search_add_items[i].id + "\").click();");
 
-            if (searchbuttonpopup.lastChild.tagName.toLowerCase() != "menuseparator") {
-                searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-                searchbuttonpopup.appendChild(document.createXULElement("menuseparator"));
-            }
+						if (native_popup_search_add_items[i].hasAttribute("image"))
+							menuitem.setAttribute("image", native_popup_search_add_items[i].getAttribute("image"));
 
-			native_popup_search_add_item.childNodes.forEach(function (child_node) {
-				menuitem = document.createXULElement("menuitem");
-				menuitem.setAttribute("label", child_node.getAttribute("label"));
-				menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon custom-addengine-item");
-				menuitem.setAttribute("tooltiptext", child_node.getAttribute("label"));
-				menuitem.setAttribute("uri", child_node.getAttribute("uri"));
-				menuitem.setAttribute("data-id", child_node.id);
-				menuitem.setAttribute("oncommand", "document.getElementById(\"" + child_node.id + "\").click();");
+						searchbuttonpopup.appendChild(menuitem);
 
-				if (child_node.hasAttribute("image"))
-					menuitem.setAttribute("image", child_node.getAttribute("image"));
+					};
 
-				searchbuttonpopup.appendChild(menuitem);
-
-			});
-
-        } else {
-
-            while (searchbuttonpopup.lastChild.classList.contains("custom-addengine-item")) {
-                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-            }
-
-            while (searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
-                searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
-
-        }
-
-    } catch (exc) {
-        console.log("custom addengine exc: " + exc);
-    }
-}
+				} 
+				else {
+					while (searchbuttonpopup.lastChild.tagName.toLowerCase() == "menuseparator")
+						searchbuttonpopup.removeChild(searchbuttonpopup.lastChild);
+				}		
+			
+			}, 0 );
+	  
+		}
+		catch (exc) {
+		  console.log("custom addengine exc: " + exc);
+		}
+	  }	
 
 	  searchbar.addEventListener("mousedown", (event) => {
 		var defaultPopup = document.getElementById("PopupSearchAutoComplete"); // Browser's default search popup.
@@ -801,7 +809,7 @@ function createAddEngineItem(e) {
 		} \
 		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay, \
 		.searchbar-search-button:not([addengines=true]) > .searchbar-search-icon-overlay { \
-		  list-style-image: url("chrome://global/skin/icons/arrow-dropdown-12.svg") !important; \
+		  list-style-image: url("chrome://global/skin/icons/arrow-down-12.svg") !important; \
 		  -moz-context-properties: fill !important; \
 		  margin-inline-start: -6px !important; \
 		  margin-inline-end: 2px !important; \
