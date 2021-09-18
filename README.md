@@ -19,7 +19,7 @@ M2 is also based on the modified files by Endor8: https://github.com/Endor8/user
 </br>
 From this projects <code>\method 2\profile\</code> folder copy <code>userChrome</code> folder and <code>userChrome.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
 </br>
-From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is). </br>
+From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox main directory (where the Firefox executable is; or on macOS, <b>inside</b> the main executable, at <code>/Applications/Firefox.app/Contents/Resources/</code>). </br>
 </br>
 <b>Edit <code>userChrome.js</code> file to add custom scripts.</b></br>
 </br>
