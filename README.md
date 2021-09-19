@@ -5,13 +5,13 @@ The <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> contains a 
 <h1>Unlock custom CSS usage in Thunderbird 69 and newer</h1>  
 <code>Settings/Options</code> > <code>Advanced</code> > <code>General</code> > <code>Config Editor...</code> </br>
 <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> > <code>true</code>  
-<strike><h2>Method 1 - files in profile folder only (Fx60-71)</h2>
+<h2>Method 1 - files in profile folder only (Fx60-71)</h2>
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
-M1 stoped working in Firefox 72! XBL support got dropped.</br>
+M1 stopped working in Firefox 72! XBL support got dropped.</br>
 </br>
 From this projects <code>\method 1\</code> folder copy <code>userChrome</code> folder and <code>userChrome.css</code> file to <code>\ PROFILENAME \chrome\</code> or add code from <code>userChrome.css</code> file to an existing <code>userChrome.css</code> file.</br>
 </br>
-<b>Edit <code>userChrome\userChrome.xml</code> file to add custom scripts.</b></strike>
+<b>Edit <code>userChrome\userChrome.xml</code> file to add custom scripts.</b>
 </br>
 <h2>Method 2 - files in install and profile folders</h2>
 M2 is based on this project by ardiman: https://github.com/ardiman/userChrome.js </br>
@@ -25,14 +25,14 @@ From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</c
 </br>
 With Firefox 62+ and Thunderbird 68+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". 
 </br>
-<strike><h2>Method 3 - files in install and profile folders</h2>
+<h2>Method 3 - files in install and profile folders (Fx60-91)</h2>
 M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
 </br>
 From this projects <code>\method 3\profile\</code> folder copy <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
 </br>
 From this projects <code>\method 3\firefox\</code> folder copy <code>defaults</code> folder and <code>config.js</code> file to Firefox/Thunderbird main directory (where the Firefox/Thunderbird executable is). </br>
 </br>
-<b>Edit <code>userChrome.uc.js</code> file to add custom scripts or delete <code>userChrome.uc.js</code> file and add scripts directly into <code> /chrome/ </code> folder.</b></strike>
+<b>Edit <code>userChrome.uc.js</code> file to add custom scripts or delete <code>userChrome.uc.js</code> file and add scripts directly into <code> /chrome/ </code> folder.</b>
 </br>
 <h2>Script/startup cache must be deleted after every change!</h2>
 Where to find Firefox <code>startupCache</code> folder?</br>
