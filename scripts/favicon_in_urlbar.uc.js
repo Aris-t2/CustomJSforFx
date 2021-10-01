@@ -5,12 +5,12 @@
 // [!] In a multi-window environment pages without favicons might show wrong icons.
 // option: set icon for pages without favicon
 
-
+var i_icon = 'chrome://global/skin/icons/info.svg';
 var sheet = 'chrome://global/skin/icons/Portrait.png';
 var brand = 'chrome://branding/content/icon16.png';
 var globe = 'chrome://global/skin/icons/defaultFavicon.svg';
 
-var icon_for_pages_without_favicon = brand; // sheet, globe or brand (colorized Fx channel icon)
+var icon_for_pages_without_favicon = i_icon; // i_icon, sheet, globe or brand (colorized Fx channel icon)
 
 var favicon_click_opens_page_info_window = false;
 
@@ -66,7 +66,7 @@ var FaviconInUrlbar = {
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		\
-		.grantedPermissions::before { \
+		.grantedPermissions::after { \
 		  content: "" !important; \
 		  display: block !important; \
 		  width: 6px !important; \
@@ -77,14 +77,14 @@ var FaviconInUrlbar = {
 		  background: Highlight !important; \
 		  border-radius: 100px !important; \
 		} \
-		#identity-permission-box::before { \
+		#identity-permission-box::after { \
 		  content: "" !important; \
 		  display: block !important; \
 		  width: 6px !important; \
 		  height: 6px !important; \
 		  position: absolute !important; \
-		  margin-inline-start: -32px !important; \
-		  margin-top: -8px !important; \
+		  margin-inline-start: 34px !important; \
+		  margin-top: -10px !important; \
 		  background: Highlight !important; \
 		  border-radius: 100px !important; \
 		} \
