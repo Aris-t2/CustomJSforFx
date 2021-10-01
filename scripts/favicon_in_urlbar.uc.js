@@ -7,7 +7,7 @@
 
 var i_icon = 'chrome://global/skin/icons/info.svg';
 var sheet = 'chrome://global/skin/icons/Portrait.png';
-var brand = 'chrome://branding/content/icon16.png';
+var brand = 'chrome://branding/content/icon32.png';
 var globe = 'chrome://global/skin/icons/defaultFavicon.svg';
 
 var icon_for_pages_without_favicon = i_icon; // i_icon, sheet, globe or brand (colorized Fx channel icon)
