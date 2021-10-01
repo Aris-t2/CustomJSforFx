@@ -1,4 +1,4 @@
-// 'Favicon in urlbars identity box' script for Firefox 89+ by Aris
+// 'Favicon in urlbars identity box' script for Firefox 92+ by Aris
 //
 // This script restores current pages favicon inside urlbar (aka location bar, address bar or awesome bar).
 // [!] If a page does not offer a favicon, browser branches default icon is shown.
@@ -6,16 +6,13 @@
 // option: set icon for pages without favicon
 
 
-var i_icon = 'chrome://browser/skin/identity-icon.svg';
 var sheet = 'chrome://global/skin/icons/Portrait.png';
 var brand = 'chrome://branding/content/icon16.png';
 var globe = 'chrome://global/skin/icons/defaultFavicon.svg';
 
-var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
+var icon_for_pages_without_favicon = brand; // sheet, globe or brand (colorized Fx channel icon)
 
 var favicon_click_opens_page_info_window = false;
-
-var appversion = parseInt(Services.appinfo.version);
 
 var FaviconInUrlbar = {
  init: function() {
@@ -34,7 +31,8 @@ var FaviconInUrlbar = {
 	favimginurlbar.style.marginTop = "3px";
 	favimginurlbar.style.marginBottom = "3px";
 	
-	document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
+	//document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
+	document.getElementById('identity-box').appendChild(favimginurlbar);
 
 	// update script every time tab attributes get modified (switch/open tabs/windows)
 	document.addEventListener("TabAttrModified", updateIcon, false);
@@ -76,6 +74,17 @@ var FaviconInUrlbar = {
 		  position: absolute !important; \
 		  margin-inline-start: 14px !important; \
 		  margin-top: 2px !important; \
+		  background: Highlight !important; \
+		  border-radius: 100px !important; \
+		} \
+		#identity-permission-box::before { \
+		  content: "" !important; \
+		  display: block !important; \
+		  width: 6px !important; \
+		  height: 6px !important; \
+		  position: absolute !important; \
+		  margin-inline-start: -32px !important; \
+		  margin-top: -8px !important; \
 		  background: Highlight !important; \
 		  border-radius: 100px !important; \
 		} \
