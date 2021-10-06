@@ -10,7 +10,7 @@ var sheet = 'chrome://global/skin/icons/Portrait.png';
 var brand = 'chrome://branding/content/icon32.png';
 var globe = 'chrome://global/skin/icons/defaultFavicon.svg';
 
-var icon_for_pages_without_favicon = i_icon; // i_icon, sheet, globe or brand (colorized Fx channel icon)
+var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
 
 var favicon_click_opens_page_info_window = false;
 
@@ -60,41 +60,6 @@ var FaviconInUrlbar = {
 	 },100);
 
 	}
-	
-	
-	/* restore icon badge for websites with granted permissions */
-	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
-	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
-		\
-		.grantedPermissions::after { \
-		  content: "" !important; \
-		  display: block !important; \
-		  width: 6px !important; \
-		  height: 6px !important; \
-		  position: absolute !important; \
-		  margin-inline-start: 14px !important; \
-		  margin-top: 2px !important; \
-		  background: Highlight !important; \
-		  border-radius: 100px !important; \
-		} \
-		#identity-permission-box::after { \
-		  content: "" !important; \
-		  display: block !important; \
-		  width: 6px !important; \
-		  height: 6px !important; \
-		  position: absolute !important; \
-		  margin-inline-start: 34px !important; \
-		  margin-top: -10px !important; \
-		  background: Highlight !important; \
-		  border-radius: 100px !important; \
-		} \
-		\
-	'), null, null);
-
-	// remove old style sheet
-	if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) sss.unregisterSheet(uri,sss.AGENT_SHEET);
-	
-	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 
   } catch(e) {}
  }
