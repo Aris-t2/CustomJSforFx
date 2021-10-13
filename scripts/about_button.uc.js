@@ -1,4 +1,4 @@
-// 'about:'-Button script for Firefox 60+ by Aris
+// 'about:'-Button script for Firefox 89+ by Aris
 //
 // Need a different 'about' page button?
 // - replace 'about:config' url with a different 'about:' url
@@ -32,12 +32,6 @@ try {
 		} catch (e) {}
 	  } 
 	  
-	  if(appversion < 87 && event.button=='1') {
-		try {
-		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('chrome://global/content/config.xhtml');
-		} catch (e) {}
-	  }
-	  
 	  if(event.button=='2') {
 		try {
 		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('about:config');
@@ -54,14 +48,6 @@ try {
 		
   });
   
-  var abouticon = "";
-  if(appversion < 87) {
-	  abouticon = '\
-	  #about-button .toolbarbutton-icon {\
-		list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.svg"); /* icon / path to icon */ \
-	  }\
-	  ';
-  }
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
@@ -69,7 +55,6 @@ try {
 		list-style-image: url("chrome://global/skin/icons/defaultFavicon.svg"); /* icon / path to icon */ \
 		fill: dimgray; /* icon color name/code */\
 	  }\
-	  '+abouticon+' \
 	\
   '), null, null);
   
