@@ -136,4 +136,13 @@ var RestartMenuFileAppItems = {
 
 }
 
-RestartMenuFileAppItems.init();
+if (gBrowserInit.delayedStartupFinished) RestartMenuFileAppItems.init();
+else {
+  let delayedListener = (subject, topic) => {
+    if (topic == 'browser-delayed-startup-finished' && subject == window) {
+      Services.obs.removeObserver(delayedListener, topic);
+      RestartMenuFileAppItems.init();
+    }
+  };
+  Services.obs.addObserver(delayedListener, 'browser-delayed-startup-finished');
+}
