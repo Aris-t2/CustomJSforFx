@@ -67,5 +67,4 @@ Hidden files must be visible to see <code>.mozilla</code> folder.</br></br>
 Script collection by ardiman: https://github.com/ardiman/userChrome.js</br>
 Script collection by Endor8: https://github.com/Endor8/userChrome.js</br>
 Script collection by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts/tree/master/chrome</br>
-Script collection by Patchonn: https://github.com/Patchonn/firefox-theme/</br>
 </br>
