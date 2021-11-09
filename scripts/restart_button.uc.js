@@ -17,14 +17,7 @@ try {
   var appversion = parseInt(Services.appinfo.version);
   
   var button_label = "Restart";
-	
-	try {
-	  switch (document.getElementById("nav-bar").getAttribute("aria-label")) {
-		case "Navigations-Symbolleiste": button_label = "Neustarten"; break;
-		case "Панель навигации": button_label = "Перезапустить"; break;
-	  }
-	} catch(e) {}
-  
+ 
   CustomizableUI.createWidget({
 	id: "uc-restart", // button id
 	defaultArea: CustomizableUI.AREA_NAVBAR,

@@ -23,13 +23,6 @@ var RestartMenuFileAppItems = {
 	var button_label = "Restart";
 	
 	try {
-	  switch (document.getElementById("nav-bar").getAttribute("aria-label")) {
-		case "Navigations-Symbolleiste": button_label = "Neustarten"; break;
-		case "Панель навигации": button_label = "Перезапустить"; break;
-	  }
-	} catch(e) {}
-
-	try {
 	  restartitem_filemenu = document.createXULElement("menuitem");
 	  if(menuicon) restartitem_filemenu.setAttribute("class","menuitem-iconic");
 	  restartitem_filemenu.setAttribute("label", button_label);
