@@ -1,4 +1,4 @@
-// 'DoubleClickOnTabReloadTab' script for Firefox 60+ by Aris
+// 'Doubleclick on tab reloads tab' script for Firefox 60+ by Aris
 
 var DoubleClickOnTabReloadTab = {
   init: function() {
@@ -7,14 +7,7 @@ var DoubleClickOnTabReloadTab = {
 
 	 gBrowser.tabContainer.addEventListener("dblclick", function abcde(e) {
 				
-	  if(e.button==0
-		  && e.target.localName != "toolbarbutton"
-			&& e.target.localName != "arrowscrollbox"
-			  && e.originalTarget.getAttribute("anonid") != "scrollbutton-up"
-				&& e.originalTarget.getAttribute("anonid") != "scrollbutton-down"
-				  && e.originalTarget.getAttribute("class") != "scrollbutton-up"
-					&& e.originalTarget.getAttribute("class") != "scrollbutton-down"
-					  && e.originalTarget.getAttribute("anonid") != "close-button")
+	  if(e.button==0)
 	  {
 
 		BrowserReload();
