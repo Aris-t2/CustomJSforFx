@@ -47,6 +47,9 @@ Search for <code>startupCache</code> folder on your hard drive.</br>
 </br>
 More info about startup cache removal (in German): https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
 More info about startup cache removal (in English [Google translation]): https://translate.googleusercontent.com/translate_c?act=url&depth=1&ie=UTF8&prev=_t&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=https://github.com/ardiman/userChrome.js/wiki/Skriptcache </br>
+<h2>Where to find Firefox folder with main executable?</h2>
+<code>about:support > Application Binary</code> (Path on your system) </br>
+</br>
 <h2>Where to find Firefox profile folder?</h2>
 <code>about:profiles > Root Directory > Open Folder</code> or </br>
 <code>about:support > Profile Folder > Open Folder</code></br>
