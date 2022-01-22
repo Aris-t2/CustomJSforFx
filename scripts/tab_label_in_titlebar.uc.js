@@ -1,12 +1,23 @@
 // 'Tab label in titlebar' script for Firefox by Aris
 
 (function() {
-	
+
   try {
 
-	var customcssforfx_tabs_not_on_top = 0; // 0 = CustomCSSforFx not installed; 1 = tabs on top; 2 = tabs not on top;
-	var customcssforfx_appbutton_in_titlebar = 0; // 0 = CustomCSSforFx not installed / disabled; 1 = default/big; 2 = icon only
+	// Configuration area
+
+	// 0 = CustomCSSforFx not installed or tabs on top;
+	// 1 = tabs not on top;
+	// 2 = tabs not on top + alt menubar position;
+	var customcssforfx_tabs_position = 1; 
 	
+	// 0 = CustomCSSforFx not installed / disabled; 
+	// 1 = default/large;
+	// 2 = icon only
+	var customcssforfx_appbutton_in_titlebar = 1; 
+
+
+	// create 'tab label in titlebar' item
 	var titlebarlabelbox = document.createXULElement("hbox");
 	titlebarlabelbox.setAttribute("id","tab_label_in_titlebar_box");
 
@@ -15,7 +26,7 @@
 	titlebarlabelbox.appendChild(titlebarlabel);
 	document.getElementById("titlebar").insertBefore(titlebarlabelbox, document.getElementById("titlebar").firstChild);
  
-	// catch cases where tab title can change
+	// cases where tab title changes
 	document.addEventListener("TabAttrModified", updateLabel, false);
 	document.addEventListener('TabSelect', updateLabel, false);
 	document.addEventListener('TabOpen', updateLabel, false);
@@ -39,7 +50,7 @@
 	if(customcssforfx_appbutton_in_titlebar == 1)
 	  customcssforfx_appbutton_in_titlebar_code = ' \
 	  #tab_label_in_titlebar_box { \
-		padding-inline-start: 95px !important; \
+		padding-inline-start: 93px !important; \
 	  } \
 	  ';
     else if(customcssforfx_appbutton_in_titlebar == 2)
@@ -72,10 +83,45 @@
 	  #main-window[tabsintitlebar] #TabsToolbar { \
 		padding-inline-start: 2px !important; \
 	  } \
-	';
+	  ';
 
-	if(customcssforfx_tabs_not_on_top == 2)
-		adjust_tabs_toolbar_position_code = '';
+	if(customcssforfx_tabs_position == 1)
+	  adjust_tabs_toolbar_position_code = ' \
+	  #toolbar-menubar #menubar-items { \
+		padding-top: 13px !important; \
+	  } \
+	  #tab_label_in_titlebar_box { \
+		margin-top: -3px !important; \
+	  } \
+	  #toolbar-menubar .menubar-text { \
+		margin: 0px 6px !important; \
+	  } \
+	  #main-window:not([sizemode="fullscreen"])[sizemode="maximized"] #toolbar-menubar #menubar-items { \
+		padding-top: 10px !important; \
+	  } \
+	  #main-window:not([sizemode="fullscreen"])[sizemode="maximized"] #tab_label_in_titlebar_box { \
+		margin-top: -4px !important; \
+	  } \
+	  #main-window:not([sizemode="fullscreen"])[sizemode="maximized"] #toolbar-menubar .menubar-text { \
+		margin: -2px 6px !important; \
+	  } \
+	  ';
+	
+	if(customcssforfx_tabs_position == 2)
+	  adjust_tabs_toolbar_position_code = ' \
+	  #toolbar-menubar { \
+	    position: absolute !important; \
+		display: flex !important; \
+		top: 0 !important; \
+		right: 0px !important; \
+	  } \
+	  #main-window:not([sizemode="fullscreen"])[sizemode="maximized"] #toolbar-menubar { \
+		top: 8px !important; \
+	  }\
+	  #tab_label_in_titlebar_box { \
+		max-width: 40vw !important; \
+	  } \
+	  ';
 	
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	  \
@@ -86,12 +132,10 @@
 	  '+adjust_tabs_toolbar_position_code+'\
 	  '+customcssforfx_appbutton_in_titlebar_code+'\
 	  \
-	'), null, null);
+	  '), null, null);
   
 	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
   
   } catch(e) {}
 	
 }());
-
-
