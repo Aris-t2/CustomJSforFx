@@ -9,12 +9,12 @@
 	// 0 = CustomCSSforFx not installed or tabs on top;
 	// 1 = tabs not on top;
 	// 2 = tabs not on top + alt menubar position;
-	var customcssforfx_tabs_position = 1; 
+	var customcssforfx_tabs_position = 0; 
 	
 	// 0 = CustomCSSforFx not installed / disabled; 
 	// 1 = default/large;
 	// 2 = icon only
-	var customcssforfx_appbutton_in_titlebar = 1; 
+	var customcssforfx_appbutton_in_titlebar = 0; 
 
 
 	// create 'tab label in titlebar' item
