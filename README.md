@@ -5,7 +5,7 @@ The <a href='https://github.com/Aris-t2/CustomJSforFx/wiki'>Wiki</a> contains a 
 <h1>Unlock custom CSS usage in Thunderbird 69 and newer</h1>  
 <code>Settings/Options</code> > <code>Advanced</code> > <code>General</code> > <code>Config Editor...</code> </br>
 <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> > <code>true</code>  
-<h2>Method 1 - files in profile folder only (Fx60-71)</h2>
+<h2>[outdated] Method 1 - files in profile folder only (Fx60-71)</h2>
 M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs </br>
 M1 stopped working in Firefox 72! XBL support got dropped.</br>
 </br>
@@ -25,8 +25,8 @@ From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</c
 </br>
 With Firefox 62+ and Thunderbird 68+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". 
 </br>
-<h2>Method 3 - files in install and profile folders (Fx60-91.4)</h2>
-M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts </br>
+<h2>[outdated] Method 3 - files in install and profile folders (Fx60-91.4)</h2>
+M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts (up-to-date / works with Fx96+) </br>
 </br>
 From this projects <code>\method 3\profile\</code> folder copy <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
 </br>
