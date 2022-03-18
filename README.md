@@ -26,7 +26,7 @@ From this projects <code>\method 2\firefox\</code> folder copy <code>defaults</c
 With Firefox 62+ and Thunderbird 68+ an additional preference <code>pref("general.config.sandbox_enabled", false);</code> has to be set inside <code>config-prefs.js</code> file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2". 
 </br>
 <h2>[outdated] Method 3 - files in install and profile folders (Fx60-91.4)</h2>
-M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts (up-to-date / works with Fx96+) </br>
+M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts (The files offered there are up-to-date and do work with Fx96+.) </br>
 </br>
 From this projects <code>\method 3\profile\</code> folder copy <code>utils</code> folder and <code>userChrome.uc.js</code> file to <code>\ PROFILENAME \chrome\</code> folder.</br>
 </br>
