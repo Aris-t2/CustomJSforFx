@@ -26,6 +26,13 @@ try {
 		  LoginHelper.openPasswordManager(window, { entryPoint: 'mainmenu' });
 		}
 	  }
+	  
+	  if(event.button=='1') {
+		try {
+		  gBrowser.selectedTab = gBrowser.addTrustedTab('about:logins');
+		} catch (e) {}
+	  }
+	  
 
 	},
 	
