@@ -1,19 +1,29 @@
 "use strict";
 
 /* Firefox 57+ userChrome.js tweaks - SCROLLBARS ********************************************** */
-/* by Aris ************************************************************************************ */
+/* by Aris (aris-addons@gmx.net)*************************************************************** */
+/* Github: https://github.com/aris-t2/customscrollbarsforfx *********************************** */
 /* ******************************************************************************************** */
 
 /* ******************************************************************************************** */
 /* Custom Scrollbars for Firefox ************************************************************** */
-/* version 1.0.4 ****************************************************************************** */
+/* version 1.0.5 ****************************************************************************** */
 /* ******************************************************************************************** */
 
 /* ***********************************************************************************************
 
  README
  
- [!] either 'method 1' or 'method 2' are required to prepare Firefox for custom JavaScript files
+ !!! Important !!!
+ 
+ Preferences have to be set to false, for this to work on recent Firefox builds (102+)
+ 
+ about:config >
+ widget.windows.overlay-scrollbars.enabled > false (Windows)
+ widget.gtk.overlay-scrollbars.enabled > false (Linux/MacOSX)
+ 
+ 
+ [!] 'Method 2' is required to prepare Firefox for custom JavaScript files
  [!] 'custom_scrollbars.uc.js' file belongs into Firefox profiles 'chrome' folder!
  -> finding profile folder: address bar > about:profiles > Root Directory > Open Folder
  -> add file to \chrome\ folder (create one, if needed)
@@ -32,7 +42,7 @@
  - opacity: 0.0 to 1.0 e.g. 1.4, 1,75
  - gradients: linear-gradient(direction, color, color, color)
  - gradients example: linear-gradient(to right, blue, #33CCFF, rgba(0,0,255,0.8))
- - unsettings predefined gradients: transparent,rgba(255,255,255,0.5),transparent -> transparent,rgba(255,255,255,0.0),transparent
+ - predefined gradients: transparent,rgba(255,255,255,0.5),transparent -> transparent,rgba(255,255,255,0.0),transparent
  - button size with arrow (descriptions for vertical scrollbars - analogous for horizontal scrollbars)
  -- 1: space above arrow = arrow height
  -- 1.5: space above arrow = 0.5 * arrow height
