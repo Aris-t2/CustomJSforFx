@@ -56,7 +56,7 @@ Cu.import('resource://gre/modules/Services.jsm');
 
 var AltSearchbar = {
  init: async function() {
-   await Services.search.wrappedJSObject._initObservers.promise;
+   await Services.search.wrappedJSObject.init();
 
    if (location != 'chrome://browser/content/browser.xhtml')
     return;
