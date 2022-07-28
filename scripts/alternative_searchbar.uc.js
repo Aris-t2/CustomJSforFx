@@ -100,6 +100,25 @@ var AltSearchbar = {
                 event.stopPropagation();
                 event.target.classList.add("search-one-offs-context-set-default");
                 searchoneoffs._contextEngine = event.target.engine;
+                searchoneoffs._on_command(event);
+                searchoneoffs._contextEngine = null;
+                // let contextEngine = event.target.engine;
+                // let currentEngine = searchbar.currentEngine;
+                // if (!searchoneoffs.getAttribute("includecurrentengine")) {
+                // 	// Make the target button of the context menu reflect the current
+                // 	// search engine first. Doing this as opposed to rebuilding all the
+                // 	// one-off buttons avoids flicker.
+                // 	let button = searchoneoffs._buttonForEngine(contextEngine);
+                // 	button.id = searchoneoffs._buttonIDForEngine(currentEngine);
+                // 	let uri = "chrome://browser/skin/search-engine-placeholder.png";
+                // 	if (currentEngine.iconURI) {
+                // 		uri = currentEngine.iconURI.spec;
+                // 	}
+                // 	button.setAttribute("image", uri);
+                // 	button.setAttribute("tooltiptext", currentEngine.name);
+                // 	button.engine = currentEngine;
+                // }
+                // searchbar.currentEngine = contextEngine;
             }
         }, true);
     };
