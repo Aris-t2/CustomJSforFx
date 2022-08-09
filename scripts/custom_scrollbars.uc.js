@@ -7,7 +7,7 @@
 
 /* ******************************************************************************************** */
 /* Custom Scrollbars for Firefox ************************************************************** */
-/* version 1.0.5 ****************************************************************************** */
+/* version 1.0.6 ****************************************************************************** */
 /* ******************************************************************************************** */
 
 /* ***********************************************************************************************
@@ -77,6 +77,8 @@ var cs_arrows_on_buttons_buttons_size = 1.5; // default: cs_arrows_on_buttons_bu
 // 'flat' scrollbars
 var cs_ignore_color_gradients = false; // default: cs_ignore_color_gradients = false
 
+var cs_thumb_minimal_size = 12; // in px
+
 // CUSTOM SCROLLBAR COLORS/GRADIENTS
 // - background
 var cs_background_color = "#DDDDDD"; // default: cs_background_color = "#DDDDDD"
@@ -138,6 +140,7 @@ var custom_scrollbars = {
 	\
 	scrollbar, scrollcorner, scrollbar thumb, scrollbar scrollbarbutton {\
 	  -moz-appearance: none !important;\
+	  appearance: none !important;\
 	}\
 	scrollbar {\
 	  background-color: '+cs_background_color+' !important;\
@@ -159,9 +162,11 @@ var custom_scrollbars = {
 	}\
 	scrollbar thumb[orient="vertical"] {\
 	  background-image: '+cs_thumb_image_vertical+' !important;\
+	  min-height: '+(cs_thumb_minimal_size+cs_thumb_roundness+cs_thumb_border)+'px !important;\
 	}\
 	scrollbar thumb[orient="horizontal"] {\
 	  background-image: '+cs_thumb_image_horizontal+' !important;\
+	  min-width: '+(cs_thumb_minimal_size+cs_thumb_roundness+cs_thumb_border)+'px !important;\
 	}\
 	scrollbar thumb:hover, scrollbar thumb:active {\
 	  background-color: '+cs_thumb_hover_color+' !important;\
@@ -417,7 +422,7 @@ var floating_scrollbars = {
 	  background-image: unset !important; \
 	}\
 	scrollbar[orient="vertical"] {\
-	  -moz-margin-start: -'+custom_scrollbar_size_value+'px !important;\
+	  margin-inline-start: -'+custom_scrollbar_size_value+'px !important;\
 	  width: '+custom_scrollbar_size_value+'px !important;\
 	}\
 	scrollbar[orient="horizontal"] {\
