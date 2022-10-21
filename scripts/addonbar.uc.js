@@ -63,7 +63,7 @@ var AddAddonbar = {
 		  #addonbar toolbarpaletteitem[place=toolbar][id^=wrapper-customizableui-special-spring],\
 		  #addonbar toolbarspring {\
 			-moz-box-flex: 1 !important;\
-			min-width: 100% !important;\
+			min-width: unset !important;\
 			width: unset !important;\
 			max-width: unset !important;\
 		  }\
