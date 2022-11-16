@@ -54,6 +54,7 @@ var searchsettingslabel = "Change Search Settings";
 // Configuration area - end
 
 var isInCustomize = 1; //start at 1 to set it once at startup
+var appversion = parseInt(Services.appinfo.version);
 
 Cu.import('resource://gre/modules/Services.jsm');
 
@@ -439,176 +440,184 @@ function createAddEngineItem(e) {
 
 	  var hide_oneoff_search_engines_code = '';
 	  var show_search_engine_names_code = '';
+	  var show_search_engine_names_code102 = '';
 	  var show_search_engine_names_with_scrollbar_code = '';
 	  var hide_addengines_plus_indicator_code = '';
 	  var switch_glass_and_engine_icon_code = '';
 
 	  if(hide_oneoff_search_engines)
-		hide_oneoff_search_engines_code=' \
-		  #PopupSearchAutoComplete .search-panel-header, \
-		  #PopupSearchAutoComplete .search-one-offs { \
-			display: none !important; \
-		  } \
-		';
+		hide_oneoff_search_engines_code=`
+		  #PopupSearchAutoComplete .search-panel-header,
+		  #PopupSearchAutoComplete .search-one-offs {
+			display: none !important;
+		  }
+		`;
 
 	  if(hide_addengines_plus_indicator)
-	   hide_addengines_plus_indicator_code=' \
-	     .searchbar-search-button[addengines=true]::after { \
-		   visibility: hidden !important; \
-		 } \
-	   ';
+	   hide_addengines_plus_indicator_code=`
+	     .searchbar-search-button[addengines=true]::after {
+		   visibility: hidden !important;
+		 }
+	   `;
 	
 	  if(show_search_engine_names && !hide_oneoff_search_engines)
-	   show_search_engine_names_code=' \
-		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item { \
-		  appearance: none !important; \
-		  min-width: 0 !important; \
-		  width: 100% !important; \
-		  border: unset !important; \
-		  height: 18px !important; \
-		  background-image: unset !important; \
-		  padding-inline-start: 2px !important; \
-		  margin-inline-start: 5px !important; \
-		  margin-inline-end: 0 !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item::after { \
-		  appearance: none !important; \
-		  display: inline !important; /* Fx102ESR compatibility - better flex or block on Fx 106*/ \
-		  content: attr(tooltiptext) !important; \
-		  position: relative !important; \
-		  padding-inline-start: 6px !important; \
-		  min-width: 0 !important; \
-		  width: 100% !important; \
-		  white-space: nowrap !important; \
-		  top: -3px !important; \
-		  bottom: 4px !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-one-offs { \
-		  min-height: unset !important; \
-		  height: unset !important; \
-		  max-height: unset !important; \
-		  line-height: unset !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box { \
-		  display: inline !important; \
-		} \
-		#PopupSearchAutoComplete  .search-setting-button { \
-		  z-index: 1000 !important; \
-		} \
-		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box .button-icon { \
-		  margin-top: 1px !important; \
-		  padding-inline-start: 0px !important; \
-		  margin-inline-start: 0px !important; \
-		  position: relative !important; \
-		} \
-   		';
+	   show_search_engine_names_code=`
+		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item {
+		  appearance: none !important;
+		  min-width: 0 !important;
+		  width: 100% !important;
+		  border: unset !important;
+		  height: 18px !important;
+		  background-image: unset !important;
+		  padding-inline-start: 2px !important;
+		  margin-inline-start: 5px !important;
+		  margin-inline-end: 0 !important;
+		}
+
+		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item::after {
+		  appearance: none !important;
+		  display: block !important;
+		  content: attr(tooltiptext) !important;
+		  position: relative !important;
+		  padding-inline-start: 6px !important;
+		  min-width: 0 !important;
+		  width: 100% !important;
+		  white-space: nowrap !important;
+		}
+
+		#PopupSearchAutoComplete .search-panel-one-offs {
+		  min-height: unset !important;
+		  height: unset !important;
+		  max-height: unset !important;
+		  line-height: unset !important;
+		}
+
+		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box {
+		  display: inline !important;
+		}
+
+		#PopupSearchAutoComplete  .search-setting-button {
+		  z-index: 1000 !important;
+		}
+
+		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item .button-box .button-icon {
+		  margin-top: 1px !important;
+		  padding-inline-start: 0px !important;
+		  margin-inline-start: 0px !important;
+		  position: relative !important;
+		}
+   		`;
+		
+	  if(appversion < 106) show_search_engine_names_code102=`
+		#PopupSearchAutoComplete .search-panel-one-offs .searchbar-engine-one-off-item::after {
+		  display: inline !important;
+		  top: -3px !important;
+		  bottom: 4px !important;
+		}
+	  `;
 
 	  if(show_search_engine_names_with_scrollbar && !hide_oneoff_search_engines && show_search_engine_names)
-	   show_search_engine_names_with_scrollbar_code=' \
-		#PopupSearchAutoComplete .search-one-offs { \
-		  height: '+show_search_engine_names_with_scrollbar_height+' !important; \
-		  max-height: '+show_search_engine_names_with_scrollbar_height+' !important; \
-		  overflow-y: scroll !important; \
-		  overflow-x: hidden !important; \
-		} \
-		\
-		';
+	   show_search_engine_names_with_scrollbar_code=`
+		#PopupSearchAutoComplete .search-one-offs {
+		  height: `+show_search_engine_names_with_scrollbar_height+` !important;
+		  max-height: `+show_search_engine_names_with_scrollbar_height+` !important;
+		  overflow-y: scroll !important;
+		  overflow-x: hidden !important;
+		}
+		`;
 
 	  if(switch_glass_and_engine_icon)
-	   switch_glass_and_engine_icon_code=' \
-		.search-go-button { \
-		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
-		  transform: scaleX(1) !important; \
-		} \
-		.searchbar-search-button .searchbar-search-icon { \
-		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important; \
-		  -moz-context-properties: fill, fill-opacity !important; \
-		  fill-opacity: 1.0 !important; \
-		  fill: #3683ba !important; \
-		} \
-		.searchbar-search-button:hover .searchbar-search-icon { \
-		  fill: #1d518c !important; \
-		} \
-		.searchbar-search-button:active .searchbar-search-icon { \
-		  fill: #00095d !important; \
-		} \
-		\
-		';
+	   switch_glass_and_engine_icon_code=`
+		.search-go-button {
+		  list-style-image: url(`+document.getElementById("searchbar").currentEngine.iconURI.spec+`) !important;
+		  transform: scaleX(1) !important;
+		}
+		.searchbar-search-button .searchbar-search-icon {
+		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important;
+		  -moz-context-properties: fill, fill-opacity !important;
+		  fill-opacity: 1.0 !important;
+		  fill: #3683ba !important;
+		}
+		.searchbar-search-button:hover .searchbar-search-icon {
+		  fill: #1d518c !important;
+		}
+		.searchbar-search-button:active .searchbar-search-icon {
+		  fill: #00095d !important;
+		}
+		`;
 
-	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
-		\
-		#search-container{ min-width: 20px !important } \
-		#searchbuttonpopup {\
-		 margin-inline-start: -1px; \
-		} \
-		.searchbar-search-button .searchbar-search-icon { \
-		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
-		} \
-		.search-go-button { \
-		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important; \
-		  -moz-context-properties: fill, fill-opacity !important; \
-		  fill-opacity: 1.0 !important; \
-		  fill: #3683ba !important; \
-		  transform: scaleX(-1) !important; \
-		  background: unset !important; \
-		  margin-inline-end: 4px !important; \
-		} \
-		.search-go-button:hover { \
-		  fill: #1d518c !important; \
-		} \
-		.search-go-button:active { \
-		  fill: #00095d !important; \
-		} \
-		.search-go-button[hidden="true"] { \
-		  display: block !important; \
-		} \
-		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay, \
-		.searchbar-search-button:not([addengines=true]) > .searchbar-search-icon-overlay { \
-		  list-style-image: url("chrome://global/skin/icons/arrow-down-12.svg") !important; \
-		  -moz-context-properties: fill !important; \
-		  margin-inline-start: -6px !important; \
-		  margin-inline-end: 2px !important; \
-		  width: 11px !important; \
-		  height: 11px !important; \
-		} \
-		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay { \
-		  margin-top: 0px !important; \
-		} \
-		.searchbar-search-button[addengines=true]::after { \
-		  content: " " !important; \
-		  background: url("chrome://browser/skin/search-indicator-badge-add.svg") center no-repeat !important; \
-		  display: block !important; \
-		  visibility: visible !important; \
-		  width: 11px !important; \
-		  height: 11px !important; \
-		  margin-inline-start: 18px !important; \
-		  margin-top: -11px !important; \
-		  position: absolute !important; \
-		} \
-		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay { \
-		  visibility: visible !important; \
-		} \
-		 \
-		.custom-addengine-item > .menu-iconic-left::after { \
-		  position: absolute !important; \
-		  display: block; !important; \
-		  content: "" !important; \
-		  background: url("chrome://browser/skin/search-indicator-badge-add.svg") no-repeat center !important; \
-		  box-shadow: none  !important; \
-		  margin-top: -12px !important; \
-		  margin-inline-start: -4px !important; \
-		  width: 11px; !important; \
-		  height: 11px; !important; \
-		  min-width: 11px; !important; \
-		  min-height: 11px; !important; \
-		} \
-		'+hide_addengines_plus_indicator_code+' \
-		'+hide_oneoff_search_engines_code+' \
-		'+show_search_engine_names_code+' \
-		'+show_search_engine_names_with_scrollbar_code+' \
-		'+switch_glass_and_engine_icon_code+' \
-		\
-	  '), null, null);
+	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
+		#search-container{ min-width: 20px !important }
+		#searchbuttonpopup {
+		 margin-inline-start: -1px;
+		}
+		.searchbar-search-button .searchbar-search-icon {
+		  list-style-image: url(`+document.getElementById("searchbar").currentEngine.iconURI.spec+`) !important;
+		}
+		.search-go-button {
+		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important;
+		  -moz-context-properties: fill, fill-opacity !important;
+		  fill-opacity: 1.0 !important;
+		  fill: #3683ba !important;
+		  transform: scaleX(-1) !important;
+		  background: unset !important;
+		  margin-inline-end: 4px !important;
+		}
+		.search-go-button:hover {
+		  fill: #1d518c !important;
+		}
+		.search-go-button:active {
+		  fill: #00095d !important;
+		}
+		.search-go-button[hidden="true"] {
+		  display: block !important;
+		}
+		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay,
+		.searchbar-search-button:not([addengines=true]) > .searchbar-search-icon-overlay {
+		  list-style-image: url("chrome://global/skin/icons/arrow-down-12.svg") !important;
+		  -moz-context-properties: fill !important;
+		  margin-inline-start: -6px !important;
+		  margin-inline-end: 2px !important;
+		  width: 11px !important;
+		  height: 11px !important;
+		}
+		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay {
+		  margin-top: 0px !important;
+		}
+		.searchbar-search-button[addengines=true]::after {
+		  content: " " !important;
+		  background: url("chrome://browser/skin/search-indicator-badge-add.svg") center no-repeat !important;
+		  display: block !important;
+		  visibility: visible !important;
+		  width: 11px !important;
+		  height: 11px !important;
+		  margin-inline-start: 18px !important;
+		  margin-top: -11px !important;
+		  position: absolute !important;
+		}
+		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay {
+		  visibility: visible !important;
+		}
+		.custom-addengine-item > .menu-iconic-left::after {
+		  position: absolute !important;
+		  display: block; !important;
+		  content: "" !important;
+		  background: url("chrome://browser/skin/search-indicator-badge-add.svg") no-repeat center !important;
+		  box-shadow: none  !important;
+		  margin-top: -12px !important;
+		  margin-inline-start: -4px !important;
+		  width: 11px; !important;
+		  height: 11px; !important;
+		  min-width: 11px; !important;
+		  min-height: 11px; !important;
+		}
+		`+hide_addengines_plus_indicator_code+`
+		`+hide_oneoff_search_engines_code+`
+		`+show_search_engine_names_code+`
+		`+show_search_engine_names_code102+`
+		`+show_search_engine_names_with_scrollbar_code+`
+		`+switch_glass_and_engine_icon_code+`
+	  `), null, null);
 
 	  // remove old style sheet
 	  if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) {
