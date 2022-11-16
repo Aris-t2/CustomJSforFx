@@ -410,62 +410,9 @@ function createAddEngineItem(e) {
 	}; //createOldSelectionPopup
 	
 	// doSearch function taken from Firefox 85+ internal 'searchbar.js' file and added modifications
-    searchbar.doSearch = function(aData, aWhere, aEngine, aParams, isOneOff = false) {
-      let textBox = this._textbox;
-      let engine = aEngine || this.currentEngine;
-
-      // Save the current value in the form history
-      if (
-        aData &&
-        !PrivateBrowsingUtils.isWindowPrivate(window) &&
-        this.FormHistory.enabled &&
-        aData.length <=
-          this.SearchSuggestionController.SEARCH_HISTORY_MAX_VALUE_LENGTH
-      ) {
-        this.FormHistory.update(
-          {
-            op: "bump",
-            fieldname: textBox.getAttribute("autocompletesearchparam"),
-            value: aData,
-            source: engine.name,
-          },
-          {
-            handleError(aError) {
-              Cu.reportError(
-                "Saving search to form history failed: " + aError.message
-              );
-            },
-          }
-        );
-      }
-
-      let submission = engine.getSubmission(aData, null, "searchbar");
-
-      // If we hit here, we come either from a one-off, a plain search or a suggestion.
-      const details = {
-        isOneOff,
-        isSuggestion: !isOneOff && this.telemetrySelectedIndex != -1,
-        url: submission.uri,
-      };
-
-      this.telemetrySelectedIndex = -1;
-
-      BrowserSearchTelemetry.recordSearch(
-        gBrowser.selectedBrowser,
-        engine,
-        "searchbar",
-        details
-      );
-      // null parameter below specifies HTML response for search
-      let params = {
-        postData: submission.postData,
-      };
-      if (aParams) {
-        for (let key in aParams) {
-          params[key] = aParams[key];
-        }
-      }
-      openTrustedLinkIn(submission.uri.spec, aWhere, params);
+	var _doSearch = searchbar.doSearch;
+    searchbar.doSearch = function(...args) {
+		_doSearch.apply(this,args);
 	  
 		if(clear_searchbar_after_search)
 			this.value = '';
@@ -474,7 +421,6 @@ function createAddEngineItem(e) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		}
-
     };
 	
 	// Workaround for the deprecated setIcon funtion
