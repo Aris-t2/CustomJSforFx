@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 91+ by Aris
+// 'Alternative search bar' script for Firefox 102+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -8,6 +8,9 @@
 //
 // Thanks to anomiex for the setIcon workaround on Fx 77+
 // https://github.com/Aris-t2/CustomJSforFx/issues/33
+//
+// Thanks to 117649 for the Fx107+ fix
+// https://github.com/Aris-t2/CustomJSforFx/pull/73
 //
 // Idea based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
@@ -409,7 +412,6 @@ function createAddEngineItem(e) {
 
 	}; //createOldSelectionPopup
 	
-	// doSearch function taken from Firefox 85+ internal 'searchbar.js' file and added modifications
 	var _doSearch = searchbar.doSearch;
     searchbar.doSearch = function(...args) {
 		_doSearch.apply(this,args);
@@ -421,6 +423,7 @@ function createAddEngineItem(e) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		}
+
     };
 	
 	// Workaround for the deprecated setIcon funtion
