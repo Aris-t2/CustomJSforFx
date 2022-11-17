@@ -413,9 +413,9 @@ function createAddEngineItem(e) {
 
 	}; //createOldSelectionPopup
 	
-	var _doSearch = searchbar.doSearch.toSource();
-    	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
-		"(function " + _doSearch.slice(0,-2) +
+	var _doSearch = searchbar.doSearch.toString();
+	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
+		"(" +(_doSearch.startsWith("function")? "":"function ") + _doSearch.slice(0,-2) +
 `
       if(clear_searchbar_after_search)
             this.value = '';
@@ -425,7 +425,7 @@ function createAddEngineItem(e) {
             updateStyleSheet();
       }
 `
-		+ _doSearch.slice(-2) + ")" 
+        + _doSearch.slice(-2) + ")"
 	);
 	
 	// Workaround for the deprecated setIcon funtion
