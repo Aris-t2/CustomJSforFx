@@ -413,19 +413,29 @@ function createAddEngineItem(e) {
 
 	}; //createOldSelectionPopup
 	
-	var _doSearch = searchbar.doSearch;
-    searchbar.doSearch = function(...args) {
-		_doSearch.apply(this,args);
-	  
-		if(clear_searchbar_after_search)
-			this.value = '';
-		  
-		if(revert_to_first_engine_after_search) {
-			searchbar.currentEngine = searchbar.engines[0];
-			updateStyleSheet();
-		}
+	ChromeUtils.defineESModuleGetters(lazy, {
+		SearchSuggestionController:
+		"resource://gre/modules/SearchSuggestionController.sys.mjs",
+	});
 
-    };
+	XPCOMUtils.defineLazyModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.jsm",
+	});
+
+	var _doSearch = searchbar.doSearch.toString();
+	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
+		"(" +(_doSearch.startsWith("function")? "":"function ") + _doSearch.slice(0,-2) +
+`
+      if(clear_searchbar_after_search)
+            this.value = '';
+
+      if(revert_to_first_engine_after_search) {
+            searchbar.currentEngine = searchbar.engines[0];
+            updateStyleSheet();
+      }
+`
+        + _doSearch.slice(-2) + ")"
+	);
 	
 	// Workaround for the deprecated setIcon funtion
 	var oldUpdateDisplay = searchbar.updateDisplay;
