@@ -413,6 +413,15 @@ function createAddEngineItem(e) {
 
 	}; //createOldSelectionPopup
 	
+	ChromeUtils.defineESModuleGetters(lazy, {
+		SearchSuggestionController:
+		"resource://gre/modules/SearchSuggestionController.sys.mjs",
+	});
+
+	XPCOMUtils.defineLazyModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.jsm",
+	});
+
 	var _doSearch = searchbar.doSearch.toString();
 	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
 		"(" +(_doSearch.startsWith("function")? "":"function ") + _doSearch.slice(0,-2) +
