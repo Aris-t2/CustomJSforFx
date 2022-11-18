@@ -412,7 +412,9 @@ function createAddEngineItem(e) {
 	  }, true);
 
 	}; //createOldSelectionPopup
-	
+
+
+
 	ChromeUtils.defineESModuleGetters(lazy, {
 		SearchSuggestionController:
 		"resource://gre/modules/SearchSuggestionController.sys.mjs",
@@ -428,7 +430,6 @@ function createAddEngineItem(e) {
 `
       if(clear_searchbar_after_search)
             this.value = '';
-
       if(revert_to_first_engine_after_search) {
             searchbar.currentEngine = searchbar.engines[0];
             updateStyleSheet();
@@ -437,7 +438,8 @@ function createAddEngineItem(e) {
         + _doSearch.slice(-2) + ")"
 	);
 	
-	// Workaround for the deprecated setIcon funtion
+	
+	// Workaround for the deprecated setIcon function
 	var oldUpdateDisplay = searchbar.updateDisplay;
 	searchbar.updateDisplay = function() {
 	  oldUpdateDisplay.call(this);
