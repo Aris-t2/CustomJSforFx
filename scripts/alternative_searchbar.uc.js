@@ -434,7 +434,7 @@ function createAddEngineItem(e) {
             updateStyleSheet();
       }
 `
-        + _doSearch.slice(-2) + ")"
+		+ _doSearch.slice(-2) + ")"
 	);
 	
 	// Workaround for the deprecated setIcon funtion
