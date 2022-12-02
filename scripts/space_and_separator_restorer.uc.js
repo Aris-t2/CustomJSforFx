@@ -110,10 +110,10 @@ var AddSeparator = {
 		#main-window[customizing] #configuration_toolbar #tb_config_tb_label {
 		  font-weight: bold !important;
 		}
-		#main-window[customizing] #configuration_toolbar :-moz-any(#spacer,#separator,#spring) {
+		#main-window[customizing] #configuration_toolbar :is(#spacer,#separator,#spring) {
 		  margin-inline-start: 20px;
 		}
-		#main-window[customizing] #configuration_toolbar :-moz-any(#wrapper-spacer,#wrapper-separator,#wrapper-spring) .toolbarpaletteitem-label {
+		#main-window[customizing] #configuration_toolbar :is(#wrapper-spacer,#wrapper-separator,#wrapper-spring) .toolbarpaletteitem-label {
 		  display: block !important;
 		  margin-inline-end: 20px;
 		}
@@ -127,7 +127,7 @@ var AddSeparator = {
 		#main-window[customizing] #configuration_toolbar > * {
 		  padding: 2px !important;
 		}
-		#main-window[customizing] #configuration_toolbar > :-moz-any(#wrapper-spacer,#wrapper-separator,#wrapper-spring) {
+		#main-window[customizing] #configuration_toolbar > :is(#wrapper-spacer,#wrapper-separator,#wrapper-spring) {
 		  border: 1px dotted !important;
 		  margin-inline-start: 2px !important;
 		  margin-inline-end: 2px !important;
@@ -149,7 +149,7 @@ var AddSeparator = {
 		  width: 18px !important;
 		}
 		#customization-palette toolbarpaletteitem[id^="wrapper-customizableui-special-spring"],
-		#customization-palette-container :-moz-any(#spring,#wrapper-spring) {
+		#customization-palette-container :is(#spring,#wrapper-spring) {
 		  display: none !important;
 		}
 		#main-window:not([customizing]) toolbar:not(#configuration_toolbar) toolbarspring {
