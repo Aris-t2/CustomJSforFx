@@ -22,7 +22,7 @@ var appversion = parseInt(Services.appinfo.version);
 var AddSeparator = {
   init: function() {
 
-	if (appversion >= 76 && location != 'chrome://browser/content/browser.xhtml')
+	if (location != 'chrome://browser/content/browser.xhtml')
       return;
 
 	/* blank tab workaround */
@@ -98,7 +98,7 @@ var AddSeparator = {
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
 		#configuration_toolbar {
-	      appearance: none !important;
+		  appearance: none !important;
 		  background-color: var(--toolbar-bgcolor);
 		  background-image: var(--toolbar-bgimage);
 		  background-clip: padding-box;
