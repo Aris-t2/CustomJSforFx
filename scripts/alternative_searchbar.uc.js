@@ -559,9 +559,11 @@ function createAddEngineItem(e) {
 		`;
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
-		#search-container{ min-width: 20px !important }
+		#search-container{
+		  min-width: 20px !important;
+		}
 		#searchbuttonpopup {
-		 margin-inline-start: -1px;
+		  margin-inline-start: -1px;
 		}
 		.searchbar-search-button .searchbar-search-icon {
 		  list-style-image: url(`+document.getElementById("searchbar").currentEngine.iconURI.spec+`) !important;
@@ -604,7 +606,6 @@ function createAddEngineItem(e) {
 		  width: 11px !important;
 		  height: 11px !important;
 		  margin-inline-start: 18px !important;
-		  margin-top: -11px !important;
 		  position: absolute !important;
 		}
 		.searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay {
