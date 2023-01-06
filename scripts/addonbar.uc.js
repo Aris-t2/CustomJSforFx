@@ -52,7 +52,17 @@ var AddAddonbar = {
 		}
 		#addonbar toolbarbutton .toolbarbutton-badge {
 		  margin-top: 0px !important;
-		  font-size: 8px !important;
+		  font-size: 5pt !important;
+		  min-width: unset !important;
+		  min-height: unset !important;
+		  margin-inline-start: 0px !important;
+		  margin-inline-end: 0px !important;
+		}
+		#addonbar .toolbaritem-combined-buttons {
+		  margin-inline: 0px !important;
+		}
+		#addonbar toolbarbutton {
+		  padding: 0 !important;
 		}
 	  `;
 
