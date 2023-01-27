@@ -1,4 +1,4 @@
-// 'Expand Edit Bookmarks Popup' script for Firefox 75+ by Aris
+// 'Expand Edit Bookmarks Popup' script for Firefox 75-108 by Aris
 //
 // option: increase folder tree height
 // option: hide preview image
