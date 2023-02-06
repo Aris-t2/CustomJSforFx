@@ -1,4 +1,4 @@
-// 'Activity throbber' script for Firefox 60+ by Aris
+// 'Activity throbber' script for Firefox by Aris
 
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
@@ -41,26 +41,22 @@ var ActivityThrobber = {
 	});
 	  
 	// style button icon / embedded non-animated icon, because there is no image for then inside Fx anymore
-	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
-		\
-		#activity_throbber { \
-		  -moz-appearance: none !important; \
-		  list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJ1BMVEUAAAC0tLS0tLSysrK0tLS0tLS0tLS1tbW0tLS6urq0tLS3t7eurq4SF2bYAAAADXRSTlMA2oILm3RnVEEF0y4TZ0HrPwAAAE5JREFUCNdjAAIjZQYISBQDU1uUA0WNvIEMR/FDOoUiQIbiCgaGLiEgY3oDAwNHJQPDtGCQQtNMBkWQKJCEM+BSMMVw7XAD4VYgLIU7AwA5fBJ3rMaMkwAAAABJRU5ErkJggg==); \
-		  width: 16px !important; \
-		  height: 16px !important; \
-		} \
-		#activity_throbber *,\
-		#activity_throbber:hover * { \
-		  -moz-appearance: none !important; \
-		  opacity: 1.0 !important; \
-		  box-shadow: unset !important; \
-		  background: unset !important; \
-		} \
-		#activity_throbber[busy] { \
-		  list-style-image: url("chrome://global/skin/media/throbber.png"); \
-		} \
-		\
-	'), null, null);
+	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
+		#activity_throbber .toolbarbutton-icon {
+		  appearance: none !important;
+		  list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJ1BMVEUAAAC0tLS0tLSysrK0tLS0tLS0tLS1tbW0tLS6urq0tLS3t7eurq4SF2bYAAAADXRSTlMA2oILm3RnVEEF0y4TZ0HrPwAAAE5JREFUCNdjAAIjZQYISBQDU1uUA0WNvIEMR/FDOoUiQIbiCgaGLiEgY3oDAwNHJQPDtGCQQtNMBkWQKJCEM+BSMMVw7XAD4VYgLIU7AwA5fBJ3rMaMkwAAAABJRU5ErkJggg==);
+		}
+		#activity_throbber *,
+		#activity_throbber:hover * {
+		  appearance: none !important;
+		  opacity: 1.0 !important;
+		  box-shadow: unset !important;
+		  background: unset !important;
+		}
+		#activity_throbber[busy] .toolbarbutton-icon {
+		  list-style-image: url("chrome://global/skin/media/throbber.png");
+		}
+	`), null, null);
 	  
 	// remove old style sheet, before registering the new one
 	if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) { sss.unregisterSheet(uri,sss.AGENT_SHEET); }

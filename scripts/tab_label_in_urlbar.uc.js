@@ -32,20 +32,20 @@
 	var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	
-	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
-	  \
-		/* hide item to interact with urlbar, if focused, open and on hover */ \
-		#urlbar:is([focused="true"],[breakout-extend],:hover) #tab_label_in_urlbar_box {\
-		  visibility: collapse !important; \
-		}\
-		\
-		#tab_label_in_urlbar {\
-		  margin-block: unset !important;\
-		  margin-inline: unset !important;\
-		  margin-top: -2px !important;\
-		}\
-	  \
-	'), null, null);
+	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
+	  	/* hide item to interact with urlbar, if focused, open and on hover */
+		#urlbar:is([focused="true"],[breakout-extend],:hover) #tab_label_in_urlbar_box {
+		  visibility: collapse !important;
+		}
+		#tab_label_in_urlbar_box {
+		  width: unset !important;
+		}
+		#tab_label_in_urlbar {
+		  margin-block: unset !important;
+		  margin-inline: unset !important;
+		  margin-top: -2px !important;
+		}
+	`), null, null);
   
 	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
   

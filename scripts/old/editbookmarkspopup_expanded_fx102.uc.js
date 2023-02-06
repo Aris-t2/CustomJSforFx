@@ -1,4 +1,4 @@
-// 'Expand Edit Bookmarks Popup' script for Firefox 109+ by Aris
+// 'Expand Edit Bookmarks Popup' script for Firefox 75-108 by Aris
 //
 // option: increase folder tree height
 // option: hide preview image
@@ -26,7 +26,7 @@ var EditBookmarkPanelTweaks = {
 	var BSObserver = new MutationObserver(function(mutations) {
 	  mutations.forEach(function(mutation) {
 		setTimeout(function(){
-		  if(document.querySelector("#editBMPanel_folderTreeRow").getAttribute("hidden"))
+		  if(document.querySelector("#editBMPanel_folderTreeRow").getAttribute("collapsed"))
 			gEditItemOverlay.toggleFolderTreeVisibility();
 		 },timeout_value);
 	  });    
