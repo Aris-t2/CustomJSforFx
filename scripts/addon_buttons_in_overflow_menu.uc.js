@@ -1,7 +1,9 @@
 // 'Add-on buttons in overflow menu' script for Firefox 111+ by Aris
 //
-// at least one default browser toolbar buttons has to be in overflow menu for it to show up
-// pin buttons to toolbar or move buttons to overflow menu using right-click context menus 'Pin to Toolbar' 
+// At least one default toolbar button has to be inside overflow menu for it to show up on navigation toolbar.
+// Pin buttons to toolbar or move buttons to overflow menu using 'right-click' context menus 'Pin to Toolbar'.
+// Unified extension button gets hidden and moved to toolbars end for extension popups to appear there.
+
 
 (function() {
 
