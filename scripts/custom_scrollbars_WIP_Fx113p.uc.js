@@ -67,7 +67,7 @@ var enable_scrollbars_on_top_of_webcontent = false; // default: enable_scrollbar
 var enable_custom_scrollbars = true; // default: enable_custom_scrollbars = true
 
 // CUSTOM SCROLLBAR SETTINGS ("custom_scrollbar_" --> "cs_")
-   /* [!!!] not working in Fx 113+ [!!!] */ var cs_thumb_border = 0; // in px // default: cs_thumb_border = 0
+var cs_thumb_border = 0; // in px // default: cs_thumb_border = 0
 var cs_thumb_roundness = 0; // in px // default: cs_thumb_roundness = 0
 var cs_buttons_roundness = 0; // in px // default: cs_buttons_roundness = 0
    /* [!!!] not working in Fx 113+ [!!!] */ var cs_buttons_as_arrows = false; // default: cs_buttons_as_arrows = false // uses 'custom_scrollbar_size_value' inside its code
@@ -158,7 +158,7 @@ var custom_scrollbars = {
 	scrollbar thumb {\
 	  background-color: '+cs_thumb_color+' !important;\
 	  border-radius: '+cs_thumb_roundness+'px !important;\
-	  border: '+cs_thumb_border+'px solid '+cs_thumb_border_color+' !important;\
+	  box-shadow: inset 0 0 0 '+cs_thumb_border+'px '+cs_thumb_border_color+' !important;\
 	}\
 	scrollbar thumb[orient="vertical"] {\
 	  background-image: '+cs_thumb_image_vertical+' !important;\
