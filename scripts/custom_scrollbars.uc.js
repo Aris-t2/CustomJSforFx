@@ -3,7 +3,7 @@
 /* Firefox userChrome.js tweaks - 'Custom Scrollbars' for Firefox
    https://github.com/Aris-t2/CustomJSforFx/blob/master/scripts/custom_scrollbars.uc.js
 
-   Version: 2.0.1 for Firefox 111+
+   Version: 2.0.2 for Firefox 111+
    
    NOTE: 'non-compatible options' from earlier versions were removed
 
@@ -151,7 +151,8 @@
   if(cs_ignore_color_gradients === true)
 	cs_background_image_vertical
 	= cs_background_image_horizontal
-	= cs_corner_background_image=cs_thumb_image_vertical
+	= cs_corner_background_image
+	= cs_thumb_image_vertical
 	= cs_thumb_image_horizontal
 	= cs_thumb_hover_image_vertical
 	= cs_thumb_hover_image_horizontal
