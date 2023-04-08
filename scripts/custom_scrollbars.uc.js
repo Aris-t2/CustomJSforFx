@@ -78,9 +78,6 @@
   // only for 'custom_scrollbar_arrows_version = 1'
   const custom_scrollbar_arrows_color = "grey";
   
-  // default: custom_scrollbar_arrows_v2 = false
-  const custom_scrollbar_arrows_v2 = false;
-
   // default: cs_thumb_border = 0 / in px
   const cs_thumb_border = 0;
   
@@ -160,7 +157,7 @@
 /* ******************************************************************************************** */
 /* ******************************************************************************************** */
 
-  let ProfilePath = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, 'chrome', 'userChrome', 'icons'));
+  let ProfilePathChrome = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, 'chrome'));
 
 
   // unset background image color gradients -> flat scrollbars
@@ -260,15 +257,12 @@
 		scrollbar[orient="vertical"] scrollbarbutton[type="decrement"] {
 		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3E%3C/svg%3E ") !important;
 		}
-
 		scrollbar[orient="vertical"] scrollbarbutton[type="increment"] {
 		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E ") !important;
 		}
-
 		scrollbar[orient="horizontal"] scrollbarbutton[type="decrement"] {
 		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E ") !important;
 		}
-
 		scrollbar[orient="horizontal"] scrollbarbutton[type="increment"] {
 		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z'/%3E%3C/svg%3E ") !important;
 		}
@@ -280,21 +274,17 @@
 		  background-repeat: no-repeat !important;
 		  background-position: center center !important;
 		}
-		
 		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePath}/up.svg") !important;
+		  background-image: url("${ProfilePathChrome}userChrome/icons/up.svg") !important;
 		}
-
 		scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePath}/down.svg") !important;
+		  background-image: url("${ProfilePathChrome}userChrome/icons/down.svg") !important;
 		}
-
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePath}/left.svg") !important;
+		  background-image: url("${ProfilePathChrome}userChrome/icons/left.svg") !important;
 		}
-
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePath}/right.svg") !important;
+		  background-image: url("${ProfilePathChrome}userChrome/icons/right.svg") !important;
 		}
 	`;
 
