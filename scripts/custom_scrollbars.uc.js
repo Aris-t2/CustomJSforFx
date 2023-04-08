@@ -3,7 +3,7 @@
 /* Firefox userChrome.js tweaks - 'Custom Scrollbars' for Firefox
    https://github.com/Aris-t2/CustomJSforFx/blob/master/scripts/custom_scrollbars.uc.js
 
-   Version: 2.0.2 for Firefox 111+
+   Version: 2.0.3 for Firefox 111+
    
    NOTE: 'non-compatible options' from earlier versions were removed
 
@@ -32,6 +32,10 @@
    - gradients example: linear-gradient(to right, blue, #33CCFF, rgba(0,0,255,0.8))
    - predefined gradients: transparent,rgba(255,255,255,0.5),transparent -> transparent,rgba(255,255,255,0.0),transparent
    - no color or no color value -> use "unset"
+   - arrow icons
+	  - files have to be downloaded from https://github.com/Aris-t2/CustomJSforFx/tree/master/scripts/icons
+	  - files have to be placed inside 'icons' (sub)folder
+	  - own svg files can also be used, if they are named up.svg, down.svg, left.svg, right.svg
  
 */
 
@@ -64,8 +68,18 @@
   // default: custom_scrollbar_arrows = true
   const custom_scrollbar_arrows = true;
   
+  // default: custom_scrollbar_arrows_version = 1
+  //  1 ==> SVG arrows as code (might not work on some pages)
+  //  2 ==> SVG arrows as files ( have to be downloaded from https://github.com/Aris-t2/CustomJSforFx/tree/master/scripts/icons
+  //        and placed inside 'icons' (sub)folder )
+  const custom_scrollbar_arrows_version = 1;
+  
   // default: custom_scrollbar_arrows_color = "grey"; / # ==> %23 e.g. #33CCFF ==> %2333CCFF
+  // only for 'custom_scrollbar_arrows_version = 1'
   const custom_scrollbar_arrows_color = "grey";
+  
+  // default: custom_scrollbar_arrows_v2 = false
+  const custom_scrollbar_arrows_v2 = false;
 
   // default: cs_thumb_border = 0 / in px
   const cs_thumb_border = 0;
@@ -146,6 +160,8 @@
 /* ******************************************************************************************** */
 /* ******************************************************************************************** */
 
+  let ProfilePath = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, 'chrome', 'userChrome', 'icons'));
+
 
   // unset background image color gradients -> flat scrollbars
   if(cs_ignore_color_gradients === true)
@@ -177,88 +193,108 @@
 		  -moz-default-appearance: none !important;
 		}
 		slider {
-		  background-color: `+cs_background_color+` !important;
+		  background-color: ${cs_background_color} !important;
 		}
 		scrollbar[orient="vertical"] slider {
-		  background-image: `+cs_background_image_vertical+` !important;
+		  background-image: ${cs_background_image_vertical} !important;
 		}
 		scrollbar[orient="horizontal"] slider {
-		  background-image: `+cs_background_image_horizontal+` !important;
+		  background-image: ${cs_background_image_horizontal} !important;
 		}
 		scrollcorner {
-		  background-color: `+cs_corner_background_color+` !important;
-		  background-image: `+cs_corner_background_image+` !important;
+		  background-color: ${cs_corner_background_color} !important;
+		  background-image: ${cs_corner_background_image} !important;
 		}
 		scrollbar thumb {
-		  background-color: `+cs_thumb_color+` !important;
-		  border-radius: `+cs_thumb_roundness+`px !important;
-		  box-shadow: inset 0 0 0 `+cs_thumb_border+`px `+cs_thumb_border_color+` !important;
+		  background-color: ${cs_thumb_color} !important;
+		  border-radius: ${cs_thumb_roundness}px !important;
+		  box-shadow: inset 0 0 0 ${cs_thumb_border}px ${cs_thumb_border_color} !important;
 		}
 		scrollbar thumb[orient="vertical"] {
-		  background-image: `+cs_thumb_image_vertical+` !important;
-		  min-height: `+(12+cs_thumb_roundness+cs_thumb_border)+`px !important;
+		  background-image: ${cs_thumb_image_vertical} !important;
+		  min-height: 17px !important;
 		}
 		scrollbar thumb[orient="horizontal"] {
-		  background-image: `+cs_thumb_image_horizontal+` !important;
-		  min-width: `+(12+cs_thumb_roundness+cs_thumb_border)+`px !important;
+		  background-image: ${cs_thumb_image_horizontal} !important;
+		  min-width: 17px !important;
 		}
 		scrollbar thumb:hover, scrollbar thumb:active {
-		  background-color: `+cs_thumb_hover_color+` !important;
+		  background-color: ${cs_thumb_hover_color} !important;
 		}
 		scrollbar thumb[orient="vertical"]:hover, scrollbar thumb[orient="vertical"]:active {
-		  background-image: `+cs_thumb_hover_image_vertical+` !important;
+		  background-image: ${cs_thumb_hover_image_vertical} !important;
 		}
 		scrollbar thumb[orient="horizontal"]:hover, scrollbar thumb[orient="horizontal"]:active {
-		  background-image: `+cs_thumb_hover_image_horizontal+` !important;
+		  background-image: ${cs_thumb_hover_image_horizontal} !important;
 		}
 		scrollbar scrollbarbutton {
-		  background-color: `+cs_buttons_color+` !important;
-		  border-radius: `+cs_buttons_roundness+`px !important;
-		  box-shadow: inset 0 0 0 `+cs_buttons_border+`px `+cs_buttons_border_color+` !important;
+		  background-color: ${cs_buttons_color} !important;
+		  border-radius: ${cs_buttons_roundness}px !important;
+		  box-shadow: inset 0 0 0 ${cs_buttons_border}px ${cs_buttons_border_color} !important;
 		  height: 17px !important;
 		  width: 17px !important;
 		}
 		scrollbar[orient="vertical"] scrollbarbutton {
-		  background-image: `+cs_buttons_image_vertical+` !important;
+		  background-image: ${cs_buttons_image_vertical} !important;
 		}
 		scrollbar[orient="horizontal"] scrollbarbutton {
-		  background-image: `+cs_buttons_image_horizontal+` !important;
+		  background-image: ${cs_buttons_image_horizontal} !important;
 		}
 		scrollbar scrollbarbutton:hover {
-		  background-color: `+cs_buttons_hover_color+` !important;
+		  background-color: ${cs_buttons_hover_color} !important;
 		}
 		scrollbar[orient="vertical"] scrollbarbutton:hover {
-		  background-image: `+cs_buttons_hover_image_vertical+` !important;
+		  background-image: ${cs_buttons_hover_image_vertical} !important;
 		}
 		scrollbar[orient="horizontal"] scrollbarbutton:hover {
-		  background-image: `+cs_buttons_hover_image_horizontal+` !important;
+		  background-image: ${cs_buttons_hover_image_horizontal} !important;
 		}
 	`;
 	
-  if(custom_scrollbar_arrows === true)
+  if(custom_scrollbar_arrows === true && custom_scrollbar_arrows_version === 1)
 	custom_scrollbar_arrows_code=`
-		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='`+custom_scrollbar_arrows_color+`' %3E%3Cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3E%3C/svg%3E ") !important;
+		scrollbar scrollbarbutton {
 		  background-repeat: no-repeat !important;
 		  background-position: center center !important;
+		}
+		scrollbar[orient="vertical"] scrollbarbutton[type="decrement"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3E%3C/svg%3E ") !important;
+		}
+
+		scrollbar[orient="vertical"] scrollbarbutton[type="increment"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E ") !important;
+		}
+
+		scrollbar[orient="horizontal"] scrollbarbutton[type="decrement"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E ") !important;
+		}
+
+		scrollbar[orient="horizontal"] scrollbarbutton[type="increment"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z'/%3E%3C/svg%3E ") !important;
+		}
+
+	`;
+  else if(custom_scrollbar_arrows === true && custom_scrollbar_arrows_version === 2)
+	custom_scrollbar_arrows_code=`
+		scrollbar scrollbarbutton {
+		  background-repeat: no-repeat !important;
+		  background-position: center center !important;
+		}
+		
+		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
+		  background-image: url("${ProfilePath}/up.svg") !important;
 		}
 
 		scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='`+custom_scrollbar_arrows_color+`' %3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E ") !important;
-		  background-repeat: no-repeat !important;
-		  background-position: center center !important;
+		  background-image: url("${ProfilePath}/down.svg") !important;
 		}
 
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='`+custom_scrollbar_arrows_color+`' %3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E ") !important;
-		  background-repeat: no-repeat !important;
-		  background-position: center center !important;
+		  background-image: url("${ProfilePath}/left.svg") !important;
 		}
 
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="increment"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='`+custom_scrollbar_arrows_color+`' %3E%3Cpath d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z'/%3E%3C/svg%3E ") !important;
-		  background-repeat: no-repeat !important;
-		  background-position: center center !important;
+		  background-image: url("${ProfilePath}/right.svg") !important;
 		}
 	`;
 
@@ -282,7 +318,7 @@
   if(custom_scrollbar_opacity === true)
 	custom_scrollbar_opacity_code=`
 		scrollbar {
-		  opacity: `+custom_opacity_value+` !important;
+		  opacity: ${custom_opacity_value} !important;
 		}
 	`;
   
@@ -299,17 +335,25 @@
 		:root{
 		  scrollbar-width: thin !important;
 		}
+		scrollbar[orient="vertical"] scrollbarbutton {
+		  height: 14px !important;
+		  width: 7px !important;
+		}
+		scrollbar[orient="horizontal"] scrollbarbutton {
+		  height: 7px !important;
+		  width: 14px !important;
+		}
 	`;
 
   Components.classes["@mozilla.org/content/style-sheet-service;1"]
     .getService(Components.interfaces.nsIStyleSheetService)
 	  .loadAndRegisterSheet(Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
-		`+custom_scrollbars_code+`
-		`+custom_scrollbar_arrows_code+`
-		`+hide_scrollbar_buttons_code+`
-		`+custom_scrollbar_opacity_code+`
-		`+hide_scrollbars_code+`
-		`+thin_scrollbars_code+`
+		${custom_scrollbars_code}
+		${custom_scrollbar_arrows_code}
+		${hide_scrollbar_buttons_code}
+		${custom_scrollbar_opacity_code}
+		${hide_scrollbars_code}
+		${thin_scrollbars_code}
   `), null, null),
   Components.classes["@mozilla.org/content/style-sheet-service;1"]
     .getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET);
