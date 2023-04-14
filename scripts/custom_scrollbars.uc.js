@@ -3,7 +3,7 @@
 /* Firefox userChrome.js tweaks - 'Custom Scrollbars' for Firefox
    https://github.com/Aris-t2/CustomJSforFx/blob/master/scripts/custom_scrollbars.uc.js
 
-   Version: 2.0.3 for Firefox 111+
+   Version: 2.0.4 for Firefox 111+
    
    NOTE: 'non-compatible options' from earlier versions were removed
 
@@ -33,8 +33,8 @@
    - predefined gradients: transparent,rgba(255,255,255,0.5),transparent -> transparent,rgba(255,255,255,0.0),transparent
    - no color or no color value -> use "unset"
    - arrow icons
-	  - files have to be downloaded from https://github.com/Aris-t2/CustomJSforFx/tree/master/scripts/icons
-	  - files have to be placed inside 'icons' (sub)folder
+	  - files have to be downloaded from https://github.com/Aris-t2/CustomJSforFx/tree/master/icons
+	  - files have to be placed inside 'icons' (sub)folder --> 'chrome\icons'
 	  - own svg files can also be used, if they are named up.svg, down.svg, left.svg, right.svg
  
 */
@@ -69,9 +69,10 @@
   const custom_scrollbar_arrows = true;
   
   // default: custom_scrollbar_arrows_version = 1
-  //  1 ==> SVG arrows as code (might not work on some pages)
-  //  2 ==> SVG arrows as files ( have to be downloaded from https://github.com/Aris-t2/CustomJSforFx/tree/master/scripts/icons
-  //        and placed inside 'icons' (sub)folder )
+  //  1 ==> SVG arrows as code: might not work on some pages
+  //  2 ==> SVG arrows as files: files have to be downloaded from
+  //        https://github.com/Aris-t2/CustomJSforFx/tree/master/icons
+  //        and placed inside 'chrome\icons' folder
   const custom_scrollbar_arrows_version = 1;
   
   // default: custom_scrollbar_arrows_color = "grey"; / # ==> %23 e.g. #33CCFF ==> %2333CCFF
@@ -275,16 +276,16 @@
 		  background-position: center center !important;
 		}
 		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePathChrome}userChrome/icons/up.svg") !important;
+		  background-image: url("${ProfilePathChrome}icons/up.svg") !important;
 		}
 		scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePathChrome}userChrome/icons/down.svg") !important;
+		  background-image: url("${ProfilePathChrome}icons/down.svg") !important;
 		}
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePathChrome}userChrome/icons/left.svg") !important;
+		  background-image: url("${ProfilePathChrome}icons/left.svg") !important;
 		}
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePathChrome}userChrome/icons/right.svg") !important;
+		  background-image: url("${ProfilePathChrome}icons/right.svg") !important;
 		}
 	`;
 
