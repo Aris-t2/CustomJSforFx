@@ -3,35 +3,27 @@
 // ... Customizing mode > 'Titlebar' checkbox > unchecked
 
 
-var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
+(function() {
 
-var CatchDoubleClick = {
-  init: function() {
-	
+
+  setTimeout(function(){
+
 	try {
-	 document.getElementById("TabsToolbar").addEventListener("dblclick", function removeDoubleClick(e) {
-				
-	  if(e.button==0 && Services.prefs.getBranch("browser.tabs.").getBoolPref("drawInTitlebar")
-	    && e.target.localName != "tab"
-		  && e.target.localName != "toolbarbutton"
-			&& e.target.localName != "arrowscrollbox"
-			  && e.originalTarget.getAttribute("anonid") != "scrollbutton-up"
-				&& e.originalTarget.getAttribute("anonid") != "scrollbutton-down"
-				  && e.originalTarget.getAttribute("anonid") != "close-button")
-	  {
-		e.stopPropagation();
-		e.preventDefault();
 
-	  }
+ 
+      gBrowser.tabContainer.addEventListener('dblclick', function abcd(e) {
+		if(e.button==0) {
+			
+			e.stopPropagation();
+			e.preventDefault();
 
-	 }, false);
+		}
+	  }, true);
+    
 	
 	} catch(e) {}
 
-  }
-
-}
-
-setTimeout(function(){
-  CatchDoubleClick.init();
-},500);
+  },500);
+	
+	
+})();
