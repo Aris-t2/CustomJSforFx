@@ -18,7 +18,7 @@ var UserChrome_js = {
         var ucFilePath = PathUtils.join(PathUtils.profileDir, "chrome", "userChrome.js");
         var ucFile = new FileUtils.File(ucFilePath);
         if (ucFile.exists() && ucFile.isFile()) {
-          this.utilFileURI = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, "./chrome/userChrome/userChromeJSutilities.js"));
+		  this.utilFileURI = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, "chrome", "userChrome", "userChromeJSutilities.js"));
           this.ucFileURI = PathUtils.toFileURI(ucFilePath);
         };
         Services.obs.removeObserver(this, "final-ui-startup");
@@ -39,7 +39,9 @@ var UserChrome_js = {
         Services.scriptloader.loadSubScript(this.utilFileURI, window, "UTF-8");
         Services.scriptloader.loadSubScript(this.ucFileURI, window, "UTF-8");
       }
-      catch (ex) {}
+      catch(e) {
+		Components.utils.reportError(e);
+	  }
     };
   }
 
