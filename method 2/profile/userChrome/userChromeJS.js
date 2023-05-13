@@ -1,6 +1,8 @@
 // main.js
 
-Cu.import("resource://gre/modules/FileUtils.jsm");
+const { FileUtils } = ChromeUtils.importESModule(
+  'resource://gre/modules/FileUtils.sys.mjs'
+);
 
 var UserChrome_js = {
 
@@ -13,11 +15,11 @@ var UserChrome_js = {
   observe: function(aSubject, aTopic, aData) {
     switch (aTopic) {
       case "final-ui-startup":
-        var ucFilePath = OS.Path.join(OS.Constants.Path.profileDir, "chrome", "userChrome.js");
+        var ucFilePath = PathUtils.join(PathUtils.profileDir, "chrome", "userChrome.js");
         var ucFile = new FileUtils.File(ucFilePath);
         if (ucFile.exists() && ucFile.isFile()) {
-          this.utilFileURI = OS.Path.toFileURI(OS.Path.join(OS.Constants.Path.profileDir, "./chrome/userChrome/userChromeJSutilities.js"));
-          this.ucFileURI = OS.Path.toFileURI(ucFilePath);
+          this.utilFileURI = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, "./chrome/userChrome/userChromeJSutilities.js"));
+          this.ucFileURI = PathUtils.toFileURI(ucFilePath);
         };
         Services.obs.removeObserver(this, "final-ui-startup");
         break;
