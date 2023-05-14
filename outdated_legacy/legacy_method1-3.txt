@@ -1,0 +1,30 @@
+Method 1 - files in profile folder only (Fx60-71)
+M1 is based on this project by nuchi: https://github.com/nuchi/firefox-quantum-userchromejs
+M1 stopped working in Firefox 72! XBL support got dropped.
+
+From this projects \method 1\ folder copy userChrome folder and userChrome.css file to \ PROFILENAME \chrome\ or add code from userChrome.css file to an existing userChrome.css file.
+
+Edit userChrome\userChrome.xml file to add custom scripts.
+
+
+Method 2 - files in install and profile folders
+M2 is based on this project by ardiman: https://github.com/ardiman/userChrome.js
+M2 is also based on the modified files by Endor8: https://github.com/Endor8/userChrome.js/
+
+From this projects \method 2\profile\ folder copy userChrome folder and userChrome.js file to \ PROFILENAME \chrome\ folder.
+
+From this projects \method 2\firefox\ folder copy defaults folder and config.js file to Firefox main directory (where the Firefox executable is; or on macOS, inside the main executable, at /Applications/Firefox.app/Contents/Resources/).
+
+Edit userChrome.js file to add custom scripts.
+
+With Firefox 62+ and Thunderbird 68+ an additional preference pref("general.config.sandbox_enabled", false); has to be set inside config-prefs.js file. This is considered less secure by Mozilla and is only a temporary workaround, but at the moment it is the only way to run custom scripts using "method 2".
+
+
+Method 3 - files in install and profile folders (Fx60-91.4)
+M3 is based on this project by xiaoxiaoflood: https://github.com/xiaoxiaoflood/firefox-scripts (The files offered there are up-to-date and do work with Fx96+.)
+
+From this projects \method 3\profile\ folder copy utils folder and userChrome.uc.js file to \ PROFILENAME \chrome\ folder.
+
+From this projects \method 3\firefox\ folder copy defaults folder and config.js file to Firefox/Thunderbird main directory (where the Firefox/Thunderbird executable is).
+
+Edit userChrome.uc.js file to add custom scripts or delete userChrome.uc.js file and add scripts directly into  /chrome/  folder.

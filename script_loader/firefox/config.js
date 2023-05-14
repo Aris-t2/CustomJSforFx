@@ -1,4 +1,4 @@
-// config.js
+// config.js 
 
 try {
   Cu.importGlobalProperties(['PathUtils']);

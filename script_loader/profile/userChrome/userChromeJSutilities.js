@@ -1,4 +1,4 @@
-// utilities.js
+// userChromeJSutilities.js
 
 var userChrome = {
 

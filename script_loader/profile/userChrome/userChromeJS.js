@@ -1,4 +1,4 @@
-// main.js
+// userChromeJS.js
 
 const { FileUtils } = ChromeUtils.importESModule(
   'resource://gre/modules/FileUtils.sys.mjs'
