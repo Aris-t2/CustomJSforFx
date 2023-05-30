@@ -141,7 +141,6 @@ var AddSeparator = {
 		  border-bottom: 1px solid rgba(255,255,255, 0.3) !important;
 		  margin: 2px 2px !important;
 		  height: 1px !important;
-		  width: 18px !important;
 		}
 		toolbar[orient="vertical"] toolbarspacer {
 		  appearance: none !important;
