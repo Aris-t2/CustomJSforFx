@@ -14,8 +14,6 @@
 
 Components.utils.import('resource:///modules/CustomizableUI.jsm');
 var {Services} = Components.utils.import('resource://gre/modules/Services.jsm', {});
-var appversion = parseInt(Services.appinfo.version);
-
 
 
 var AddonbarVertical = {
@@ -107,8 +105,8 @@ var AddonbarVertical = {
 			label: button_label, // button title
 			tooltiptext: button_label, // tooltip title
 			onClick: function(event) {
-
-			  var windows = Services.wm.getEnumerator(null);
+			  if(event.button==0) {
+			    var windows = Services.wm.getEnumerator(null);
 				while (windows.hasMoreElements()) {
 				  var win = windows.getNext();
 				  
@@ -124,7 +122,7 @@ var AddonbarVertical = {
 					win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
 				  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
 				}
-
+			  }
 			},
 			onCreated: function(button) {
 			  if(Services.prefs.getBranch('browser.vaddonbar.').getBoolPref('enabled'))
