@@ -8,6 +8,7 @@
 
 try {
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
+  ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   
@@ -27,10 +28,13 @@ try {
 		} catch (e) {}
 	  } else if(event.button=='1') {
 		try {
-		  var mainWindow = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+		  /*var mainWindow = Components.classes["@mozilla.org/appshell/window-mediator;1"]
 							.getService(Components.interfaces.nsIWindowMediator)
 							.getMostRecentWindow("navigator:browser");
-		  mainWindow.gBrowser.selectedTab = gBrowser.addTab('about:downloads', {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
+		  mainWindow.gBrowser.selectedTab = gBrowser.addTab('about:downloads', {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});*/
+		  //mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addWebTab('about:downloads');
+		  //mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTrustedTab('about:downloads');
+		  gBrowser.selectedTab = gBrowser.addTrustedTab('about:downloads');
 		} catch (e) {}
 	  }
 

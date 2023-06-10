@@ -1,7 +1,7 @@
 // 'Activity throbber' script for Firefox by Aris
 
-
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
+ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 

@@ -8,8 +8,8 @@
 // workaround on Fx 71 to save/restore toolbar visibility
 // creating an observer array always fails, so observers are created manually atm.
 
-
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
+ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
