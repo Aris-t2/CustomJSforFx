@@ -11,7 +11,6 @@
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
-var {Services} = Components.utils.import('resource://gre/modules/Services.jsm', {});
 var appversion = parseInt(Services.appinfo.version);
 
 var compact_buttons = false; // reduced toolbar height and smaller buttons

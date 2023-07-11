@@ -7,7 +7,6 @@
 // [!] option: type icons like boomarks star, switch to tab etc. can be moved to the right using 'move_bookmarks_star_to_the_end' variable
 
 
-var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 var fx70_workaround = true; // fixes issues with large amounts for search engines

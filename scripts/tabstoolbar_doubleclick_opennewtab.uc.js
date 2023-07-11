@@ -3,8 +3,6 @@
 // Customizing mode > 'Titlebar' checkbox > unchecked
 
 
-var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
-
 var NewTabOnDoubleClick = {
   init: function() {
 	  

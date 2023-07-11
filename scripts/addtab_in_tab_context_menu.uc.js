@@ -5,7 +5,6 @@
 // option: show_menuitem_on_top = true/false
 // option: define own new tab url / default: 'about:newtab'
 
-var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
 var item_label = "New Tab"; // menuitem label

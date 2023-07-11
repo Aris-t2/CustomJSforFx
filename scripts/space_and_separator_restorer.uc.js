@@ -16,7 +16,6 @@
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
 ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
-var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 var appversion = parseInt(Services.appinfo.version);
 
 var AddSeparator = {
@@ -154,9 +153,9 @@ var AddSeparator = {
 		#main-window:not([customizing]) toolbar:not(#configuration_toolbar) toolbarspring {
 		  max-width: 100% !important;
 		}
-		#menubar-items + spacer {
+		/*#menubar-items + spacer {
 		  display: none !important;
-		}
+		}*/
 	  `), null, null);
 
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
