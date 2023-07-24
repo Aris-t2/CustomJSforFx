@@ -37,27 +37,28 @@ var FaviconInUrlbar = {
 	// update script every time tab attributes get modified (switch/open tabs/windows)
 	document.addEventListener("TabAttrModified", updateIcon, false);
 	document.addEventListener('TabSelect', updateIcon, false);
-	document.addEventListener('TabOpen', updateIcon, false);
 	document.addEventListener('TabClose', updateIcon, false);
-	document.addEventListener('load', updateIcon, false);
-	document.addEventListener("DOMContentLoaded", updateIcon, false);
+	// document.addEventListener('TabOpen', updateIcon, false);
+	// document.addEventListener('load', updateIcon, false);
+	// document.addEventListener("DOMContentLoaded", updateIcon, false);
+	
 
+	function updateIcon(e) {
+		if (e && e.target.getAttribute('selected') !== 'true') return; // don't listen to non-selected tabs
 
-	function updateIcon() {
+		setTimeout(function(){ // timeout fixes wrong icon detection in some cases
 		
-	 setTimeout(function(){ // timeout fixes wrong icon detection in some cases
-	  
-	  // get current tabs favicon
-	  var favicon_in_urlbar = gBrowser.selectedTab.image;
-	  
-	  // if current tab offers no icon, use selected icon (icon_for_pages_without_favicon)
-	  if(!gBrowser.selectedTab.image || gBrowser.selectedTab.image == null)
-		if(!icon_for_pages_without_favicon) favicon_in_urlbar = brand;
-		  else favicon_in_urlbar = icon_for_pages_without_favicon;
-		  
-	  document.querySelector('#favimginurlbar').style.listStyleImage = "url("+favicon_in_urlbar+")";
-	  
-	 },100);
+		// get current tabs favicon
+		var favicon_in_urlbar = gBrowser.selectedTab.image;
+		
+		// if current tab offers no icon, use selected icon (icon_for_pages_without_favicon)
+		if(!gBrowser.selectedTab.image || gBrowser.selectedTab.image == null)
+			if(!icon_for_pages_without_favicon) favicon_in_urlbar = brand;
+			else favicon_in_urlbar = icon_for_pages_without_favicon;
+			
+		document.querySelector('#favimginurlbar').style.listStyleImage = "url("+favicon_in_urlbar+")";
+		
+		},100);
 
 	}
 
