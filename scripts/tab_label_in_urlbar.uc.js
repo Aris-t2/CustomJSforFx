@@ -18,14 +18,22 @@
 	updateLabel();
   
 	// catch cases where tab title can change
-	document.addEventListener("TabAttrModified", updateLabel, false);
+	document.addEventListener('TabAttrModified', updateLabel, false);
 	document.addEventListener('TabSelect', updateLabel, false);
-	document.addEventListener('TabOpen', updateLabel, false);
 	document.addEventListener('TabClose', updateLabel, false);
-	document.addEventListener('load', updateLabel, false);
-	document.addEventListener("DOMContentLoaded", updateLabel, false);
+	// document.addEventListener('TabOpen', updateLabel, false);
+	// document.addEventListener('load', updateLabel, false);
+	// document.addEventListener("DOMContentLoaded", updateLabel, false);
   
-	function updateLabel() {
+	function updateLabel(e) {
+		if (e) {
+			if (e.target.getAttribute('selected') !== 'true') return; // don't listen to non-selected tabs
+
+			if (e.target._fullLabel || e.target.label) {
+				tablabel.setAttribute("value",  e.target._fullLabel || e.target.label);
+				return;
+			}
+		}
 	  tablabel.setAttribute("value",gBrowser.selectedBrowser.contentTitle);
 	}
 	
