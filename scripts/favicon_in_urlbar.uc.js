@@ -1,46 +1,45 @@
-// 'Favicon in urlbars identity box' script for Firefox 92+ by Aris
+// 'Favicon in urlbars identity box' script for Firefox 115+ by Aris
 //
 // This script restores current pages favicon inside urlbar (aka location bar, address bar or awesome bar).
-// [!] If a page does not offer a favicon, browser branches default icon is shown.
+// [!] If a page does not offer a favicon, browser default branch icon is shown.
 // [!] In a multi-window environment pages without favicons might show wrong icons.
 // option: set icon for pages without favicon
 
-var i_icon = 'chrome://global/skin/icons/info.svg';
-var sheet = 'chrome://global/skin/icons/Portrait.png';
-var brand = 'chrome://branding/content/icon32.png';
-var globe = 'chrome://global/skin/icons/defaultFavicon.svg';
+(function() {
 
-var icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
+  try {
 
-var favicon_click_opens_page_info_window = false;
+	const i_icon = 'chrome://global/skin/icons/info.svg';
+	const sheet = 'chrome://global/skin/icons/Portrait.png';
+	const brand = 'chrome://branding/content/icon32.png';
+	const globe = 'chrome://global/skin/icons/defaultFavicon.svg';
 
-var FaviconInUrlbar = {
- init: function() {
-   try {
-	   
-	var favimginurlbar = document.createXULElement("image");
+	const icon_for_pages_without_favicon = brand; // i_icon, sheet, globe or brand (colorized Fx channel icon)
+
+	const favicon_click_opens_page_info_window = false; // opens page info window on click, if set to true
+
+
+	const favimginurlbar = document.createXULElement("image");
 	favimginurlbar.setAttribute("id","favimginurlbar");
-	  
-	if(favicon_click_opens_page_info_window)
-	  favimginurlbar.setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");	  
-	  
-	favimginurlbar.style.width = "16px";
-	favimginurlbar.style.height = "16px";
+	favimginurlbar.setAttribute("align","center");
+	favimginurlbar.style.width = "18px";
+	favimginurlbar.style.height = "18px";
 	favimginurlbar.style.marginLeft = "3px";
 	favimginurlbar.style.marginRight = "3px";
-	favimginurlbar.style.marginTop = "3px";
-	favimginurlbar.style.marginBottom = "3px";
-	
-	//document.getElementById('identity-box').insertBefore(favimginurlbar,document.getElementById('identity-box').firstChild);
+	favimginurlbar.style.marginTop = "auto";
+	favimginurlbar.style.marginBottom = "auto";
+
+
+	if(favicon_click_opens_page_info_window)
+	  favimginurlbar.setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");
+
+
 	document.getElementById('identity-box').appendChild(favimginurlbar);
 
-	// update script every time tab attributes get modified (switch/open tabs/windows)
+	// update script every time a tab attribute gets modified
 	document.addEventListener("TabAttrModified", updateIcon, false);
 	document.addEventListener('TabSelect', updateIcon, false);
-	document.addEventListener('TabOpen', updateIcon, false);
 	document.addEventListener('TabClose', updateIcon, false);
-	document.addEventListener('load', updateIcon, false);
-	document.addEventListener("DOMContentLoaded", updateIcon, false);
 
 
 	function updateIcon() {
@@ -62,8 +61,5 @@ var FaviconInUrlbar = {
 	}
 
   } catch(e) {}
- }
-};
-
-// initiate script after DOM/browser content is loaded
-document.addEventListener("DOMContentLoaded", FaviconInUrlbar.init(), false);
+  
+})();
