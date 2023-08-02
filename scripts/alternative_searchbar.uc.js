@@ -56,8 +56,6 @@ var searchsettingslabel = "Change Search Settings";
 var isInCustomize = 1; //start at 1 to set it once at startup
 var appversion = parseInt(Services.appinfo.version);
 
-Cu.import('resource://gre/modules/Services.jsm');
-
 var AltSearchbar = {
  init: async function() {
    await Services.search.wrappedJSObject.init();
@@ -102,9 +100,27 @@ var AltSearchbar = {
         searchoneoffs.container.addEventListener("click", (event) => {
             if (!(event instanceof KeyboardEvent) && (event.button == 0)) {
                 event.stopPropagation();
-                let target = searchoneoffs.contextMenuPopup.childNodes[1].hidden ? searchoneoffs.contextMenuPopup.childNodes[2] : searchoneoffs.contextMenuPopup.childNodes[1];
-                target.closest("menupopup")._triggerButton = event.target;
-                target.dispatchEvent(new MouseEvent("command",{"bubbles":true}));
+                event.target.classList.add("search-one-offs-context-set-default");
+                searchoneoffs._contextEngine = event.target.engine;
+                searchoneoffs._on_command(event);
+                searchoneoffs._contextEngine = null;
+                // let contextEngine = event.target.engine;
+                // let currentEngine = searchbar.currentEngine;
+                // if (!searchoneoffs.getAttribute("includecurrentengine")) {
+                // 	// Make the target button of the context menu reflect the current
+                // 	// search engine first. Doing this as opposed to rebuilding all the
+                // 	// one-off buttons avoids flicker.
+                // 	let button = searchoneoffs._buttonForEngine(contextEngine);
+                // 	button.id = searchoneoffs._buttonIDForEngine(currentEngine);
+                // 	let uri = "chrome://browser/skin/search-engine-placeholder.png";
+                // 	if (currentEngine.iconURI) {
+                // 		uri = currentEngine.iconURI.spec;
+                // 	}
+                // 	button.setAttribute("image", uri);
+                // 	button.setAttribute("tooltiptext", currentEngine.name);
+                // 	button.engine = currentEngine;
+                // }
+                // searchbar.currentEngine = contextEngine;
             }
         }, true);
     };
@@ -417,7 +433,7 @@ function createAddEngineItem(e) {
             updateStyleSheet();
       }
 `
-		+ _doSearch.slice(-2) + ")"
+        + _doSearch.slice(-2) + ")"
 	);
 	
 	
