@@ -98,29 +98,14 @@ var AltSearchbar = {
     function selectEngineByClickOneoffsButton() {
         var searchoneoffs = searchbar.textbox.popup.oneOffButtons;
         searchoneoffs.container.addEventListener("click", (event) => {
-            if (!(event instanceof KeyboardEvent) && (event.button == 0)) {
+            if ((event.target.className == "searchbar-engine-one-off-item") && !(event instanceof KeyboardEvent) && (event.button == 0)) {
                 event.stopPropagation();
-                event.target.classList.add("search-one-offs-context-set-default");
-                searchoneoffs._contextEngine = event.target.engine;
-                searchoneoffs._on_command(event);
-                searchoneoffs._contextEngine = null;
-                // let contextEngine = event.target.engine;
-                // let currentEngine = searchbar.currentEngine;
-                // if (!searchoneoffs.getAttribute("includecurrentengine")) {
-                // 	// Make the target button of the context menu reflect the current
-                // 	// search engine first. Doing this as opposed to rebuilding all the
-                // 	// one-off buttons avoids flicker.
-                // 	let button = searchoneoffs._buttonForEngine(contextEngine);
-                // 	button.id = searchoneoffs._buttonIDForEngine(currentEngine);
-                // 	let uri = "chrome://browser/skin/search-engine-placeholder.png";
-                // 	if (currentEngine.iconURI) {
-                // 		uri = currentEngine.iconURI.spec;
-                // 	}
-                // 	button.setAttribute("image", uri);
-                // 	button.setAttribute("tooltiptext", currentEngine.name);
-                // 	button.engine = currentEngine;
-                // }
-                // searchbar.currentEngine = contextEngine;
+                searchoneoffs.contextMenuPopup._triggerButton = event.target;
+                searchoneoffs.contextMenuPopup.querySelectorAll('[class^="search-one-offs-context-set-default"]:not([hidden])')[0]
+                    .dispatchEvent(new Event('command', {
+                        bubbles: true,
+                        cancelable: true
+                    }));
             }
         }, true);
     };
