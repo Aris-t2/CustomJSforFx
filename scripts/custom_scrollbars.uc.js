@@ -3,7 +3,7 @@
 /* Firefox userChrome.js tweaks - 'Custom Scrollbars' for Firefox
    https://github.com/Aris-t2/CustomJSforFx/blob/master/scripts/custom_scrollbars.uc.js
 
-   Version: 2.0.4 for Firefox 111+
+   Version: 2.0.5 for Firefox 115+
    
    NOTE: 'non-compatible options' from earlier versions were removed
 
@@ -160,7 +160,6 @@
 
   let ProfilePathChrome = PathUtils.toFileURI(PathUtils.join(PathUtils.profileDir, 'chrome'));
 
-
   // unset background image color gradients -> flat scrollbars
   if(cs_ignore_color_gradients === true)
 	cs_background_image_vertical
@@ -276,16 +275,16 @@
 		  background-position: center center !important;
 		}
 		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePathChrome}icons/up.svg") !important;
+		  background-image: url("${ProfilePathChrome}/icons/up.svg") !important;
 		}
 		scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePathChrome}icons/down.svg") !important;
+		  background-image: url("${ProfilePathChrome}/icons/down.svg") !important;
 		}
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="decrement"] {
-		  background-image: url("${ProfilePathChrome}icons/left.svg") !important;
+		  background-image: url("${ProfilePathChrome}/icons/left.svg") !important;
 		}
 		scrollbar[orient="horizontal"] > scrollbarbutton[type="increment"] {
-		  background-image: url("${ProfilePathChrome}icons/right.svg") !important;
+		  background-image: url("${ProfilePathChrome}/icons/right.svg") !important;
 		}
 	`;
 
