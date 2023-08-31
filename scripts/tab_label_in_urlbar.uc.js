@@ -20,16 +20,15 @@
 	// catch cases where tab title can change
 	document.addEventListener("TabAttrModified", updateLabel, false);
 	document.addEventListener('TabSelect', updateLabel, false);
-	document.addEventListener('TabOpen', updateLabel, false);
+	//document.addEventListener('TabOpen', updateLabel, false);
 	document.addEventListener('TabClose', updateLabel, false);
-	document.addEventListener('load', updateLabel, false);
-	document.addEventListener("DOMContentLoaded", updateLabel, false);
+	//document.addEventListener('load', updateLabel, false);
+	//document.addEventListener("DOMContentLoaded", updateLabel, false);
   
 	function updateLabel() {
 	  tablabel.setAttribute("value",gBrowser.selectedBrowser.contentTitle);
 	}
 	
-	var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
@@ -52,5 +51,3 @@
   } catch(e) {}
 	
 }());
-
-

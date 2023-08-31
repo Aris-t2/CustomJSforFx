@@ -42,7 +42,6 @@
 	  },100);
 	}
 	
-	var {Services} = Components.utils.import("resource://gre/modules/Services.jsm", {});
 	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	
 	var customcssforfx_appbutton_in_titlebar_code = '';
