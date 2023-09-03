@@ -169,9 +169,6 @@ var AddonbarVertical = {
 		  #addonbar_v {
 			border-inline-start: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important;
 		  }
-		  #toolbox_abv{
-			order: 10 !important;
-		  }
 		`;
 	  }
 
@@ -218,6 +215,16 @@ var AddonbarVertical = {
 		}
 		`+end_border+`
 	  `;
+	}
+	
+	var addonbar_right = '';
+	
+	if(!addonbar_v_on_the_left) {
+		addonbar_right =`
+		  #toolbox_abv{
+			order: 10 !important;
+		  }
+		`;
 	}
 	
 	if(addonbar_v_togglebutton) {
@@ -269,7 +276,7 @@ var AddonbarVertical = {
 		}
 	  `;
 	  
-	var uri = Services.io.newURI('data:text/css;charset=utf-8,' + encodeURIComponent(''+addonbar_v_style + togglebutton_addonbar_v_style + compact_buttons_code), null, null);
+	var uri = Services.io.newURI('data:text/css;charset=utf-8,' + encodeURIComponent(''+addonbar_v_style + togglebutton_addonbar_v_style + addonbar_right + compact_buttons_code), null, null);
 	  
 	var sss = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(Components.interfaces.nsIStyleSheetService);
 	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
