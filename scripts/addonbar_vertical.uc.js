@@ -1,4 +1,4 @@
-// 'Vertical Add-on Bar' script for Firefox 102+ by Aris
+// 'Vertical Add-on Bar' script for Firefox by Aris
 //
 // no 'close' button
 // 'toggle' toolbar with 'Ctr + Alt + /' on Windows/Linux or 'Cmd + Alt + /' on macOS
@@ -30,7 +30,6 @@ var AddonbarVertical = {
 	var button_label = 'Toggle vertical Add-on Bar'; // Toggle button name
 	var addonbar_v_togglebutton = true; // display toggle button for vertical toolbar (true) or not (false)
 	var addonbar_v_on_the_left = true; // display vertical toolbar on the left (true) or the right (false)
-	var insert_before_borders = false; // may not always offer a visible change
 	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
 	var addonbar_v_width = '30px'; // toolbar width
 	var compact_buttons = false; // compact button size (true) or default button size (false)
@@ -63,12 +62,10 @@ var AddonbarVertical = {
 	  CustomizableUI.registerToolbarNode(tb_addonbarv);
 	  
 	  if(addonbar_v_on_the_left) {
-	    if(insert_before_borders) document.getElementById('browser').insertBefore(toolbox_abv,document.getElementById('browser').firstChild);
-	    else document.getElementById('browser').insertBefore(toolbox_abv,document.getElementById('browser').firstChild.nextSibling);
+	    document.getElementById('browser').insertBefore(toolbox_abv,document.getElementById('browser').firstChild);
 	  }
 	  else {
-		if(insert_before_borders) document.getElementById('browser').appendChild(toolbox_abv);
-	    else document.getElementById('browser').insertBefore(toolbox_abv,document.getElementById('browser').lastChild);
+		document.getElementById('browser').appendChild(toolbox_abv);
 	  }
 	  
   	  var observer = new MutationObserver(function(mutations) {
