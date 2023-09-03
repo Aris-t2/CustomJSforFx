@@ -169,6 +169,9 @@ var AddonbarVertical = {
 		  #addonbar_v {
 			border-inline-start: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important;
 		  }
+		  #toolbox_abv{
+			order: 10 !important;
+		  }
 		`;
 	  }
 
