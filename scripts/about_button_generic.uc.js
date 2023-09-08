@@ -11,9 +11,11 @@ try {
 	
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
   ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
-  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+  const sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   
-  var button_label = "About Button (generic)";
+  const button_label = "About Button (generic)";
+  
+  const open_in_a_window = false; // open in a window (true) or tab (false)
 
   CustomizableUI.createWidget({
 	id: "about-button-gen", // button id
@@ -23,13 +25,18 @@ try {
 	tooltiptext: button_label, // tooltip title
 	onClick: function(event) {
 		
-	  var win = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+	  const win = Components.classes["@mozilla.org/appshell/window-mediator;1"]
 		.getService(Components.interfaces.nsIWindowMediator)
 		.getMostRecentWindow("navigator:browser");
 		
       if(event.button=='0') {
 		try {
-		  win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('about:about');
+		  
+		  if(open_in_a_window)
+		    window.open("about:about","","width=1024,height=768, chrome");
+		  else
+			win.gBrowser.selectedTab = win.gBrowser.addTrustedTab('about:about');
+		  
 		} catch (e) {}
 	  }   
 	},
@@ -40,7 +47,7 @@ try {
   });
   
   // style button icon
-  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
+  const uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
 	\
 	  #about-button-gen .toolbarbutton-icon {\
 		list-style-image: url("chrome://global/skin/icons/defaultFavicon.svg"); /* icon / path to icon */ \
