@@ -39,7 +39,7 @@
 // Configuration area - start (all 'false' by default)
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
-var old_search_engine_selection_popup = true; // show old search engine selection popup (true) or not (false)
+var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
 var select_engine_by_click_oneoffs_button = false; // select search engine by left-clicking search icon (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
@@ -404,9 +404,20 @@ function createAddEngineItem(e) {
 		"resource://gre/modules/SearchSuggestionController.sys.mjs",
 	});
 
-	XPCOMUtils.defineLazyModuleGetters(lazy, {
-		FormHistory: "resource://gre/modules/FormhIstory.sys.mjs",
-	});
+	if(appversion < 120) {
+
+	  XPCOMUtils.defineLazyModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
+	  });
+	
+	}
+	
+	if(appversion >= 120) {
+		
+	  ChromeUtils.defineESModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
+	  });
+	}
 
 	/*var _doSearch = searchbar.doSearch.toString();
 	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](

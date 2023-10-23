@@ -403,9 +403,20 @@ function createAddEngineItem(e) {
 		"resource://gre/modules/SearchSuggestionController.sys.mjs",
 	});
 
-	XPCOMUtils.defineLazyModuleGetters(lazy, {
-		FormHistory: "resource://gre/modules/FormHistory.jsm",
-	});
+	if(appversion < 120) {
+
+	  XPCOMUtils.defineLazyModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
+	  });
+	
+	}
+	
+	if(appversion >= 120) {
+		
+	  ChromeUtils.defineESModuleGetters(lazy, {
+		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
+	  });
+	}
 
 	var _doSearch = searchbar.doSearch.toString();
 	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
