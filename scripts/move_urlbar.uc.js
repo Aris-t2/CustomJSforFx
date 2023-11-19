@@ -19,6 +19,7 @@ var bookmarks = CustomizableUI.AREA_BOOKMARKS;
 var backbutton_on_toolbar = navigation;  
 var forwardbutton_on_toolbar = navigation;
 var urlbar_on_toolbar = navigation;
+var extensions_button_on_toolbar = navigation;
 
 /* [target position of item]
 	0 = 1st
@@ -29,7 +30,7 @@ var urlbar_on_toolbar = navigation;
 var backbutton_on_toolbar_position = 0;  
 var forwardbutton_on_toolbar_position = 1;
 var urlbar_on_toolbar_position = 2;
-
+var extensions_button_position = 3;
 
 var MoveUrlbar = {
   init: function() {
@@ -38,6 +39,7 @@ var MoveUrlbar = {
 	  document.getElementById('back-button').setAttribute('removable','true');
 	  document.getElementById('forward-button').setAttribute('removable','true');
 	  document.getElementById('urlbar-container').setAttribute('removable','true');
+	  document.getElementById('unified-extensions-button').setAttribute('removable','true');
 	} catch(e){}
 
 	CustomizableUI.addWidgetToArea("back-button", backbutton_on_toolbar);
@@ -46,11 +48,14 @@ var MoveUrlbar = {
 	CustomizableUI.moveWidgetWithinArea("forward-button", forwardbutton_on_toolbar_position);
 	CustomizableUI.addWidgetToArea("urlbar-container", urlbar_on_toolbar);
 	CustomizableUI.moveWidgetWithinArea("urlbar-container", urlbar_on_toolbar_position);
+	CustomizableUI.addWidgetToArea("unified-extensions-button", extensions_button_on_toolbar);
+	CustomizableUI.moveWidgetWithinArea("unified-extensions-button", extensions_button_position);
 	
 	try {
 	  document.getElementById('back-button').setAttribute('removable','false');
 	  document.getElementById('forward-button').setAttribute('removable','false');
 	  document.getElementById('urlbar-container').setAttribute('removable','false');
+	  document.getElementById('unified-extensions-button').setAttribute('removable','false');
 	} catch(e){}
 
   }
