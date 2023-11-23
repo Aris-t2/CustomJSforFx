@@ -1,5 +1,6 @@
-//posted on Reddit by u/Diab01ica1
-//image changed from menu.svg by Pizzapops.
+// posted on Reddit by u/Diab01ica1
+// image changed from menu.svg by Pizzapops.
+// image changed from chrome://browser/skin/welcome-back.svg to chrome://branding/content/about-logo.png
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
@@ -15,14 +16,14 @@ let listener = {
         if(listener.css !== undefined)
             sss.unregisterSheet(listener.css, sss.AGENT_SHEET);
         
-        listener.css = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
-#' + aWidgetId + '{\
-list-style-image: url("chrome://browser/skin/welcome-back.svg");\
-}\
-#PanelUI-button {\
-display: none !important;\
-}\
-'), null, null);
+        listener.css = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
+			#` + aWidgetId + `{
+			  list-style-image: url('chrome://branding/content/about-logo.png');
+			}
+			#PanelUI-button {
+			  display: none !important;
+			}
+			`), null, null);
         
         sss.loadAndRegisterSheet(listener.css, sss.AGENT_SHEET);
     }
