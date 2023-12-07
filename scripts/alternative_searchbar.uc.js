@@ -430,7 +430,7 @@ function createAddEngineItem(e) {
       }
 `
         + _doSearch.slice(-2) + ")"
-	);
+	).bind(searchbar);
 	
 	
 	// Workaround for the deprecated setIcon function
