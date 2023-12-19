@@ -22,8 +22,8 @@
 // Feature (not optional): search button shows current search engines icon (like with "old" search)
 // Feature (not optional): search buttons dropmarker is always visible (like with "old" search)
 //
-// Option: clear search input after search
-// Option: revert to first search engine in list after search
+// [!Currently broken!] Option: clear search input after search
+// [!Currently broken!] Option: revert to first search engine in list after search
 // Option: old search engine selection popup
 // Option: hide 'add engines' '+' indicator
 // Option: hide 'oneoff' search engines (engines at popups bottom)
@@ -39,7 +39,7 @@
 // Configuration area - start (all 'false' by default)
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
-var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
+var old_search_engine_selection_popup = true; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
 var select_engine_by_click_oneoffs_button = false; // select search engine by left-clicking search icon (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
@@ -145,12 +145,12 @@ var AltSearchbar = {
 	  
 		try {
 			
-			var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
-			hidden_list =  hidden_list ? hidden_list.split(",") : [];					
+			/*var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
+			hidden_list =  hidden_list ? hidden_list.split(",") : [];	*/				
 
 			for (var i = 0; i <= searchbar.engines.length - 1; ++i) {
 						
-				if(!hidden_list.includes(searchbar.engines[i].name)) {
+				//if(!hidden_list.includes(searchbar.engines[i].name)) {
 						
 					menuitem = document.createXULElement("menuitem");;
 					menuitem.setAttribute("label", searchbar.engines[i].name);
@@ -163,24 +163,25 @@ var AltSearchbar = {
 					if (searchbar.engines[i].iconURI)
 						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
 							
-							menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
+					menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 
-							searchbuttonpopup.appendChild(menuitem);
+					searchbuttonpopup.appendChild(menuitem);
 							
-						}
+				//} 
+				updateStyleSheet();
 	  
-					}
+			}
 		
-					menuseparator_om = document.createXULElement("menuseparator");
-					searchbuttonpopup.appendChild(menuseparator_om);
-
-					menuitem_om = document.createXULElement("menuitem");
-					menuitem_om.setAttribute("label", searchsettingslabel);
-					menuitem_om.setAttribute("class", "open-engine-manager");
-					menuitem_om.setAttribute("oncommand", "openPreferences('search');");
-					searchbuttonpopup.appendChild(menuitem_om);	
-
-					updateStyleSheet();
+			menuseparator_om = document.createXULElement("menuseparator");
+			
+			searchbuttonpopup.appendChild(menuseparator_om);
+			
+			menuitem_om = document.createXULElement("menuitem");
+			menuitem_om.setAttribute("label", searchsettingslabel);
+			menuitem_om.setAttribute("class", "open-engine-manager");
+			menuitem_om.setAttribute("oncommand", "openPreferences('search');");
+			searchbuttonpopup.appendChild(menuitem_om);	
+			updateStyleSheet();
 		
 		} catch(exc) {
 		  console.log("Exception AltSearchbar: " + exc);
@@ -402,7 +403,7 @@ function createAddEngineItem(e) {
 		SearchSuggestionController:
 		"resource://gre/modules/SearchSuggestionController.sys.mjs",
 	});
-
+	
 	if(appversion < 120) {
 
 	  XPCOMUtils.defineLazyModuleGetters(lazy, {
@@ -417,7 +418,7 @@ function createAddEngineItem(e) {
 		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
 	  });
 	}
-
+/*	
 	var _doSearch = searchbar.doSearch.toString();
 	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
 		"(" +(_doSearch.startsWith("function")? "":"function ") + _doSearch.slice(0,-2) +
@@ -430,9 +431,8 @@ function createAddEngineItem(e) {
       }
 `
         + _doSearch.slice(-2) + ")"
-	).bind(searchbar);
-	
-	
+	).bind(searchbar);	
+*/	
 	// Workaround for the deprecated setIcon function
 	var oldUpdateDisplay = searchbar.updateDisplay;
 	searchbar.updateDisplay = function() {
