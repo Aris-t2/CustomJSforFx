@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 102+ by Aris
+// 'Alternative search bar' script for Firefox 121+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -12,6 +12,9 @@
 // Thanks to 117649 for the Fx107+ fix
 // https://github.com/Aris-t2/CustomJSforFx/pull/73
 //
+// Thanks to milupo for the Fx121+ workaround
+// https://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-7935627
+//
 // Idea based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
@@ -22,8 +25,8 @@
 // Feature (not optional): search button shows current search engines icon (like with "old" search)
 // Feature (not optional): search buttons dropmarker is always visible (like with "old" search)
 //
-// [!Currently broken!] Option: clear search input after search
-// [!Currently broken!] Option: revert to first search engine in list after search
+// Option: clear search input after search
+// Option: revert to first search engine in list after search
 // Option: old search engine selection popup
 // Option: hide 'add engines' '+' indicator
 // Option: hide 'oneoff' search engines (engines at popups bottom)
@@ -39,7 +42,7 @@
 // Configuration area - start (all 'false' by default)
 var clear_searchbar_after_search = false; // clear input after search (true) or not (false)
 var revert_to_first_engine_after_search = false; // revert to first engine (true) or not (false)
-var old_search_engine_selection_popup = true; // show old search engine selection popup (true) or not (false)
+var old_search_engine_selection_popup = false; // show old search engine selection popup (true) or not (false)
 var select_engine_by_scrolling_over_button = false; // select search engine by scrolling mouse wheel over search bars button (true) or not (false)
 var select_engine_by_click_oneoffs_button = false; // select search engine by left-clicking search icon (true) or not (false)
 var hide_oneoff_search_engines = false; // hide 'one off' search engines (true) or not (false)
@@ -418,6 +421,8 @@ function createAddEngineItem(e) {
 		FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
 	  });
 	}
+	
+/* incompatible with Firefox 121*/
 /*	
 	var _doSearch = searchbar.doSearch.toString();
 	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
@@ -432,7 +437,70 @@ function createAddEngineItem(e) {
 `
         + _doSearch.slice(-2) + ")"
 	).bind(searchbar);	
-*/	
+*/
+/* workaround for the above problem */
+	if(clear_searchbar_after_search && searchbar.doSearch) {
+	  setTimeout(function() {
+		if (!window.BrowserSearch)
+			return;
+		
+		var searchbar = BrowserSearch.searchBar;
+		
+		if (!searchbar)
+			return;
+		
+		var textbox = searchbar.textbox;
+		var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
+
+
+		textbox.addEventListener('keydown', function(e) {
+		   if (e.keyCode === 13){
+			textbox.value = '';
+			document.getElementById('PopupSearchAutoComplete').hidePopup();
+		  }
+		});
+		
+		searchbar_go_button.addEventListener('click', function(e) {
+		  if (e.button == 0){
+			textbox.value = '';
+			document.getElementById('PopupSearchAutoComplete').hidePopup();
+		  }
+		});
+		
+	  }, 0);
+	}
+	
+	if(revert_to_first_engine_after_search && searchbar.doSearch) {
+	  setTimeout(function() {
+		if (!window.BrowserSearch)
+			return;
+		
+		var searchbar = BrowserSearch.searchBar;
+		
+		if (!searchbar)
+			return;
+		
+		var textbox = searchbar.textbox;
+		var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
+
+
+		textbox.addEventListener('keydown', function(e) {
+		   if (e.keyCode === 13){
+				searchbar.currentEngine = searchbar.engines[0];
+				updateStyleSheet();
+		  }
+		});
+		
+		searchbar_go_button.addEventListener('click', function(e) {
+		  if (e.button == 0){
+				searchbar.currentEngine = searchbar.engines[0];
+				updateStyleSheet();
+		  }
+		});
+
+	  }, 0);
+	}
+
 	// Workaround for the deprecated setIcon function
 	var oldUpdateDisplay = searchbar.updateDisplay;
 	searchbar.updateDisplay = function() {
