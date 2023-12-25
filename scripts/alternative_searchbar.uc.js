@@ -453,6 +453,13 @@ function createAddEngineItem(e) {
 		var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
 
 
+		document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
+		  if (e.button == 0){
+			textbox.value = '';
+			document.getElementById('PopupSearchAutoComplete').hidePopup();
+		  }
+		});
+		
 		textbox.addEventListener('keydown', function(e) {
 		   if (e.keyCode === 13){
 			textbox.value = '';
@@ -483,18 +490,24 @@ function createAddEngineItem(e) {
 		var textbox = searchbar.textbox;
 		var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
 
+		document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
+		  if (e.button == 0){
+			searchbar.currentEngine = searchbar.engines[0];
+			updateStyleSheet();
+		  }
+		});
 
 		textbox.addEventListener('keydown', function(e) {
 		   if (e.keyCode === 13){
-				searchbar.currentEngine = searchbar.engines[0];
-				updateStyleSheet();
+			searchbar.currentEngine = searchbar.engines[0];
+			updateStyleSheet();
 		  }
 		});
 		
 		searchbar_go_button.addEventListener('click', function(e) {
 		  if (e.button == 0){
-				searchbar.currentEngine = searchbar.engines[0];
-				updateStyleSheet();
+			searchbar.currentEngine = searchbar.engines[0];
+			updateStyleSheet();
 		  }
 		});
 
