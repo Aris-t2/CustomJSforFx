@@ -422,23 +422,8 @@ function createAddEngineItem(e) {
 	  });
 	}
 	
-/* incompatible with Firefox 121*/
-/*	
-	var _doSearch = searchbar.doSearch.toString();
-	searchbar.doSearch = Cu.getGlobalForObject(this)["ev"+"al"](
-		"(" +(_doSearch.startsWith("function")? "":"function ") + _doSearch.slice(0,-2) +
-`
-      if(clear_searchbar_after_search)
-            this.value = '';
-      if(revert_to_first_engine_after_search) {
-            searchbar.currentEngine = searchbar.engines[0];
-            updateStyleSheet();
-      }
-`
-        + _doSearch.slice(-2) + ")"
-	).bind(searchbar);	
-*/
-/* workaround for the above problem */
+
+	/* clear searchbar after search */
 	if(clear_searchbar_after_search && searchbar.doSearch) {
 	  setTimeout(function() {
 		if (!window.BrowserSearch)
@@ -454,21 +439,21 @@ function createAddEngineItem(e) {
 
 
 		document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
-		  if (e.button == 0){
+		  if (e.button == 0 || e.button == 1) {
 			textbox.value = '';
 			document.getElementById('PopupSearchAutoComplete').hidePopup();
 		  }
 		});
 		
 		textbox.addEventListener('keydown', function(e) {
-		   if (e.keyCode === 13){
+		   if (e.keyCode === 13) {
 			textbox.value = '';
 			document.getElementById('PopupSearchAutoComplete').hidePopup();
 		  }
 		});
 		
 		searchbar_go_button.addEventListener('click', function(e) {
-		  if (e.button == 0){
+		  if (e.button == 0 || e.button == 1) {
 			textbox.value = '';
 			document.getElementById('PopupSearchAutoComplete').hidePopup();
 		  }
@@ -477,6 +462,7 @@ function createAddEngineItem(e) {
 	  }, 0);
 	}
 	
+	/* revert to first search engine after search */
 	if(revert_to_first_engine_after_search && searchbar.doSearch) {
 	  setTimeout(function() {
 		if (!window.BrowserSearch)
@@ -491,21 +477,21 @@ function createAddEngineItem(e) {
 		var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
 
 		document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
-		  if (e.button == 0){
+		  if (e.button == 0 || e.button == 1) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		  }
 		});
 
 		textbox.addEventListener('keydown', function(e) {
-		   if (e.keyCode === 13){
+		   if (e.keyCode === 13) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		  }
 		});
 		
 		searchbar_go_button.addEventListener('click', function(e) {
-		  if (e.button == 0){
+		  if (e.button == 0 || e.button == 1) {
 			searchbar.currentEngine = searchbar.engines[0];
 			updateStyleSheet();
 		  }
