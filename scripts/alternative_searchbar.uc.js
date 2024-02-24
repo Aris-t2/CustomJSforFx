@@ -517,6 +517,16 @@ function createAddEngineItem(e) {
 	  var show_search_engine_names_with_scrollbar_code = '';
 	  var hide_addengines_plus_indicator_code = '';
 	  var switch_glass_and_engine_icon_code = '';
+	  
+	  var icon_url = null;
+	  
+	  try {
+		if(appversion >= 123) {
+			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
+		} else {
+			icon_url = searchbar.currentEngine.iconURI.spec;
+		}
+	  } catch{}
 
 	  if(hide_oneoff_search_engines)
 		hide_oneoff_search_engines_code=`
@@ -602,7 +612,7 @@ function createAddEngineItem(e) {
 	  if(switch_glass_and_engine_icon)
 	   switch_glass_and_engine_icon_code=`
 		.search-go-button {
-		  list-style-image: url(`+document.getElementById("searchbar").currentEngine.iconURI.spec+`) !important;
+		  list-style-image: url(`+icon_url+`) !important;
 		  transform: scaleX(1) !important;
 		}
 		.searchbar-search-button .searchbar-search-icon {
@@ -627,7 +637,7 @@ function createAddEngineItem(e) {
 		  margin-inline-start: -1px;
 		}
 		.searchbar-search-button .searchbar-search-icon {
-		  list-style-image: url(`+document.getElementById("searchbar").currentEngine.iconURI.spec+`) !important;
+		  list-style-image: url(`+icon_url+`) !important;
 		}
 		.search-go-button {
 		  list-style-image: url("chrome://global/skin/icons/search-glass.svg") !important;
