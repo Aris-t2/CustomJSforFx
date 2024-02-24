@@ -5,6 +5,8 @@
 // Fx 77+ fix provided by anomiex
 
 var tries = 30;
+var appversion = parseInt(Services.appinfo.version);
+
 var init = function() {
   // Sometimes search interface is not being created in time. Retry (up to 30 times) until it does.
   try {
@@ -17,6 +19,16 @@ var init = function() {
 
   try {
 	var searchbar = document.getElementById("searchbar");
+	
+	var icon_url = null;
+	  
+	try {
+		if(appversion >= 123) {
+			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
+		} else {
+			icon_url = searchbar.currentEngine.iconURI.spec;
+		}
+	} catch{}
 
 	updateStyleSheet();
 
@@ -33,7 +45,7 @@ var init = function() {
 
 	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
 		.searchbar-search-button .searchbar-search-icon { \
-		  list-style-image: url('+document.getElementById("searchbar").currentEngine.iconURI.spec+') !important; \
+		  list-style-image: url('+icon_url+') !important; \
 		} \
 		\
 	  '), null, null);
