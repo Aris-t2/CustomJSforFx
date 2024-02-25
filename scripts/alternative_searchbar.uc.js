@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 121+ by Aris
+// 'Alternative search bar' script for Firefox 123+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -146,14 +146,9 @@ var AltSearchbar = {
 		searchbuttonpopup.setAttribute("width", searchbar.getBoundingClientRect().width - 6 );
 		searchbuttonpopup.setAttribute("position", "after_start");
 	  
-		try {
-			
-			/*var hidden_list = Services.prefs.getStringPref("browser.search.hiddenOneOffs");
-			hidden_list =  hidden_list ? hidden_list.split(",") : [];	*/				
+		try {	
 
 			for (var i = 0; i <= searchbar.engines.length - 1; ++i) {
-						
-				//if(!hidden_list.includes(searchbar.engines[i].name)) {
 						
 					menuitem = document.createXULElement("menuitem");;
 					menuitem.setAttribute("label", searchbar.engines[i].name);
@@ -163,14 +158,16 @@ var AltSearchbar = {
 					if (searchbar.engines[i] == searchbar.currentEngine)
 							menuitem.setAttribute("selected", "true");
 			
-					if (searchbar.engines[i].iconURI)
-						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);
+					if (searchbar.engines[i].getIconURL)
+						menuitem.setAttribute("image",searchbar.engines[i].getIconURL());
+					
+					if (appversion < 123 && searchbar.engines[i].iconURI)
+						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);	
 							
 					menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine("+i+")");
 
 					searchbuttonpopup.appendChild(menuitem);
-							
-				//} 
+
 				updateStyleSheet();
 	  
 			}
