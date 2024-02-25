@@ -1,61 +1,69 @@
-// 'Search engine icon in search bar' script for Firefox 60+ by Aris
-//
-// Feature: search button shows current search engines icon (like with old search)
-// based on 'alternative_searchbar.uc.js'
-// Fx 77+ fix provided by anomiex
+// 'Search_engine icon in search bar' script for Firefox 123+ by Aris
+// based on alternative_searchbar.uc.js
 
-var tries = 30;
+var init_delay_ms = 0;
 var appversion = parseInt(Services.appinfo.version);
 
-var init = function() {
-  // Sometimes search interface is not being created in time. Retry (up to 30 times) until it does.
-  try {
-	document.getElementById("searchbar").currentEngine;
-  } catch(e) {
-	if (--tries > 0) {
-	  setTimeout(init, 1000);
-	}
-  }
+var SearchIconInSearchbar = {
+ init: async function() {
+   await Services.search.wrappedJSObject.init();
 
-  try {
+   if (location != 'chrome://browser/content/browser.xhtml')
+    return;
+
+   window.removeEventListener("load", SearchIconInSearchbar.init, false);
+
+   try {
+	   
 	var searchbar = document.getElementById("searchbar");
 	
-	var icon_url = null;
-	  
-	try {
-		if(appversion >= 123) {
-			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
-		} else {
-			icon_url = searchbar.currentEngine.iconURI.spec;
-		}
-	} catch{}
-
-	updateStyleSheet();
-
-	// Override updateDisplay() from browsers internal 'searchbar.js' file to also update the icon
+	// Workaround for the deprecated setIcon function
 	var oldUpdateDisplay = searchbar.updateDisplay;
 	searchbar.updateDisplay = function() {
 	  oldUpdateDisplay.call(this);
 	  updateStyleSheet();
 	};
-
-	// main style sheet
+	
+	// style sheet
 	function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
+	  
+	  var icon_url = null;
+	  
+	  try {
+		if(appversion >= 123) {
+			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
+		} else {
+			icon_url = searchbar.currentEngine.iconURI.spec;
+		}
+	  } catch{}
 
-	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(' \
-		.searchbar-search-button .searchbar-search-icon { \
-		  list-style-image: url('+icon_url+') !important; \
-		} \
-		\
-	  '), null, null);
+	  var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
+		.searchbar-search-button .searchbar-search-icon {
+		  list-style-image: url(`+icon_url+`) !important;
+		}
+	  `), null, null);
 
 	  // remove old style sheet
-	  if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) { sss.unregisterSheet(uri,sss.AGENT_SHEET); }
+	  if (sss.sheetRegistered(uri,sss.AGENT_SHEET)) {
+		sss.unregisterSheet(uri,sss.AGENT_SHEET);
+	  }
+
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 
 	};
 
-  } catch(e) {}
+   } catch(e) {} 
+
+ }
 }
-setTimeout(init, 1000);
+
+/* if search is not hidden on current window, wait for searchbar loading and then initialize 'search icon' (with delay) */
+if(!document.firstElementChild.hasAttribute("chromehidden") || !document.firstElementChild.getAttribute("chromehidden").includes("toolbar")) {
+	if (document.readyState === "complete") {
+		setTimeout(SearchIconInSearchbar.init, init_delay_ms);
+	}
+	else {
+		window.addEventListener("load", SearchIconInSearchbar.init, false);
+	}
+}
