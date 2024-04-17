@@ -25,14 +25,14 @@ var SearchIconInSearchbar = {
 	};
 	
 	// style sheet
-	function updateStyleSheet() {
+	async function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 	  
 	  var icon_url = null;
 	  
 	  try {
 		if(appversion >= 123) {
-			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
+			icon_url = await document.getElementById("searchbar").currentEngine.getIconURL();
 		} else {
 			icon_url = searchbar.currentEngine.iconURI.spec;
 		}
