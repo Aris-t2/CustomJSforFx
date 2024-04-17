@@ -153,13 +153,13 @@ var AltSearchbar = {
 					menuitem = document.createXULElement("menuitem");;
 					menuitem.setAttribute("label", searchbar.engines[i].name);
 					menuitem.setAttribute("tooltiptext", searchbar.engines[i].name);
-							menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
+					menuitem.setAttribute("class", "menuitem-iconic searchbar-engine-menuitem menuitem-with-favicon");
 			
 					if (searchbar.engines[i] == searchbar.currentEngine)
 							menuitem.setAttribute("selected", "true");
 			
 					if (searchbar.engines[i].getIconURL)
-						menuitem.setAttribute("image",searchbar.engines[i].getIconURL());
+						menuitem.setAttribute("image",await searchbar.engines[i].getIconURL());
 					
 					if (appversion < 123 && searchbar.engines[i].iconURI)
 						menuitem.setAttribute("image",searchbar.engines[i].iconURI.spec);	
