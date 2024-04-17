@@ -1,4 +1,4 @@
-// 'Alternative search bar' script for Firefox 123+ by Aris
+// 'Alternative search bar' script for Firefox 125+ by Aris
 //
 // Thanks to UndeadStar (aka BoomerangAide) for Fx 69+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/issues/11
@@ -505,7 +505,7 @@ function createAddEngineItem(e) {
 	};
 	
 	// main style sheet
-	function updateStyleSheet() {
+	async function updateStyleSheet() {
 	  var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 	  var hide_oneoff_search_engines_code = '';
@@ -519,7 +519,7 @@ function createAddEngineItem(e) {
 	  
 	  try {
 		if(appversion >= 123) {
-			icon_url = document.getElementById("searchbar").currentEngine.getIconURL();
+			icon_url = await document.getElementById("searchbar").currentEngine.getIconURL();
 		} else {
 			icon_url = searchbar.currentEngine.iconURI.spec;
 		}
