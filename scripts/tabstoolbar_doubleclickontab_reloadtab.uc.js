@@ -1,4 +1,4 @@
-// 'Doubleclick on tab reloads tab' script for Firefox 60+ by Aris
+// 'Doubleclick on tab reloads tab' script for Firefox 126+ by Aris
 
 var DoubleClickOnTabReloadTab = {
   init: function() {
@@ -10,7 +10,7 @@ var DoubleClickOnTabReloadTab = {
 	  if(e.button==0)
 	  {
 
-		BrowserReload();
+		BrowserCommands.reload();
 		e.stopPropagation();
 		e.preventDefault();
 

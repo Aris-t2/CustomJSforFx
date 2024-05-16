@@ -58,7 +58,12 @@ var AddonbarVertical = {
 	  
 	  toolbox_abv.appendChild(tb_addonbarv);
 	  
-	  CustomizableUI.registerArea('addonbar_v', {legacy: true});
+	  //CustomizableUI.registerArea('addonbar_v', {legacy: true});
+
+	  setTimeout(function(){
+		CustomizableUI.registerArea('addonbar_v', {legacy: true});
+	  },2000);
+	  
 	  CustomizableUI.registerToolbarNode(tb_addonbarv);
 	  
 	  if(addonbar_v_on_the_left) {
@@ -180,10 +185,10 @@ var AddonbarVertical = {
 		  background-clip: padding-box;
 		  color: var(--toolbar-color, inherit);
 		}
-		#main-window:-moz-lwtheme #addonbar_v {
+		:root[lwtheme] #addonbar_v {
 		  background: var(--lwt-accent-color) !important;
 		}
-		#main-window[lwtheme-image='true']:-moz-lwtheme #addonbar_v {
+		:root[lwtheme][lwtheme-image='true'] #addonbar_v {
 		  background: var(--lwt-header-image) !important;
 		  background-position: 0vw 50vh !important;
 		}
@@ -205,7 +210,7 @@ var AddonbarVertical = {
 		  outline: 1px dashed !important;
 		  outline-offset: -2px !important;
 		}
-		#addonbar_v:-moz-lwtheme {
+		:root[lwtheme] #addonbar_v {
 		  background: var(--lwt-header-image) !important;
 		  background-position: 100vw 50vh !important;
 		}
@@ -213,6 +218,10 @@ var AddonbarVertical = {
 		#addonbar_v toolbar .toolbarbutton-1 {
 		  padding: 0 !important;
 		}
+		#unified-extensions-button[hidden]{
+			visibility: visible !important;
+			display: flex !important;
+		  }
 		`+end_border+`
 	  `;
 	}

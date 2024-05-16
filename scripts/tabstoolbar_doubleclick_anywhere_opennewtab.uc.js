@@ -13,7 +13,7 @@ var DoubleClickAnywhereOnTabsToolbar = {
 			e.stopPropagation();
 			e.preventDefault();
 			
-			BrowserOpenTab();
+			BrowserCommands.openTab();
 
 		}
 	  }, true);

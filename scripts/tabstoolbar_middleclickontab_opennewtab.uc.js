@@ -1,4 +1,4 @@
-// 'Middle click on tab opens a new tab' script for Firefox 60+ by Aris
+// 'Middle click on tab opens a new tab' script for Firefox 126+ by Aris
 
 
 var NewTabOnMiddleClickonTab = {
@@ -15,7 +15,7 @@ var NewTabOnMiddleClickonTab = {
 			e.stopPropagation();
 			e.preventDefault();
 			
-			BrowserOpenTab();
+			BrowserCommands.openTab();
 
 		  }
 	  }, true);

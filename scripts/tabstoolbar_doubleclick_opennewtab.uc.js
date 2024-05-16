@@ -1,4 +1,4 @@
-// 'Double click on tabs toolbar opens a new tab' script for Firefox 91+ by Aris
+// 'Double click on tabs toolbar opens a new tab' script for Firefox 126+ by Aris
 // Script is only for Firefox titlebar not OS titlebar:
 // Customizing mode > 'Titlebar' checkbox > unchecked
 
@@ -12,7 +12,7 @@ var NewTabOnDoubleClick = {
 				
 	  if(e.button==0 && e.target.localName == "arrowscrollbox")
 	  {
-		BrowserOpenTab();
+		BrowserCommands.openTab();
 		e.stopPropagation();
 		e.preventDefault();
 
