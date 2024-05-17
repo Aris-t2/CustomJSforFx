@@ -1,4 +1,4 @@
-// Add-on Bar script for Firefox 102+ by Aris
+// Add-on Bar script for Firefox 126+ by Aris
 //
 // no 'close' button
 // 'toggle' toolbar with 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS
@@ -83,10 +83,10 @@ var AddAddonbar = {
 			background-image: var(--toolbar-bgimage);
 			-moz-window-dragging: no-drag !important;
 		  }
-		  #main-window:-moz-lwtheme #addonbar {
+		  :root[lwtheme]  #addonbar {
 			background: var(--lwt-accent-color) !important;
 		  }
-		  #main-window[lwtheme-image='true']:-moz-lwtheme #addonbar {
+		  :root[lwtheme][lwtheme-image='true'] #addonbar {
 			background: var(--lwt-header-image) !important;
 			background-position: 0vw 50vh !important;
 		  }
