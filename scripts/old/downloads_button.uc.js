@@ -1,4 +1,4 @@
-// Downloads button script for Firefox 127+ by Aris
+// Downloads button script for Firefox 60+ by Aris
 //
 // left-click on custom downloads button: opens downloads library
 // middle-click on custom downloads button: opens 'about:downloads' in a new tab
@@ -22,10 +22,17 @@ try {
 	onClick: function(event) {
 	  if(event.button=='0') {
 		try {
-		  BrowserCommands.downloadsUI();
+		  //DownloadsPanel.showDownloadsHistory();
+		  BrowserDownloadsUI(); // equals the above call
 		} catch (e) {}
 	  } else if(event.button=='1') {
 		try {
+		  /*var mainWindow = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+							.getService(Components.interfaces.nsIWindowMediator)
+							.getMostRecentWindow("navigator:browser");
+		  mainWindow.gBrowser.selectedTab = gBrowser.addTab('about:downloads', {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});*/
+		  //mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addWebTab('about:downloads');
+		  //mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTrustedTab('about:downloads');
 		  gBrowser.selectedTab = gBrowser.addTrustedTab('about:downloads');
 		} catch (e) {}
 	  }
