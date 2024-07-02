@@ -46,6 +46,7 @@ var AdditionalTopToolbars = {
 		  toptoolbar.setAttribute("context","toolbar-context-menu");
 		  toptoolbar.setAttribute("lockiconsize","true");
 		  toptoolbar.setAttribute("defaultset","spring");
+		  toptoolbar.setAttribute("accesskey","");		  
 		
 		  document.querySelector('#navigator-toolbox').appendChild(toptoolbar);
 		  
