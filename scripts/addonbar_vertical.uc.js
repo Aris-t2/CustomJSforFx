@@ -58,7 +58,7 @@ var AddonbarVertical = {
 	  
 	  toolbox_abv.appendChild(tb_addonbarv);
 	  
-	  //CustomizableUI.registerArea('addonbar_v', {legacy: true});
+	  CustomizableUI.registerArea('addonbar_v', {legacy: true});
 
 	  setTimeout(function(){
 		CustomizableUI.registerArea('addonbar_v', {legacy: true});
@@ -225,30 +225,34 @@ var AddonbarVertical = {
 		#addonbar_v toolbaritem separator {
 			display: none !important;
 		}
-		#addonbar_v toolbaritem {
+		#main-window:not([customizing]) #addonbar_v toolbaritem {
 		  writing-mode: vertical-rl !important;
 		  text-orientation: mixed !important;
 		  transform: rotate(0deg) !important;
 		}
-		#addonbar_v #search-container,
-		#addonbar_v #wrapper-search-container {
+		#main-window:not([customizing]) #addonbar_v #search-container,
+		#main-window:not([customizing]) #addonbar_v #wrapper-search-container {
 		  flex: unset !important;
 		}
-		#addonbar_v #search-container {
+		#main-window:not([customizing]) #addonbar_v #search-container {
 		  min-width: unset !important;
 		  width: unset !important;
 		  height: 100px !important;
 
 		  &[width] {
-			flex:  unset !important;
+			flex: unset !important;
 		  }
 		}
-		#addonbar_v #zoom-reset-button > .toolbarbutton-text {
+		#main-window:not([customizing]) #addonbar_v #zoom-reset-button > .toolbarbutton-text {
 		  min-width: unset !important;
 		  min-height: unset !important;
 		}
-		#addonbar_v #zoom-reset-button:not([label]) {
+		#main-window:not([customizing]) #addonbar_v #zoom-reset-button:not([label]) {
 		  display: none !important;
+		}
+		#main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
+		  width: unset !important;
+		  padding-inline: 8px !important;
 		}
 		`+end_border+`
 	  `;
