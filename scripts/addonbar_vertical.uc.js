@@ -210,10 +210,10 @@ var AddonbarVertical = {
 		  outline: 1px dashed !important;
 		  outline-offset: -2px !important;
 		}
-		:root[lwtheme] #addonbar_v {
+		/*:root[lwtheme] #addonbar_v {
 		  background: var(--lwt-header-image) !important;
 		  background-position: 100vw 50vh !important;
-		}
+		}*/
 		#addonbar_v toolbarbutton,
 		#addonbar_v toolbar .toolbarbutton-1 {
 		  padding: 0 !important;
