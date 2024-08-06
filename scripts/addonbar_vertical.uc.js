@@ -76,7 +76,7 @@ var AddonbarVertical = {
   	  var observer = new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
 		  try {
-			if(document.querySelector('#main-window').getAttribute('customizing')) {
+			if(document.querySelector('#browser').getAttribute('hidden') || document.querySelector('#main-window').getAttribute('customizing')) {
 			  document.querySelector('#addonbar_v').setAttribute('orient','horizontal');
 			  document.querySelector('#navigator-toolbox').appendChild(document.querySelector('#addonbar_v'));
 			}
@@ -210,10 +210,6 @@ var AddonbarVertical = {
 		  outline: 1px dashed !important;
 		  outline-offset: -2px !important;
 		}
-		/*:root[lwtheme] #addonbar_v {
-		  background: var(--lwt-header-image) !important;
-		  background-position: 100vw 50vh !important;
-		}*/
 		#addonbar_v toolbarbutton,
 		#addonbar_v toolbar .toolbarbutton-1 {
 		  padding: 0 !important;
@@ -225,10 +221,15 @@ var AddonbarVertical = {
 		#addonbar_v toolbaritem separator {
 			display: none !important;
 		}
-		#main-window:not([customizing]) #addonbar_v toolbaritem {
+		#main-window:not([customizing]) #addonbar_v > toolbaritem {
 		  writing-mode: vertical-rl !important;
 		  text-orientation: mixed !important;
 		  transform: rotate(0deg) !important;
+		}
+		#main-window:not([customizing]) #addonbar_v > toolbaritem menupopup{
+		  max-height: 170px !important;
+		  max-width: 170px !important;
+		  transform: rotate(-90deg) !important;
 		}
 		#main-window:not([customizing]) #addonbar_v #search-container,
 		#main-window:not([customizing]) #addonbar_v #wrapper-search-container {
@@ -252,7 +253,7 @@ var AddonbarVertical = {
 		}
 		#main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
 		  width: unset !important;
-		  padding-inline: 8px !important;
+		  padding-inline: 10px !important;
 		}
 		`+end_border+`
 	  `;
