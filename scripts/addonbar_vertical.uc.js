@@ -253,7 +253,7 @@ var AddonbarVertical = {
 		}
 		#main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
 		  width: unset !important;
-		  padding-inline: 10px !important;
+		  height: 16px !important;
 		}
 		`+end_border+`
 	  `;
