@@ -226,10 +226,16 @@ var AddonbarVertical = {
 		  text-orientation: mixed !important;
 		  transform: rotate(0deg) !important;
 		}
-		#main-window:not([customizing]) #addonbar_v > toolbaritem menupopup{
+		#main-window:not([customizing]) #addonbar_v > toolbaritem menupopup {
 		  max-height: 170px !important;
 		  max-width: 170px !important;
 		  transform: rotate(-90deg) !important;
+		}
+		#main-window:not([customizing]) #addonbar_v > toolbaritem .toolbarbutton-badge {
+		  transform: rotate(-90deg) !important;
+		  position: absolute !important;
+		  right: -6px !important;
+		  top: 4px !important;
 		}
 		#main-window:not([customizing]) #addonbar_v #search-container,
 		#main-window:not([customizing]) #addonbar_v #wrapper-search-container {
