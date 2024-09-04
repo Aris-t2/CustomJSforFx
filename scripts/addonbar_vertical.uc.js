@@ -234,8 +234,8 @@ var AddonbarVertical = {
 		#main-window:not([customizing]) #addonbar_v > toolbaritem .toolbarbutton-badge {
 		  transform: rotate(-90deg) !important;
 		  position: absolute !important;
-		  right: -6px !important;
-		  top: 4px !important;
+		  padding: 1px 2px !important;
+		  top: -4px !important;
 		}
 		#main-window:not([customizing]) #addonbar_v #search-container,
 		#main-window:not([customizing]) #addonbar_v #wrapper-search-container {
