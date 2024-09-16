@@ -106,7 +106,7 @@ var AddonbarVertical = {
 			label: button_label, // button title
 			tooltiptext: button_label, // tooltip title
 			onClick: function(event) {
-			  if(event.button==0) {
+			  if(event.button==0 || event.button==1) {
 			    var windows = Services.wm.getEnumerator(null);
 				while (windows.hasMoreElements()) {
 				  var win = windows.getNext();
