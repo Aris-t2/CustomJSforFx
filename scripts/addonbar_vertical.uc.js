@@ -55,6 +55,7 @@ var AddonbarVertical = {
 	  tb_addonbarv.setAttribute('label', addonbar_v_label);
 	  tb_addonbarv.setAttribute('lockiconsize','true');
 	  tb_addonbarv.setAttribute('defaultset','spring');
+	  tb_addonbarv.setAttribute("accesskey","");
 	  
 	  toolbox_abv.appendChild(tb_addonbarv);
 	  
@@ -341,4 +342,3 @@ setTimeout(function(){
   AddonbarVertical.init();
 },2000);
 */
-
