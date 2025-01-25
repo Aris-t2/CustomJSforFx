@@ -11,8 +11,6 @@
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
 
-var appversion = parseInt(Services.appinfo.version);
-
 var compact_buttons = false; // reduced toolbar height and smaller buttons
 
 var AddAddonbar = {
@@ -32,6 +30,7 @@ var AddAddonbar = {
 
 	var addonbar_label = 'Add-on Bar';
 	var compact_buttons_code = '';
+	var h_button_label = 'Toggle horizontal Add-on Bar'; // Toggle button name
 	
 	if(compact_buttons)
 	  compact_buttons_code = `
@@ -84,7 +83,7 @@ var AddAddonbar = {
 			background-image: var(--toolbar-bgimage);
 			-moz-window-dragging: no-drag !important;
 		  }
-		  :root[lwtheme] #addonbar {
+		  :root[lwtheme]  #addonbar {
 			background: var(--lwt-accent-color) !important;
 		  }
 		  :root[lwtheme][lwtheme-image='true'] #addonbar {
@@ -104,9 +103,10 @@ var AddAddonbar = {
 			height: 24px !important;
 			max-height: 24px !important;
 		  }*/
-		  #unified-extensions-button[hidden]{
-			visibility: visible !important;
-			display: flex !important;
+		  #togglebutton_addonbar_h .toolbarbutton-icon { \
+		    list-style-image: url('chrome://browser/skin/sidebars.svg');
+		    fill: green; 
+			transform: rotate(270deg);
 		  }
 		  `+compact_buttons_code+`
 	  `), null, null),
@@ -129,13 +129,8 @@ var AddAddonbar = {
 		tb_addonbar.setAttribute('class','toolbar-primary chromeclass-toolbar browser-toolbar customization-target');
 
 		document.getElementById('browser').parentNode.appendChild(tb_addonbar);
-		//tb_addonbar.insertBefore(document.querySelector('#statuspanel'),tb_addonbar.firstChild);
 		
 		CustomizableUI.registerArea('addonbar', {legacy: true});
-		
-		setTimeout(function(){
-		  CustomizableUI.registerArea('addonbar', {legacy: true});
-		},2000);
 	  
 		CustomizableUI.registerToolbarNode(tb_addonbar);
 		
@@ -144,17 +139,58 @@ var AddAddonbar = {
 		key.id = 'key_toggleAddonBar';
 		key.setAttribute('key', '/');
 		key.setAttribute('modifiers', 'accel');
-		key.setAttribute('oncommand',`
-			var newAddonBar = document.getElementById('addonbar');
-			setToolbarVisibility(newAddonBar, newAddonBar.collapsed);
-			Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!newAddonBar.collapsed);
-		  `);
+	    key.setAttribute('oncommand',`
+			var windows = Services.wm.getEnumerator(null);
+			while (windows.hasMoreElements()) {
+			  var win = windows.getNext();
+			  var hAddonBar = win.document.getElementById('addonbar');
+			  setToolbarVisibility(hAddonBar, hAddonBar.collapsed);
+			  Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!hAddonBar.collapsed);
+			  if(!hAddonBar.collapsed)
+				win.document.querySelector('#togglebutton_addonbar_h').setAttribute('checked','true');
+			  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
+			}
+	    `);
 		document.getElementById('mainKeyset').appendChild(key);
 		
 		
 		try {
 		  setToolbarVisibility(document.getElementById('addonbar'), Services.prefs.getBranch('browser.addonbar.').getBoolPref('enabled'));
 		} catch(e) {}
+		
+		
+		CustomizableUI.createWidget({
+			id: 'togglebutton_addonbar_h', // button id
+			defaultArea: CustomizableUI.AREA_NAVBAR,
+			removable: true,
+			label: h_button_label, // button title
+			tooltiptext: h_button_label, // tooltip title
+			onClick: function(event) {
+			  if(event.button==0) {
+			    var windows = Services.wm.getEnumerator(null);
+				while (windows.hasMoreElements()) {
+				  var win = windows.getNext();
+				  
+				  var hAddonBar = win.document.getElementById('addonbar');
+				  setToolbarVisibility(hAddonBar, hAddonBar.collapsed);
+					  
+				  
+				  Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!hAddonBar.collapsed);
+				  
+				  if(!hAddonBar.collapsed)
+					win.document.querySelector('#togglebutton_addonbar_h').setAttribute('checked','true');
+				  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
+				}
+			  }
+			},
+			onCreated: function(button) {
+			  if(Services.prefs.getBranch('browser.addonbar.').getBoolPref('enabled'))
+			    button.setAttribute('checked','true');
+			  return button;
+			}
+				
+		});
+		
 	  
 	  }
 	} catch(e) {}
@@ -166,23 +202,3 @@ var AddAddonbar = {
 /* initialization delay workaround */
 document.addEventListener('DOMContentLoaded', AddAddonbar.init(), false);
 /* Use the below code instead of the one above this line, if issues occur */
-/*
-setTimeout(function(){
-  AddAddonbar.init();
-},2000);
-*/
-
-/* fix for downloads button on add-on bar - thanks to dimdamin */
-/* https://github.com/Aris-t2/CustomJSforFx/issues/125#issuecomment-2506613776 */
-(async url => !location.href.startsWith(url) || await delayedStartupPromise ||
-	(async (scrNT, nTjs) => {
-		if (scrNT.length >= 1) {
-			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
-			nTjs.res = await fetch(scrNT[0].src);
-			nTjs.src = (await nTjs.res.text())
-				.replace(/navigator-toolbox/, "addonbar_v")
-				.replace(/widget-overflow/, "addonbar");
-			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
-		};
-	})(document.getElementById("navigator-toolbox").querySelectorAll(":scope > script"), {})
-)("chrome://browser/content/browser.x");

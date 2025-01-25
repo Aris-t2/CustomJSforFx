@@ -179,8 +179,7 @@ var AltSearchbar = {
 			menuitem_om = document.createXULElement("menuitem");
 			menuitem_om.setAttribute("label", searchsettingslabel);
 			menuitem_om.setAttribute("class", "open-engine-manager");
-			//menuitem_om.setAttribute("oncommand", "openPreferences('search');");
-			menuitem_om.addEventListener("command", () => {openPreferences('search');} );
+			menuitem_om.setAttribute("oncommand", "openPreferences('search');");
 			searchbuttonpopup.appendChild(menuitem_om);	
 			updateStyleSheet();
 		
@@ -254,8 +253,7 @@ var AltSearchbar = {
                     if (searchbar.engines[i].iconURI)
                         menuitem.setAttribute("image", searchbar.engines[i].iconURI.spec);
 
-                    //menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine(" + i + ")");
-					menuitem.addEventListener("command", () => {document.getElementById('searchbar').setNewSearchEngine(" + i + ");} );
+                    menuitem.setAttribute("oncommand", "document.getElementById('searchbar').setNewSearchEngine(" + i + ")");
 
                     searchbuttonpopup.insertBefore(menuitem, separator);
 
@@ -326,9 +324,7 @@ function createAddEngineItem(e) {
 						menuitem.setAttribute("tooltiptext", native_popup_search_add_items[i].getAttribute("label"));
 						menuitem.setAttribute("uri", native_popup_search_add_items[i].getAttribute("uri"));
 						menuitem.setAttribute("data-id", native_popup_search_add_items[i].id);
-						//menuitem.setAttribute("oncommand", "document.getElementById(\"" + native_popup_search_add_items[i].id + "\").click();");
-						menuitem.addEventListener("command", () => {document.getElementById(""+native_popup_search_add_items[i].id+"").click(); } );
-
+						menuitem.setAttribute("oncommand", "document.getElementById(\"" + native_popup_search_add_items[i].id + "\").click();");
 
 						if (native_popup_search_add_items[i].hasAttribute("image"))
 							menuitem.setAttribute("image", native_popup_search_add_items[i].getAttribute("image"));

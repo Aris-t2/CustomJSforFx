@@ -342,18 +342,3 @@ setTimeout(function(){
   AddonbarVertical.init();
 },2000);
 */
-
-/* fix for downloads button on add-on bar - thanks to dimdamin */
-/* https://github.com/Aris-t2/CustomJSforFx/issues/125#issuecomment-2506613776 */
-(async url => !location.href.startsWith(url) || await delayedStartupPromise ||
-	(async (scrNT, nTjs) => {
-		if (scrNT.length >= 1) {
-			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
-			nTjs.res = await fetch(scrNT[0].src);
-			nTjs.src = (await nTjs.res.text())
-				.replace(/navigator-toolbox/, "addonbar_v")
-				.replace(/widget-overflow/, "addonbar");
-			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
-		};
-	})(document.getElementById("navigator-toolbox").querySelectorAll(":scope > script"), {})
-)("chrome://browser/content/browser.x");

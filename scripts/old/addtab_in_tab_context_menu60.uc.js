@@ -1,9 +1,11 @@
-// New Tab script for Firefox 13X+ by Aris
+// New Tab script for Firefox 60+ by Aris
 // Adds 'New Tab' item to tab context menu
 // option: menuitem label
 // option: show_icon = true/false
 // option: show_menuitem_on_top = true/false
 // option: define own new tab url / default: 'about:newtab'
+
+var appversion = parseInt(Services.appinfo.version);
 
 var item_label = "New Tab"; // menuitem label
 var show_icon = true; // icon visible (true) or hidden (false)
@@ -14,19 +16,20 @@ var NewTabMenuItem = {
   init: function() {
 
 	try {
-	  addtab_sep = document.createXULElement("menuseparator");
+	  if(appversion <= 62) addtab_sep = document.createElement("menuseparator");
+	  else addtab_sep = document.createXULElement("menuseparator");
 	  addtab_sep.setAttribute("id","newtab-menuitem_sep");
 	  document.getElementById("tabContextMenu").appendChild(addtab_sep);
 	} catch(e) {}
 
 	try {
-	  addtab_item = document.createXULElement("menuitem");
+	  if(appversion <= 62) addtab_item = document.createElement("menuitem");
+	  else addtab_item = document.createXULElement("menuitem");
 	  addtab_item.setAttribute("label", item_label);
 	  addtab_item.setAttribute("id","newtab-menuitem");
 	  addtab_item.setAttribute("class","menuitem-iconic");
 	  addtab_item.setAttribute("key", "T");
-	  //addtab_item.setAttribute("oncommand", "NewTabMenuItem.newTab();");
-	  addtab_item.addEventListener("command", () => {NewTabMenuItem.newTab();} );
+	  addtab_item.setAttribute("oncommand", "NewTabMenuItem.newTab();");
 	  document.getElementById("tabContextMenu").appendChild(addtab_item);
 	} catch(e) {}
 	
