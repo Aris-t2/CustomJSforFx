@@ -3,7 +3,6 @@
 // option: place back button on a different toolbar
 // option: place back button on a different toolbar
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
 ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   
 var navigation = CustomizableUI.AREA_NAVBAR;

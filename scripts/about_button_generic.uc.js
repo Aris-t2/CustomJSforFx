@@ -1,4 +1,4 @@
-// 'about:'-Button script for Firefox 89+ by Aris
+// 'about:'-Button script for Firefox by Aris
 //
 // Need a different 'about' page button?
 // - replace 'about:about' url with a different 'about:' url
@@ -9,7 +9,6 @@
 
 try {
 	
-  Components.utils.import("resource:///modules/CustomizableUI.jsm");
   ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   const sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   

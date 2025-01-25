@@ -12,7 +12,6 @@
   - invalidate caches from Session Saver add-on
 */
 
-var appversion = parseInt(Services.appinfo.version);
 var menuicon = false;
 var appmenuicon = false;
 
@@ -67,8 +66,6 @@ var RestartMenuFileAppItems = {
 	
 	var icon = "chrome://global/skin/icons/reload.svg";
   
-	if(appversion < 92) icon = "chrome://browser/skin/reload.svg";
-	
 	var menu_item_code = "";
 	
 	if(menuicon)

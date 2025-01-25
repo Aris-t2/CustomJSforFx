@@ -1,4 +1,4 @@
-// Downloads button script for Firefox 127+ by Aris
+// Downloads button script for Firefox by Aris
 //
 // left-click on custom downloads button: opens downloads library
 // middle-click on custom downloads button: opens 'about:downloads' in a new tab
@@ -7,7 +7,6 @@
 (function() {
 
 try {
-  Components.utils.import("resource:///modules/CustomizableUI.jsm");
   ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   

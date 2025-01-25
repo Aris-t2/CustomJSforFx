@@ -1,10 +1,8 @@
-// 'Work Offline' button for Firefox 60+ by Aris
+// 'Work Offline' button for Firefox by Aris
 
 (function() {
 
 try {
-  Components.utils.import("resource:///modules/CustomizableUI.jsm");
-  Components.utils.import("resource://gre/modules/LoginHelper.jsm");
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   
   CustomizableUI.createWidget({
@@ -31,7 +29,7 @@ try {
   });
   
   /* set icon */
-  var button_icon = 'chrome://browser/skin/wifi.svg';
+  var button_icon = 'chrome://browser/skin/import-export.svg';
   
   // style button icon
   var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\

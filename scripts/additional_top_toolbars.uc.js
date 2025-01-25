@@ -1,4 +1,4 @@
-// 'Additional top toolbars' script for Firefox 60+ by Aris
+// 'Additional top toolbars' script for Firefox by Aris
 // - "number_of_additional_top_toolbars": set the amount of additional top toolbar
 // - "tb_label": set a toolbar name
 // - use toolbar[id^="additional_top_toolbar"] {...} to affect all toolbars at once in CSS
@@ -8,7 +8,6 @@
 // workaround on Fx 71 to save/restore toolbar visibility
 // creating an observer array always fails, so observers are created manually atm.
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
 ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var appversion = parseInt(Services.appinfo.version);
 
@@ -36,7 +35,6 @@ var AdditionalTopToolbars = {
 		  else var toptoolbar = document.createXULElement("toolbar");
 		
 		  toptoolbar.setAttribute("id", "additional_top_toolbar"+i+"");
-		  toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
 		  toptoolbar.setAttribute("toolbarname", tb_label+" ("+i+")");
 		  toptoolbar.setAttribute("customizable","true");
 		  toptoolbar.setAttribute("class","toolbar-primary chromeclass-toolbar browser-toolbar customization-target");

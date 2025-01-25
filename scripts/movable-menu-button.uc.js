@@ -2,7 +2,6 @@
 // image changed from menu.svg by Pizzapops.
 // image changed from chrome://browser/skin/welcome-back.svg to chrome://branding/content/about-logo.png
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 (function(){

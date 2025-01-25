@@ -14,7 +14,6 @@
    [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 */
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
 ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var appversion = parseInt(Services.appinfo.version);
 
