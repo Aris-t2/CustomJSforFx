@@ -1,4 +1,4 @@
-// 'Favicon in urlbars identity box' script for Firefox 115+ by Aris
+// 'Favicon in urlbars identity box' script for Firefox 13X+ by Aris
 //
 // This script restores current pages favicon inside urlbar (aka location bar, address bar or awesome bar).
 // [!] If a page does not offer a favicon, browser default branch icon is shown.
@@ -31,7 +31,8 @@
 
 
 	if(favicon_click_opens_page_info_window)
-	  favimginurlbar.setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");
+	  //favimginurlbar.setAttribute("onclick","gIdentityHandler.handleMoreInfoClick(event);");
+	  favimginurlbar.addEventListener("click", () => {gIdentityHandler.handleMoreInfoClick(event);} );
 
 
 	document.getElementById('identity-box').appendChild(favimginurlbar);
