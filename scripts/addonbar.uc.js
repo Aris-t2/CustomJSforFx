@@ -144,11 +144,14 @@ var AddAddonbar = {
 		key.id = 'key_toggleAddonBar';
 		key.setAttribute('key', '/');
 		key.setAttribute('modifiers', 'accel');
-		key.setAttribute('oncommand',`
+		/*key.setAttribute('oncommand',`
 			var newAddonBar = document.getElementById('addonbar');
 			setToolbarVisibility(newAddonBar, newAddonBar.collapsed);
 			Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!newAddonBar.collapsed);
-		  `);
+		  `);*/
+		key.addEventListener("command", () => {var newAddonBar = document.getElementById('addonbar');
+			setToolbarVisibility(newAddonBar, newAddonBar.collapsed);
+			Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!newAddonBar.collapsed);} );
 		document.getElementById('mainKeyset').appendChild(key);
 		
 		

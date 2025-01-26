@@ -140,7 +140,7 @@ var AddonbarVertical = {
 	  key.id = 'key_toggleVAddonBar';
 	  key.setAttribute('key', '/');
 	  key.setAttribute('modifiers', 'accel,alt');
-	  key.setAttribute('oncommand',`
+	  /*key.setAttribute('oncommand',`
 		var windows = Services.wm.getEnumerator(null);
 		while (windows.hasMoreElements()) {
 		  var win = windows.getNext();
@@ -153,7 +153,19 @@ var AddonbarVertical = {
 			win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
 		  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
 		}
-	  `);
+	  `);*/
+	  key.addEventListener("command", () => {var windows = Services.wm.getEnumerator(null);
+		while (windows.hasMoreElements()) {
+		  var win = windows.getNext();
+		  var vAddonBar = win.document.getElementById('addonbar_v');
+		  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
+		  var vAddonBarBox = win.document.getElementById('toolbox_abv');
+		  setToolbarVisibility(vAddonBarBox, vAddonBarBox.collapsed);
+		  Services.prefs.getBranch('browser.vaddonbar.').setBoolPref('enabled',!vAddonBar.collapsed);
+		  if(!vAddonBar.collapsed)
+			win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
+		  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
+		}} );
 	  document.getElementById('mainKeyset').appendChild(key);
 	  
 	 }

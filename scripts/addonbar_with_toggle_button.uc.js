@@ -139,7 +139,7 @@ var AddAddonbar = {
 		key.id = 'key_toggleAddonBar';
 		key.setAttribute('key', '/');
 		key.setAttribute('modifiers', 'accel');
-	    key.setAttribute('oncommand',`
+	    /*key.setAttribute('oncommand',`
 			var windows = Services.wm.getEnumerator(null);
 			while (windows.hasMoreElements()) {
 			  var win = windows.getNext();
@@ -150,7 +150,17 @@ var AddAddonbar = {
 				win.document.querySelector('#togglebutton_addonbar_h').setAttribute('checked','true');
 			  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
 			}
-	    `);
+	    `);*/
+		key.addEventListener("command", () => {var windows = Services.wm.getEnumerator(null);
+			while (windows.hasMoreElements()) {
+			  var win = windows.getNext();
+			  var hAddonBar = win.document.getElementById('addonbar');
+			  setToolbarVisibility(hAddonBar, hAddonBar.collapsed);
+			  Services.prefs.getBranch('browser.addonbar.').setBoolPref('enabled',!hAddonBar.collapsed);
+			  if(!hAddonBar.collapsed)
+				win.document.querySelector('#togglebutton_addonbar_h').setAttribute('checked','true');
+			  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
+			}} );
 		document.getElementById('mainKeyset').appendChild(key);
 		
 		
