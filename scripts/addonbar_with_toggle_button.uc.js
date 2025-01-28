@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', AddAddonbar.init(), false);
 			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
 			nTjs.res = await fetch(scrNT[0].src);
 			nTjs.src = (await nTjs.res.text())
-				.replace(/navigator-toolbox/, "addonbar_v")
+				.replace(/navigator-toolbox/, "addonbar")
 				.replace(/widget-overflow/, "addonbar");
 			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
 		};

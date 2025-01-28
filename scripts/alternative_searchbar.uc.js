@@ -16,7 +16,7 @@
 // https://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-7935627
 //
 // Thanks to Sneakpeakcss for Fx 13X+ improvements
-// hhttps://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-11819554
+// https://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-11819554
 //
 // Idea based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758

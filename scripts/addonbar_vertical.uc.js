@@ -11,10 +11,6 @@
 
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
-ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
-
-
 var AddonbarVertical = {
   init: function() {
 
@@ -342,6 +338,10 @@ var AddonbarVertical = {
 	var sss = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(Components.interfaces.nsIStyleSheetService);
 	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	
+	// fixes the issue where downloads button was always hidden after restart
+	if(Services.prefs.getBranch('browser.download.').getBoolPref('autohideButton') == false)
+	  document.getElementById("downloads-button").removeAttribute('hidden');
+	
   }
 
 }
@@ -364,7 +364,7 @@ setTimeout(function(){
 			nTjs.res = await fetch(scrNT[0].src);
 			nTjs.src = (await nTjs.res.text())
 				.replace(/navigator-toolbox/, "addonbar_v")
-				.replace(/widget-overflow/, "addonbar");
+				.replace(/widget-overflow/, "addonbar_v");
 			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
 		};
 	})(document.getElementById("navigator-toolbox").querySelectorAll(":scope > script"), {})
