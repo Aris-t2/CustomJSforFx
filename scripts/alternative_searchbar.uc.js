@@ -18,6 +18,9 @@
 // Thanks to Sneakpeakcss for Fx 13X+ improvements
 // https://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-11819554
 //
+// Thanks to Sneakpeakcss for Fx 137+ improvements
+// https://github.com/Aris-t2/CustomJSforFx/discussions/59#discussioncomment-12707026
+//
 // Idea based on 'search revert' script by '2002Andreas':
 // https://www.camp-firefox.de/forum/viewtopic.php?f=16&t=112673&start=2010#p1099758
 //
@@ -92,6 +95,15 @@ var AltSearchbar = {
       if (select_engine_by_click_oneoffs_button)
         selectEngineByClickOneoffsButton();
 
+      if (clear_searchbar_after_search)
+        clearSearchbarAfterSearch();
+
+      if (revert_to_first_engine_after_search)
+        revertToFirstEngineAfterSearch();
+
+      if (clear_searchbar_on_doubleclick)
+        clearSearchbarOnDoubleclick();
+
       // select search engine by scrolling mouse wheel over search bars button
       function selectEngineByScrollingOverButton() {
         if (!old_search_engine_selection_popup) Services.search.getVisibleEngines().then(engines => searchbar.engines = engines);
@@ -101,7 +113,7 @@ var AltSearchbar = {
             const selectedEngineIndex = enabledEngines.findIndex((e) => e.name === searchbar.currentEngine.name);
             enabledEngines.length < 1 ? null :
               searchbar.currentEngine = enabledEngines[(selectedEngineIndex + (event.detail > 0 ? 1 : -1) + enabledEngines.length) % enabledEngines.length];
-            BrowserSearch.searchBar.select();
+            searchbar.select();
           }
         }, true);
       };
@@ -137,18 +149,37 @@ var AltSearchbar = {
           isInCustomize--;
       }
 
+      function afterCustomizationHandler() {
+        if (clear_searchbar_after_search) {
+          clearSearchbarAfterSearch();
+        }
+
+        if (revert_to_first_engine_after_search) {
+          revertToFirstEngineAfterSearch();
+        }
+
+        if (old_search_engine_selection_popup) {
+          attachOldPopupToButton();
+        }
+
+        if (clear_searchbar_on_doubleclick) {
+           clearSearchbarOnDoubleclick();
+        }
+      }
+
+      window.addEventListener("aftercustomization", afterCustomizationHandler, false);
+       
       // old search selection popup
       async function createOldSelectionPopup() {
 
         searchbar.engines = await Services.search.getVisibleEngines();
 
         window.addEventListener("beforecustomization", function(e) { isInCustomize++; }, false);
-        window.addEventListener("aftercustomization", attachOldPopupToButton, false);
 
         // set new search engine
         searchbar.setNewSearchEngine = function(index) {
           searchbar.currentEngine = searchbar.engines[index];
-          BrowserSearch.searchBar.select();
+          searchbar.select();
         };
 
         // create search popup
@@ -156,6 +187,8 @@ var AltSearchbar = {
         searchbuttonpopup.setAttribute("id", "searchbuttonpopup");
         searchbuttonpopup.style.setProperty("width", searchbar.getBoundingClientRect().width + 8 + "px");
         searchbuttonpopup.setAttribute("position", "after_start");
+        searchbuttonpopup.addEventListener("popupshowing", () => {searchbar.setAttribute("open", "true");});
+        searchbuttonpopup.addEventListener("popuphidden", () => {searchbar.removeAttribute("open");});
 
         try {
 
@@ -300,7 +333,7 @@ var AltSearchbar = {
             }
 
             // Get available search engines
-            const engines = gBrowser.selectedBrowser.engines || [];
+            const engines = gURLBar.addSearchEngineHelper.engines || [];
             if (engines.length === 0) {
               return;
             }
@@ -372,7 +405,7 @@ var AltSearchbar = {
                                         && addEngineItem.hasAttribute("image")
                                         && addEngineItem.getAttribute("label") !== "null"
                                         && addEngineItem.getAttribute("image") !== "chrome://browser/skin/search-engine-placeholder.png"
-                                        && gBrowser.selectedBrowser.engines[0].uri === addEngineItem.getAttribute("uri"))
+                                        && gURLBar.addSearchEngineHelper.engines[0].uri === addEngineItem.getAttribute("uri"))
                                         || (!hasAddEnginesAttribute && !addEngineItem)) {
               event.stopPropagation();
             } else {
@@ -384,14 +417,12 @@ var AltSearchbar = {
 
               defaultPopup.style.visibility = "collapse";
 
-              // We now use 'gBrowser.selectedBrowser.engines' directly to get the data,
+              // We now use 'gURLBar.addSearchEngineHelper.engines' directly to get the data,
               // eliminating the need to wait for the original menu, and allowing for instant updates.
               // defaultPopup.addEventListener("popupshowing", createAddEngineItem, { once: true });
               createAddEngineItem()
             }
           }
-
-          /*searchbar.focus();*/
 
         }, true);
 
@@ -412,96 +443,94 @@ var AltSearchbar = {
       }
 
       /* clear searchbar after search */
-      if (clear_searchbar_after_search && searchbar.doSearch) {
-        setTimeout(function() {
-          if (!window.BrowserSearch)
-            return;
+      function clearSearchbarAfterSearch() {
+        if (clear_searchbar_after_search && searchbar.doSearch) {
+          setTimeout(function() {
+            var searchbar = document.getElementById("searchbar");
 
-          var searchbar = BrowserSearch.searchBar;
+            if (!searchbar)
+              return;
 
-          if (!searchbar)
-            return;
+            var textbox = searchbar.textbox;
+            var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
 
-          var textbox = searchbar.textbox;
-          var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
+            document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
+              if (e.button == 0 || e.button == 1) {
+                textbox.value = '';
+                document.getElementById('PopupSearchAutoComplete').hidePopup();
+              }
+            });
 
-          document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
-            if (e.button == 0 || e.button == 1) {
-              textbox.value = '';
-              document.getElementById('PopupSearchAutoComplete').hidePopup();
-            }
-          });
+            textbox.addEventListener('keydown', function(e) {
+              if (e.keyCode === 13) {
+                textbox.value = '';
+                document.getElementById('PopupSearchAutoComplete').hidePopup();
+              }
+            });
 
-          textbox.addEventListener('keydown', function(e) {
-            if (e.keyCode === 13) {
-              textbox.value = '';
-              document.getElementById('PopupSearchAutoComplete').hidePopup();
-            }
-          });
+            searchbar_go_button.addEventListener('click', function(e) {
+              if (e.button == 0 || e.button == 1) {
+                textbox.value = '';
+                document.getElementById('PopupSearchAutoComplete').hidePopup();
+              }
+            });
 
-          searchbar_go_button.addEventListener('click', function(e) {
-            if (e.button == 0 || e.button == 1) {
-              textbox.value = '';
-              document.getElementById('PopupSearchAutoComplete').hidePopup();
-            }
-          });
-
-        }, 0);
+          }, 0);
+        }
       }
 
       /* clear searchbar on double-click */
-      if (clear_searchbar_on_doubleclick) {
-        var searchbar = BrowserSearch.searchBar;
-
-        if (!searchbar)
-          return;
-
-        document.querySelector("#searchbar .searchbar-textbox").addEventListener("dblclick", function clearInputBox() {
-          searchbar.textbox.value = '';
-          searchbar.textbox.popup.hidePopup();
-          // Refocus the input box to allow autocompletion suggestions to reappear 
-          // when the same value is re-entered after clearing.
-          searchbar.textbox.blur();
-          searchbar.textbox.focus();
-        });
-      }
-
-      /* revert to first search engine after search */
-      if (revert_to_first_engine_after_search && searchbar.doSearch) {
-        setTimeout(function() {
-          if (!window.BrowserSearch)
-            return;
-
-          var searchbar = BrowserSearch.searchBar;
+      function clearSearchbarOnDoubleclick() {
+          var searchbar = document.getElementById("searchbar");
 
           if (!searchbar)
             return;
 
-          if (!old_search_engine_selection_popup && !select_engine_by_scrolling_over_button)
-            Services.search.getVisibleEngines().then(engines => searchbar.engines = engines);
-
-          var textbox = searchbar.textbox;
-          var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
-
-          document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
-            if (e.button == 0 || e.button == 1) {
-              searchbar.currentEngine = searchbar.engines[0];
-            }
+          document.querySelector("#searchbar .searchbar-textbox").addEventListener("dblclick", function clearInputBox() {
+            searchbar.textbox.value = '';
+            searchbar.textbox.popup.hidePopup();
+            // Refocus the input box to allow autocompletion suggestions to reappear 
+            // when the same value is re-entered after clearing.
+            searchbar.textbox.blur();
+            searchbar.textbox.focus();
           });
+      }
 
-          textbox.addEventListener('keydown', function(e) {
-            if (e.keyCode === 13) {
-              searchbar.currentEngine = searchbar.engines[0];
-            }
-          });
+      /* revert to first search engine after search */
+      function revertToFirstEngineAfterSearch() {
+        if (revert_to_first_engine_after_search && searchbar.doSearch) {
+          setTimeout(function() {
+            var searchbar = document.getElementById("searchbar");
 
-          searchbar_go_button.addEventListener('click', function(e) {
-            if (e.button == 0 || e.button == 1) {
-              searchbar.currentEngine = searchbar.engines[0];
-            }
-          });
+            if (!searchbar)
+              return;
 
-        }, 0);
+            if (!old_search_engine_selection_popup && !select_engine_by_scrolling_over_button)
+              Services.search.getVisibleEngines().then(engines => searchbar.engines = engines);
+
+            var textbox = searchbar.textbox;
+            var searchbar_go_button = searchbar.getElementsByClassName("search-go-container")[0];
+
+            document.getElementById('PopupSearchAutoComplete').addEventListener('click', function(e) {
+              if (e.button == 0 || e.button == 1) {
+                searchbar.currentEngine = searchbar.engines[0];
+              }
+            });
+
+            textbox.addEventListener('keydown', function(e) {
+              if (e.keyCode === 13) {
+                searchbar.currentEngine = searchbar.engines[0];
+              }
+            });
+
+            searchbar_go_button.addEventListener('click', function(e) {
+              if (e.button == 0 || e.button == 1) {
+                searchbar.currentEngine = searchbar.engines[0];
+              }
+            });
+
+          }, 0);
+        }
       }
 
       function updateSelected() {
@@ -699,6 +728,10 @@ var AltSearchbar = {
           margin-inline-end: 2px !important;
           width: 11px !important;
           height: 11px !important;
+        }
+        #searchbar[open] .searchbar-search-button[popup] .searchbar-search-icon-overlay,
+        .searchbar-search-button[popup]:hover .searchbar-search-icon-overlay {
+          fill: #00adee;
         }
         .searchbar-search-button[addengines=true] > .searchbar-search-icon-overlay {
           margin-top: 0px !important;
