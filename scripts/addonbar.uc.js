@@ -108,12 +108,12 @@ var AddAddonbar = {
 			visibility: visible !important;
 			display: flex !important;
 		  }
-          #statuspanel-label {
-            background-color: var(--toolbar-bgcolor)!important;
-            color: var(--toolbar-color)!important;
-            border: none!important;
-            height: 26px!important;
-          }
+		  #statuspanel-label {
+			background-color: var(--toolbar-bgcolor)!important;
+			color: var(--toolbar-color)!important;
+			border: none!important;
+			height: 26px!important;
+		  }
 		  `+compact_buttons_code+`
 	  `), null, null),
 	  Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET
@@ -138,13 +138,13 @@ var AddAddonbar = {
 		tb_addonbar.insertBefore(document.querySelector('#statuspanel'),tb_addonbar.firstChild);
 
 		newappend = function() {
-          if(document.getElementById('addonbar') == null) {
-            this.selectedBrowser.insertAdjacentElement("afterend", StatusPanel.panel);
-          } else {
-            tb_addonbar = document.getElementById('addonbar');
-            tb_addonbar.insertBefore(StatusPanel.panel, tb_addonbar.firstChild);
-          }
-        }
+		  if(document.getElementById('addonbar') == null) {
+			this.selectedBrowser.insertAdjacentElement("afterend", StatusPanel.panel);
+		  } else {
+			tb_addonbar = document.getElementById('addonbar');
+			tb_addonbar.insertBefore(StatusPanel.panel, tb_addonbar.firstChild);
+		  }
+		}
 
 		gBrowser._appendStatusPanel = newappend
 		
