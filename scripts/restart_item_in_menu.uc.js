@@ -69,34 +69,34 @@ var RestartMenuFileAppItems = {
 	var menu_item_code = "";
 	
 	if(menuicon)
-	 menu_item_code ='	\
-	  #fileMenu-restart-item { \
-	  	 list-style-image: url("'+icon+'") !important; /* File Menu Entry */ \
-	  } \
-	  #fileMenu-restart-item > hbox > image.menu-iconic-icon { /* Style the menuItem */ \
-		 margin-inline-start: 2px; \
-		 margin-top: 2px; \
-		-moz-context-properties: fill; \
-		 transform: scaleX(-1); \
-		 fill: red; \
-	  } \
-	 ';
+	 menu_item_code =`
+	  #fileMenu-restart-item {
+	  	 list-style-image: url("${icon}") !important; /* File Menu Entry */
+	  }
+	  #fileMenu-restart-item > .menu-icon { /* Style the menuItem */
+		 margin-inline-start: 2px;
+		 margin-top: 2px;
+		-moz-context-properties: fill;
+		 transform: scaleX(-1);
+		 fill: red;
+	  }
+	 `;
 	  
 	var appmenu_item_code = "";
 	  
 	if(appmenuicon)
-	 appmenu_item_code = '	\
-	  #appMenu-restart-button { \
-		list-style-image: url("'+icon+'"); /* Button in appMenu */ \
-	  } \
-	  #appMenu-restart-button .toolbarbutton-icon { /* Style the Button */ \
-		transform: scaleX(-1); /* Icon mirroring */ \
-		color: red; /* Icon color name */ \
-	  } \
-	  #main-window:-moz-lwtheme:-moz-lwtheme-brighttext #appMenu-restart-button .toolbarbutton-icon { \
-		color: unset; /* do not color the icon in dark mode */ \
-	  } \
-	 ';
+	 appmenu_item_code = `
+	  #appMenu-restart-button {
+		list-style-image: url("${icon}"); /* Button in appMenu */
+	  }
+	  #appMenu-restart-button > .toolbarbutton-icon { /* Style the Button */
+		transform: scaleX(-1); /* Icon mirroring */
+		color: red; /* Icon color name */
+	  }
+	  #main-window:-moz-lwtheme:-moz-lwtheme-brighttext #appMenu-restart-button .toolbarbutton-icon {
+		color: unset; /* do not color the icon in dark mode */
+	  }
+	 `;
 
 	// Style the icons (button/menu)
 	var uri = Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent('\
