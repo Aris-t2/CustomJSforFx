@@ -14,7 +14,6 @@
    [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
 */
 
-ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var appversion = parseInt(Services.appinfo.version);
 
 var AddSeparator = {
@@ -101,6 +100,17 @@ var AddSeparator = {
 		  background-image: var(--toolbar-bgimage);
 		  background-clip: padding-box;
 		  color: var(--toolbar-color, inherit);
+
+		  pointer-events: none !important;
+		  & > toolbarpaletteitem {
+		    pointer-events: auto !important;
+		    max-width: 100px !important;
+		  }
+		  &[draggingover],
+		  & > toolbarpaletteitem[dragover],
+		  &:has(toolbarpaletteitem[mousedown]) {
+		    pointer-events: none !important;
+		  }
 		}
 		#main-window:not([customizing]) #configuration_toolbar {
 		  visibility: collapse;

@@ -8,7 +8,6 @@
 // location bar width is forced to 40% of window width (optional)
 // CAUTION: moving some of the items into palette will break your ui!
 
-var {CustomizableUI} = ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
 var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
 
 var Oneliner = {

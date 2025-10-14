@@ -7,7 +7,6 @@
 (function() {
 
 try {
-  ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   
   var button_label = "Downloads";

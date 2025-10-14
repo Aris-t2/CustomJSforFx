@@ -10,310 +10,319 @@
 // toolbar is display horizontally in customizing mode
 
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
-
-var AddonbarVertical = {
-  init: function() {
-
-	if (location != 'chrome://browser/content/browser.xhtml')
-      return;
-
-	/* blank tab workaround */
-	try {
-	  if(gBrowser.selectedBrowser.getAttribute('blank')) gBrowser.selectedBrowser.removeAttribute('blank');
-	} catch(e) {}
-	  
-	var addonbar_v_label = 'Vertical Add-on Bar'; // toolbar name
-	var button_label = 'Toggle vertical Add-on Bar'; // Toggle button name
-	var addonbar_v_togglebutton = true; // display toggle button for vertical toolbar (true) or not (false)
-	var addonbar_v_on_the_left = true; // display vertical toolbar on the left (true) or the right (false)
-	var style_addonbar_v = true; // apply default toolbar appearance/colors to vertical add-on bar
-	var addonbar_v_width = '30px'; // toolbar width
-	var compact_buttons = false; // compact button size (true) or default button size (false)
-
-	try {
-	 if(document.getElementById('toolbox_abv') == null && document.getElementById('addonbar_v') == null) {
-	  var toolbox_abv = document.createXULElement('toolbox');
-	  toolbox_abv.setAttribute('orient','horizontal');
-	  toolbox_abv.setAttribute('id','toolbox_abv');
-	  toolbox_abv.setAttribute('insertbefore','sidebar-box');
-	  
-	  var tb_addonbarv = document.createXULElement('toolbar');
-	  tb_addonbarv.setAttribute('id','addonbar_v');
-	  tb_addonbarv.setAttribute('customizable','true');
-	  tb_addonbarv.setAttribute('class','toolbar-primary chromeclass-toolbar browser-toolbar customization-target');
-	  tb_addonbarv.setAttribute('mode','icons');
-	  tb_addonbarv.setAttribute('iconsize','small');
-	  tb_addonbarv.setAttribute('toolboxid','navigator-toolbox');
-	  tb_addonbarv.setAttribute('orient','vertical');
-	  tb_addonbarv.setAttribute('flex','1');
-	  tb_addonbarv.setAttribute('context','toolbar-context-menu');
-	  tb_addonbarv.setAttribute('toolbarname', addonbar_v_label);
-	  tb_addonbarv.setAttribute('label', addonbar_v_label);
-	  tb_addonbarv.setAttribute('lockiconsize','true');
-	  tb_addonbarv.setAttribute('defaultset','spring');
-	  tb_addonbarv.setAttribute("accesskey","");
-	  
-	  toolbox_abv.appendChild(tb_addonbarv);
-	  
-	  CustomizableUI.registerArea('addonbar_v', {legacy: true});
-
-	  setTimeout(function(){
-		CustomizableUI.registerArea('addonbar_v', {legacy: true});
-	  },2000);
-	  
-	  CustomizableUI.registerToolbarNode(tb_addonbarv);
-	  
-	  if(addonbar_v_on_the_left) {
-	    document.getElementById('browser').insertBefore(toolbox_abv,document.getElementById('browser').firstChild);
-	  }
-	  else {
-		document.getElementById('browser').appendChild(toolbox_abv);
-	  }
-	  
-  	  var observer = new MutationObserver(function(mutations) {
-		mutations.forEach(function(mutation) {
-		  try {
-			if(document.querySelector('#browser').getAttribute('hidden') || document.querySelector('#main-window').getAttribute('customizing')) {
-			  document.querySelector('#addonbar_v').setAttribute('orient','horizontal');
-			  document.querySelector('#navigator-toolbox').appendChild(document.querySelector('#addonbar_v'));
-			}
-			else  {
-			  document.querySelector('#addonbar_v').setAttribute('orient','vertical');
-			  document.querySelector('#toolbox_abv').appendChild(document.querySelector('#addonbar_v'));
-
-			}
-		  } catch(e){}
-		});    
-	  });
 	
-	  observer.observe(document.querySelector('#main-window'), { attributes: true, attributeFilter: ['customizing'] });
-	  
-	  try {
-		Services.prefs.getDefaultBranch('browser.vaddonbar.').setBoolPref('enabled',true);
-		setToolbarVisibility(document.getElementById('addonbar_v'), Services.prefs.getBranch('browser.vaddonbar.').getBoolPref('enabled'));
-		setToolbarVisibility(document.getElementById('toolbox_abv'), Services.prefs.getBranch('browser.vaddonbar.').getBoolPref('enabled'));
-	  } catch(e) {}
-	  
-	  if(addonbar_v_togglebutton) {
-	  
-		CustomizableUI.createWidget({
-			id: 'togglebutton_addonbar_v', // button id
-			defaultArea: CustomizableUI.AREA_NAVBAR,
-			removable: true,
-			label: button_label, // button title
-			tooltiptext: button_label, // tooltip title
-			onClick: function(event) {
-			  if(event.button==0 || event.button==1) {
-			    var windows = Services.wm.getEnumerator(null);
-				while (windows.hasMoreElements()) {
-				  var win = windows.getNext();
-				  
-				  var vAddonBar = win.document.getElementById('addonbar_v');
-				  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
-					  
-				  var vAddonBarBox = win.document.getElementById('toolbox_abv');
-				  setToolbarVisibility(vAddonBarBox, vAddonBarBox.collapsed);
-					  
-				  Services.prefs.getBranch('browser.vaddonbar.').setBoolPref('enabled',!vAddonBar.collapsed);
-				  
-				  if(!vAddonBar.collapsed)
-					win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
-				  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
+(function() {
+
+  // ==UserConfig==
+  const addonbar_v_label = "Vertical Add-on Bar";    // toolbar name
+  const button_label = "Toggle vertical Add-on Bar"; // toggle button name
+  const addonbar_v_width = "30px";                   // toolbar width
+  const addonbar_v_togglebutton = true;              // display toggle button for vertical toolbar (true) or not (false)
+  const addonbar_v_on_the_left = true;               // display vertical toolbar on the left (true) or the right (false)
+  const style_addonbar_v = true;                     // apply default toolbar appearance/colors to vertical add-on bar
+  const theme_support = true;                        // better Firefox native theme support
+  const compact_buttons = false;                     // compact button size (true) or default button size (false)
+  // ==UserConfig==
+
+  function init() {
+	if (location != "chrome://browser/content/browser.xhtml") return;
+
+	try {
+	  let bar = document.getElementById("addonbar_v");
+	  if (!bar) {
+		const tb_addonbarv = document.createXULElement("toolbar");
+		[
+		  ["id", "addonbar_v"],
+		  ["customizable", "true"],
+		  ["class", "toolbar-primary chromeclass-toolbar browser-toolbar customization-target"],
+		  ["mode", "icons"],
+		  ["iconsize", "small"],
+		  ["toolboxid", "navigator-toolbox"],
+		  ["orient", "vertical"],
+		  ["flex", "1"],
+		  ["context", "toolbar-context-menu"],
+		  ["toolbarname", addonbar_v_label],
+		  ["label", addonbar_v_label],
+		  ["lockiconsize", "true"],
+		  ["defaultset", "spring"],
+		  ["accesskey", ""]
+		].forEach(([name, value]) => tb_addonbarv.setAttribute(name, value));
+
+		const browser = document.getElementById("browser");
+		addonbar_v_on_the_left
+		  ? browser.insertBefore(tb_addonbarv, browser.firstChild)
+		  : browser.appendChild(tb_addonbarv);
+
+		bar = tb_addonbarv;
+
+		// Register
+		CustomizableUI.registerArea("addonbar_v", { legacy: true });
+		CustomizableUI.registerToolbarNode(tb_addonbarv);
+
+		const prefs = Services.prefs.getBranch("browser.vaddonbar.");
+		// Restore state from prefs
+		// Apply after register to prevent silent fail when it's in collapsed state
+	    try {
+	  	  Services.prefs.getDefaultBranch("browser.vaddonbar.").setBoolPref("enabled", true);
+		  const enabled = prefs.getBoolPref("enabled");
+		  bar.collapsed = !enabled;
+	    } catch(e) {}
+
+		// Detect theme change and apply necessary classes for theme support + Apply vertical background
+		if (theme_support) {
+		  const bgBox = document.createXULElement("vbox");
+		  bar.classList.add("experimental");
+		  bgBox.id = "addonbar_v_bg";
+		  bar.appendChild(bgBox);
+		  const updateBackgroundClass = () => {
+			const cs = getComputedStyle(document.documentElement);
+			const hasHeader = cs.getPropertyValue("--lwt-header-image").trim();
+			const hasAdditional = cs.getPropertyValue("--lwt-additional-images").trim();
+			const validHeader = hasHeader && hasHeader !== "none";
+			const validAdditional = hasAdditional && hasAdditional !== "none";
+			bar.classList.toggle("header", validHeader);
+			bar.classList.toggle("additional", validAdditional && !validHeader);
+		  };
+		  updateBackgroundClass();
+		  Services.prefs.addObserver("extensions.activeThemeID", {observe: updateBackgroundClass});
+		}
+
+		// Movable toggle button
+	    if (addonbar_v_togglebutton && !CustomizableUI.getWidget("togglebutton_addonbar_v")) {
+	  	  CustomizableUI.createWidget({
+	  	    id: "togglebutton_addonbar_v", // button id
+	  	    defaultArea: CustomizableUI.AREA_NAVBAR,
+	  	    removable: true,
+	  	    label: button_label, // button title
+	  	    tooltiptext: button_label, // tooltip title
+			onClick(event) {
+			  if (event.button == 0 || event.button == 1) {
+				for (let win of Services.wm.getEnumerator("navigator:browser")) {
+				  const bar = win.document.getElementById("addonbar_v");
+				  const state = bar.collapsed = !bar.collapsed;
+				  prefs.setBoolPref("enabled", !state);
+				  win.document.querySelector("#togglebutton_addonbar_v")?.toggleAttribute("checked", !state);
 				}
 			  }
 			},
-			onCreated: function(button) {
-			  if(Services.prefs.getBranch('browser.vaddonbar.').getBoolPref('enabled'))
-			    button.setAttribute('checked','true');
+			onCreated(button) {
+			  if (prefs.getBoolPref("enabled")) button.setAttribute("checked", "true");
 			  return button;
 			}
-				
+	  	  });
+	    }
+
+	    // Toggle bar hotkey
+		const key = document.createXULElement("key");
+		key.id = "key_toggleVAddonBar";
+		key.setAttribute("key", "/");
+		key.setAttribute("modifiers", "accel,alt");
+		key.addEventListener("command", () => {
+		  for (let win of Services.wm.getEnumerator("navigator:browser")) {
+			const bar = win.document.getElementById("addonbar_v");
+			const state = bar.collapsed = !bar.collapsed;
+			prefs.setBoolPref("enabled", !state);
+			win.document.querySelector("#togglebutton_addonbar_v")?.toggleAttribute("checked", !state);
+		  }
+		});
+		document.getElementById("mainKeyset").appendChild(key);
+
+		// Attach handlers for buttons moved outside #navigator-toolbox
+	    // https://searchfox.org/firefox-main/source/browser/base/content/navigator-toolbox.js
+	    const customHandlers = {
+	  	  "unified-extensions-button": (el, e) => gUnifiedExtensions.togglePanel(e),
+	  	  "fxa-toolbar-menu-button":   (el, e) => gSync.toggleAccountPanel(el, e),
+	  	  "firefox-view-button":       (el, e) => FirefoxViewHandler.openToolbarMouseEvent(e),
+	  	  "downloads-button":          (el, e) => DownloadsIndicatorView.onCommand(e),
+	  	  "pageActionButton":          (el, e) => BrowserPageActions.mainButtonClicked(e),
+	  	  "alltabs-button":            (el, e) => gTabsPanel.showAllTabsPanel(e, "alltabs-button"),
+	  	  "library-button":            (el, e) => PanelUI.showSubView("appMenu-libraryView", el, e),
+	  	  "import-button":             (el, e) => MigrationUtils.showMigrationWizard(window, {
+	  	    entrypoint: MigrationUtils.MIGRATION_ENTRYPOINTS.BOOKMARKS_TOOLBAR,
+	  	  }),
+	    };
+
+		bar.addEventListener("mousedown", (e) => {
+		  const button = e.target.closest("toolbarbutton");
+		  if (button?.id && customHandlers[button.id]) customHandlers[button.id](button, e);
+		});
+
+		// Force display during customization
+		document.addEventListener("beforecustomization", () => {
+		  bar.setAttribute("orient", "horizontal");
+		  document.getElementById("navigator-toolbox").appendChild(bar);
+		  bar.collapsed = false;
+		});
+		document.addEventListener("aftercustomization", () => {
+		  bar.setAttribute("orient", "vertical");
+		  addonbar_v_on_the_left
+			? browser.insertBefore(bar, browser.firstChild)
+			: browser.appendChild(bar);
+		  bar.collapsed = !prefs.getBoolPref("enabled", true);
+		  bar.appendChild(document.getElementById("addonbar_v_bg")); // Make sure bg is always at the very end
 		});
 	  }
+	  // Ignore download-button's autohide `browser.download.autohideButton` preference
+	  if (!Services.prefs.getBranch("browser.download.").getBoolPref("autohideButton"))
+		document.getElementById("downloads-button")?.removeAttribute("hidden");
 
-	  // Press 'Ctr + Alt + /' on Windows/Linux and 'Cmd + Alt + /' on macOS to toggle vertical add-on bar
-	  var key = document.createXULElement('key');
-	  key.id = 'key_toggleVAddonBar';
-	  key.setAttribute('key', '/');
-	  key.setAttribute('modifiers', 'accel,alt');
-	  /*key.setAttribute('oncommand',`
-		var windows = Services.wm.getEnumerator(null);
-		while (windows.hasMoreElements()) {
-		  var win = windows.getNext();
-		  var vAddonBar = win.document.getElementById('addonbar_v');
-		  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
-		  var vAddonBarBox = win.document.getElementById('toolbox_abv');
-		  setToolbarVisibility(vAddonBarBox, vAddonBarBox.collapsed);
-		  Services.prefs.getBranch('browser.vaddonbar.').setBoolPref('enabled',!vAddonBar.collapsed);
-		  if(!vAddonBar.collapsed)
-			win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
-		  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
-		}
-	  `);*/
-	  key.addEventListener("command", () => {var windows = Services.wm.getEnumerator(null);
-		while (windows.hasMoreElements()) {
-		  var win = windows.getNext();
-		  var vAddonBar = win.document.getElementById('addonbar_v');
-		  setToolbarVisibility(vAddonBar, vAddonBar.collapsed);
-		  var vAddonBarBox = win.document.getElementById('toolbox_abv');
-		  setToolbarVisibility(vAddonBarBox, vAddonBarBox.collapsed);
-		  Services.prefs.getBranch('browser.vaddonbar.').setBoolPref('enabled',!vAddonBar.collapsed);
-		  if(!vAddonBar.collapsed)
-			win.document.querySelector('#togglebutton_addonbar_v').setAttribute('checked','true');
-		  else win.document.querySelector('#togglebutton_addonbar_v').removeAttribute('checked');
-		}} );
-	  document.getElementById('mainKeyset').appendChild(key);
-	  
-	 }
 	} catch(e) {}
 	
-	// style toolbar & toggle button
-	var addonbar_v_style = '';
-	var togglebutton_addonbar_v_style = '';
 	
-	if(style_addonbar_v) {
-	  var end_border =`
-		#addonbar_v {
-			border-inline-end: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important;
-		}
-	  `;
-		  
-	  if(!addonbar_v_on_the_left) {
-		end_border =`
-		  #addonbar_v {
-			border-inline-start: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important;
-		  }
-		`;
+	// Style toolbar
+	let css = `
+	  #main-window:not([customizing]) #addonbar_v:not([collapsed="true"]) {
+	  	width: ${addonbar_v_width};
+	  	min-width: ${addonbar_v_width};
+	  	max-width: ${addonbar_v_width};
 	  }
+	  #main-window[customizing] #addonbar_v {
+	  	outline: 1px dashed !important;
+	  	outline-offset: -2px !important;
+		overflow: hidden !important;
+		height: 28px !important;
+		min-height: 28px !important;
+		max-height: 28px !important;
+	  }
+	`;
 
-	  addonbar_v_style =`
-		#addonbar_v {
-		  appearance: none !important;
-		  background-color: var(--toolbar-bgcolor);
-		  background-image: var(--toolbar-bgimage);
-		  background-clip: padding-box;
-		  color: var(--toolbar-color, inherit);
+	if (style_addonbar_v) {
+	  css += `
+		${addonbar_v_on_the_left
+		  ? "#addonbar_v { border-inline-end: 1px solid var(--sidebar-border-color, rgba(0,0,0,0.1)) !important; }"
+		  : "#addonbar_v { border-inline-start: 1px solid var(--sidebar-border-color, rgba(0,0,0,0.1)) !important; }"
 		}
-		:root[lwtheme] #addonbar_v {
-		  background: var(--lwt-accent-color) !important;
-		}
-		:root[lwtheme][lwtheme-image='true'] #addonbar_v {
-		  background: var(--lwt-header-image) !important;
-		  background-position: 0vw 50vh !important;
-		}
-		#main-window:not([customizing]) #toolbox_abv:not([collapsed='true']),
-		#main-window:not([customizing]) #addonbar_v:not([collapsed='true']) {
-		  min-width: `+addonbar_v_width+`;
-		  width: `+addonbar_v_width+`;
-		  max-width: `+addonbar_v_width+`;
-		}
-		#main-window[chromehidden='menubar toolbar location directories status extrachrome '] #toolbox_abv:not([collapsed='true']),
-		#main-window[chromehidden='menubar toolbar location directories status extrachrome '] #addonbar_v:not([collapsed='true']),
-		#main-window[sizemode='fullscreen'] #toolbox_abv:not([collapsed='true']),
-		#main-window[sizemode='fullscreen'] #addonbar_v:not([collapsed='true']) {
-		  min-width: 0px;
-		  width: 0px;
-		  max-width: 0px;
-		}
-		#main-window[customizing] #addonbar_v {
-		  outline: 1px dashed !important;
-		  outline-offset: -2px !important;
-		}
-		#addonbar_v toolbarbutton,
-		#addonbar_v toolbar .toolbarbutton-1 {
-		  padding: 0 !important;
-		}
-		#unified-extensions-button[hidden]{
-			visibility: visible !important;
-			display: flex !important;
-		}
-		#addonbar_v toolbaritem separator {
-			display: none !important;
-		}
-		#main-window:not([customizing]) #addonbar_v > toolbaritem {
-		  writing-mode: vertical-rl !important;
-		  text-orientation: mixed !important;
-		  transform: rotate(0deg) !important;
-		}
-		#main-window:not([customizing]) #addonbar_v > toolbaritem menupopup {
-		  max-height: 170px !important;
-		  max-width: 170px !important;
-		  transform: rotate(-90deg) !important;
-		}
-		#main-window:not([customizing]) #addonbar_v > toolbaritem .toolbarbutton-badge {
-		  transform: rotate(-90deg) !important;
-		  position: absolute !important;
-		  padding: 1px 2px !important;
-		  top: -4px !important;
-		}
-		#main-window:not([customizing]) #addonbar_v #search-container,
-		#main-window:not([customizing]) #addonbar_v #wrapper-search-container {
-		  flex: unset !important;
-		}
-		#main-window:not([customizing]) #addonbar_v #search-container {
-		  min-width: unset !important;
-		  width: unset !important;
-		  height: 100px !important;
+	    #addonbar_v {
+	  	  appearance: none !important;
+	  	  background-color: var(--toolbar-bgcolor);
+	  	  background-image: var(--toolbar-bgimage);
+	  	  background-clip: padding-box;
+	  	  color: var(--toolbar-color, inherit);
+	    }
 
-		  &[width] {
-			flex: unset !important;
+	    #main-window[chromehidden="menubar toolbar location directories status extrachrome "] #addonbar_v:not([collapsed="true"]),
+	    #main-window[sizemode="fullscreen"] #addonbar_v:not([collapsed="true"]) {
+	  	  min-width: 0px;
+	  	  width: 0px;
+	  	  max-width: 0px;
+	    }
+	    #addonbar_v toolbarbutton,
+	    #addonbar_v toolbar .toolbarbutton-1 {
+	  	  padding: 0 !important;
+	    }
+	    #unified-extensions-button[hidden] {
+	  	  visibility: visible !important;
+	  	  display: flex !important;
+	    }
+	    #addonbar_v toolbaritem separator {
+	  	  display: none !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v > toolbaritem {
+	  	  writing-mode: vertical-rl !important;
+	  	  text-orientation: mixed !important;
+	  	  transform: rotate(0deg) !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v > toolbaritem menupopup {
+	  	  max-height: 170px !important;
+	  	  max-width: 170px !important;
+	  	  transform: rotate(-90deg) !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v > toolbaritem .toolbarbutton-badge {
+	  	  transform: rotate(-90deg) !important;
+	  	  position: absolute !important;
+	  	  padding: 1px 2px !important;
+	  	  top: -4px !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v #search-container,
+	    #main-window:not([customizing]) #addonbar_v #wrapper-search-container {
+	  	  flex: unset !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v #search-container {
+	  	  min-width: unset !important;
+	  	  width: unset !important;
+	  	  height: 100px !important;
+	  
+	  	  &[width] {
+	  	    flex: unset !important;
+	  	  }
+	    }
+	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button > .toolbarbutton-text {
+	  	  min-width: unset !important;
+	  	  min-height: unset !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button:not([label]) {
+	  	  display: none !important;
+	    }
+	    #main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
+	  	  width: unset !important;
+	  	  height: 16px !important;
+	    }
+		#main-window:not([customizing]) #addonbar_v:not([collapsed="true"], .header, .additional) {
+		  &::before, &::after {
+			content: "";
+			width: ${addonbar_v_width};
+			height: 1px;
+			/*background: rgb(from var(--toolbar-bgcolor) r g b / 1);*/
+			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;*/
+			background: rgb(from var(--toolbar-bgcolor) r g b / 1);
+			position: absolute;
+			opacity: 1;
 		  }
+		  &::before { top: -1px; }
+		  &::after  { bottom: -1px;}
 		}
-		#main-window:not([customizing]) #addonbar_v #zoom-reset-button > .toolbarbutton-text {
-		  min-width: unset !important;
-		  min-height: unset !important;
+		#addonbar_v.experimental {
+		  overflow: hidden !important;
 		}
-		#main-window:not([customizing]) #addonbar_v #zoom-reset-button:not([label]) {
+		#addonbar_v.experimental > *:not(#addonbar_v_bg) {
+		  z-index: 1 !important;
+		}
+		#addonbar_v.experimental #addonbar_v_bg {
+		  position: relative !important;
+		}
+		/* rotate the background image in a vertical toolbar */
+		#addonbar_v.experimental #addonbar_v_bg::before {
+		  content: "" ;
+		  position: absolute;
+		  top: 0;
+		  left: 0;
+		  /* the horizontal length becomes the vertical span once rotated */
+		  width: 100vw !important; 
+		  height: ${addonbar_v_width} !important; 
+		  background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;
+		  background-repeat: no-repeat !important;
+		  background-position: right top !important;
+		  background-size: cover !important;
+		  transform: rotate(90deg) translate(-100%, 0) !important;
+		  transform-origin: bottom left !important;
+		  z-index: 0 !important;
+		  display: block !important;
+		}
+		#main-window[customizing] #addonbar_v.experimental #addonbar_v_bg::before {
 		  display: none !important;
 		}
-		#main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
-		  width: unset !important;
-		  height: 16px !important;
+		#addonbar_v.experimental.header #addonbar_v_bg::before {
+		  background-size: auto !important;
 		}
-		`+end_border+`
+		#addonbar_v.experimental.additional #addonbar_v_bg::before {
+		  background-size: cover !important;
+		}
 	  `;
 	}
-	
-	var addonbar_right = '';
-	
-	if(!addonbar_v_on_the_left) {
-		addonbar_right =`
-		  #toolbox_abv{
-			order: 10 !important;
-		  }
-		`;
-	}
-	
-	if(addonbar_v_togglebutton) {
-	  togglebutton_addonbar_v_style =`
-		#togglebutton_addonbar_v .toolbarbutton-icon { \
-		  list-style-image: url('chrome://browser/skin/sidebars.svg');
-		  fill: green; 
+
+	// Toggle button styling
+	if (addonbar_v_togglebutton) {
+	  css += `
+		#togglebutton_addonbar_v .toolbarbutton-icon {
+		  list-style-image: url("chrome://browser/skin/sidebars.svg");
+		  fill: var(--toolbarbutton-icon-fill);
 		}
-		/*#togglebutton_addonbar_v .toolbarbutton-icon {
-		  list-style-image: url('chrome://browser/skin/forward.svg');
-		  fill: red;
-		}
-		#togglebutton_addonbar_v[checked] .toolbarbutton-icon {
-		  fill: green;
-		}
-		#togglebutton_addonbar_v {
-		  background: url('chrome://browser/skin/back.svg') no-repeat;
-		  background-size: 35% !important;
-		  background-position: 10% 70% !important;
-		}
-		#togglebutton_addonbar_v[checked] {
-		  transform: rotate(180deg) !important;
-		  background: url('chrome://browser/skin/back.svg') no-repeat;
-		  background-position: 10% 30% !important;
-		}*/
 	  `;
 	}
-	
-	var compact_buttons_code = '';
-	
-	if(compact_buttons)
-	  compact_buttons_code = `
+
+	// Compact button styling
+	if (compact_buttons) {
+	  css += `
 		#addonbar_v toolbarbutton .toolbarbutton-icon {
 		  padding: 0 !important;
 		  width: 16px !important;
@@ -332,40 +341,22 @@ var AddonbarVertical = {
 		  font-size: 8px !important;
 		}
 	  `;
-	  
-	var uri = Services.io.newURI('data:text/css;charset=utf-8,' + encodeURIComponent(''+addonbar_v_style + togglebutton_addonbar_v_style + addonbar_right + compact_buttons_code), null, null);
-	  
-	var sss = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(Components.interfaces.nsIStyleSheetService);
-	sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
-	
-	// fixes the issue where downloads button was always hidden after restart
-	if(Services.prefs.getBranch('browser.download.').getBoolPref('autohideButton') == false)
-	  document.getElementById("downloads-button").removeAttribute('hidden');
-	
+	}
+
+	const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
+	const uri = Services.io.newURI("data:text/css;charset=UTF-8," + encodeURIComponent(css));
+	if (!sss.sheetRegistered(uri, sss.AGENT_SHEET)) {
+	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
+	}
   }
 
-}
+  /* initialization delay */
+  if (location == "chrome://browser/content/browser.xhtml") {
+	document.addEventListener("DOMContentLoaded", () => init(), { once: true });
+  }
+  /* Alternative delays */
+  // Promise.resolve().then(() => init());
+  // or
+  // setTimeout(() => init(), 2000);
 
-/* initialization delay workaround */
-document.addEventListener('DOMContentLoaded', AddonbarVertical.init(), false);
-/* Use the below code instead of the one above this line, if issues occur */
-/*
-setTimeout(function(){
-  AddonbarVertical.init();
-},2000);
-*/
-
-/* fix for downloads button on add-on bar - thanks to dimdamin */
-/* https://github.com/Aris-t2/CustomJSforFx/issues/125#issuecomment-2506613776 */
-(async url => !location.href.startsWith(url) || await delayedStartupPromise ||
-	(async (scrNT, nTjs) => {
-		if (scrNT.length >= 1) {
-			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
-			nTjs.res = await fetch(scrNT[0].src);
-			nTjs.src = (await nTjs.res.text())
-				.replace(/navigator-toolbox/, "addonbar_v")
-				.replace(/widget-overflow/, "addonbar_v");
-			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
-		};
-	})(document.getElementById("navigator-toolbox").querySelectorAll(":scope > script"), {})
-)("chrome://browser/content/browser.x");
+})();
