@@ -9,7 +9,6 @@
 
 try {
 	
-  ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   const sss = Components.classes["@mozilla.org/content/style-sheet-service;1"].getService(Components.interfaces.nsIStyleSheetService);
   
   const button_label = "About Button (generic)";

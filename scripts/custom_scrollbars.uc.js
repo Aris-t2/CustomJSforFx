@@ -3,15 +3,16 @@
 /* Firefox userChrome.js tweaks - 'Custom Scrollbars' for Firefox
    https://github.com/Aris-t2/CustomJSforFx/blob/master/scripts/custom_scrollbars.uc.js
 
-   Version: 2.0.5 for Firefox 115+
+   Version: 2.0.5 for Firefox 143+
    
    NOTE: 'non-compatible options' from earlier versions were removed
 
    README
   
    about:config >
-       widget.windows.overlay-scrollbars.enabled > false (Windows)
-       widget.gtk.overlay-scrollbars.enabled > false (Linux)
+	   widget.non-native-theme.win.scrollbar.use-system-size > false (required for custom_scrollbar_width)
+	   widget.windows.overlay-scrollbars.enabled > false (Windows)
+	   widget.gtk.overlay-scrollbars.enabled > false (Linux)
    [!] The above preferences have to be set to 'false' for this code to work
  
    [!] STARTUP CACHE HAS TO BE DELETED AFTER EVERY CHANGE!
@@ -22,10 +23,10 @@
    Modifying appearance > change values
    - enable/disable options: true <-> false
    - color
-     - name: red, blue, transparent 
-     - hex code: #33CCFF, #FFF
-     - rgb(a): rgba(0,0,255,0.8)
-     - hsl(a): hsla(240,100%,50%,0.8)
+	 - name: red, blue, transparent 
+	 - hex code: #33CCFF, #FFF
+	 - rgb(a): rgba(0,0,255,0.8)
+	 - hsl(a): hsla(240,100%,50%,0.8)
    - numbers: 1, 2, 3 ... 10, 11, 12 ...
    - opacity: 0.0 to 1.0 e.g. 1.4, 1,75
    - gradients: linear-gradient(direction, color, color, color)
@@ -53,6 +54,9 @@
   // default: thin_scrollbars = false / browsers own way to show thin scrollbars
   const thin_scrollbars = false;
 
+  // default: custom_scrollbar_width = 0 / requires preference change, see README above.
+  const custom_scrollbar_width = 0
+ 
   // default: custom_scrollbar_opacity = false
   const custom_scrollbar_opacity = false;
 
@@ -75,9 +79,11 @@
   //        and placed inside 'chrome\icons' folder
   const custom_scrollbar_arrows_version = 1;
   
-  // default: custom_scrollbar_arrows_color = "grey"; / # ==> %23 e.g. #33CCFF ==> %2333CCFF
-  // only for 'custom_scrollbar_arrows_version = 1'
+  // default: custom_scrollbar_arrows_color = "grey"
+  // _hover and _active color options are only applied to version 2
   const custom_scrollbar_arrows_color = "grey";
+  const custom_scrollbar_arrows_hover_color = "rgb(255, 0, 0)"
+  const custom_scrollbar_arrows_active_color = "#00ff00"
   
   // default: cs_thumb_border = 0 / in px
   const cs_thumb_border = 0;
@@ -85,11 +91,20 @@
   // default: cs_thumb_roundness = 0 / in px
   const cs_thumb_roundness = 0;
  
+  // default: cs_background_roundness = 0 / in px
+  const cs_background_roundness = 0;
+ 
   // default: cs_buttons_border = 0 / in px
   const cs_buttons_border = 0;
 
   // default: cs_buttons_roundness = 0 / in px
   const cs_buttons_roundness = 0;
+
+  // default: cs_buttons_vertical_size = 17 / in px
+  const cs_buttons_vertical_size = 17;
+
+  // default: cs_buttons_vertical_size = 17 / in px
+  const cs_buttons_horizontal_size = 17;
 
   // default: cs_ignore_color_gradients = false / 'flat' scrollbars
   const cs_ignore_color_gradients = false; 
@@ -192,10 +207,10 @@
 		slider {
 		  background-color: ${cs_background_color} !important;
 		}
-		scrollbar[orient="vertical"] slider {
+		scrollbar[vertical="true"] slider {
 		  background-image: ${cs_background_image_vertical} !important;
 		}
-		scrollbar[orient="horizontal"] slider {
+		scrollbar:not([vertical]) slider {
 		  background-image: ${cs_background_image_horizontal} !important;
 		}
 		scrollcorner {
@@ -207,83 +222,90 @@
 		  border-radius: ${cs_thumb_roundness}px !important;
 		  box-shadow: inset 0 0 0 ${cs_thumb_border}px ${cs_thumb_border_color} !important;
 		}
-		scrollbar thumb[orient="vertical"] {
+		scrollbar > slider{
+		  border-radius: ${cs_background_roundness}px !important;
+		}
+		scrollbar[vertical="true"] > slider > thumb {
 		  background-image: ${cs_thumb_image_vertical} !important;
 		  min-height: 17px !important;
 		}
-		scrollbar thumb[orient="horizontal"] {
+		scrollbar:not([vertical]) > slider > thumb {
 		  background-image: ${cs_thumb_image_horizontal} !important;
 		  min-width: 17px !important;
 		}
 		scrollbar thumb:hover, scrollbar thumb:active {
 		  background-color: ${cs_thumb_hover_color} !important;
+		  transition: background-color ease-in 0.2s;
 		}
-		scrollbar thumb[orient="vertical"]:hover, scrollbar thumb[orient="vertical"]:active {
+		scrollbar[vertical="true"] > slider > thumb:hover, scrollbar[vertical="true"] > slider > thumb:active {
 		  background-image: ${cs_thumb_hover_image_vertical} !important;
 		}
-		scrollbar thumb[orient="horizontal"]:hover, scrollbar thumb[orient="horizontal"]:active {
+		scrollbar:not([vertical]) > slider > thumb:hover, scrollbar:not([vertical]) > slider > thumb:active {
 		  background-image: ${cs_thumb_hover_image_horizontal} !important;
 		}
 		scrollbar scrollbarbutton {
 		  background-color: ${cs_buttons_color} !important;
 		  border-radius: ${cs_buttons_roundness}px !important;
 		  box-shadow: inset 0 0 0 ${cs_buttons_border}px ${cs_buttons_border_color} !important;
-		  height: 17px !important;
-		  width: 17px !important;
+		  height: ${cs_buttons_vertical_size}px !important;
+		  width: ${cs_buttons_horizontal_size}px !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton {
+		scrollbar[vertical="true"] scrollbarbutton {
 		  background-image: ${cs_buttons_image_vertical} !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton {
+		scrollbar:not([vertical]) scrollbarbutton {
 		  background-image: ${cs_buttons_image_horizontal} !important;
 		}
 		scrollbar scrollbarbutton:hover {
 		  background-color: ${cs_buttons_hover_color} !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton:hover {
+		scrollbar[vertical="true"] scrollbarbutton:hover {
 		  background-image: ${cs_buttons_hover_image_vertical} !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton:hover {
+		scrollbar:not([vertical]) scrollbarbutton:hover {
 		  background-image: ${cs_buttons_hover_image_horizontal} !important;
 		}
 	`;
-	
+
   if(custom_scrollbar_arrows === true && custom_scrollbar_arrows_version === 1)
 	custom_scrollbar_arrows_code=`
 		scrollbar scrollbarbutton {
 		  background-repeat: no-repeat !important;
 		  background-position: center center !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton[type="decrement"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3E%3C/svg%3E ") !important;
+		scrollbar[vertical="true"] scrollbarbutton[type="decrement"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${encodeURIComponent(custom_scrollbar_arrows_color)}' %3E%3Cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3E%3C/svg%3E ") !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton[type="increment"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E ") !important;
+		scrollbar[vertical="true"] scrollbarbutton[type="increment"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${encodeURIComponent(custom_scrollbar_arrows_color)}' %3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E ") !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton[type="decrement"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E ") !important;
+		scrollbar:not([vertical]) scrollbarbutton[type="decrement"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${encodeURIComponent(custom_scrollbar_arrows_color)}' %3E%3Cpath d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z'/%3E%3C/svg%3E ") !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton[type="increment"] {
-		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${custom_scrollbar_arrows_color}' %3E%3Cpath d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z'/%3E%3C/svg%3E ") !important;
+		scrollbar:not([vertical]) scrollbarbutton[type="increment"] {
+		  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${encodeURIComponent(custom_scrollbar_arrows_color)}' %3E%3Cpath d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z'/%3E%3C/svg%3E ") !important;
 		}
-
 	`;
   else if(custom_scrollbar_arrows === true && custom_scrollbar_arrows_version === 2)
 	custom_scrollbar_arrows_code=`
 		scrollbar scrollbarbutton {
 		  background-repeat: no-repeat !important;
 		  background-position: center center !important;
+		  -moz-context-properties: fill, fill-opacity !important;
+		  fill: ${custom_scrollbar_arrows_color};
+		  &:hover { fill: ${custom_scrollbar_arrows_hover_color}; }
+		  &:active { fill: ${custom_scrollbar_arrows_active_color}; } 
 		}
-		scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
+		scrollbar[vertical="true"] > scrollbarbutton[type="decrement"] {
 		  background-image: url("${ProfilePathChrome}/icons/up.svg") !important;
 		}
-		scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
+		scrollbar[vertical="true"] > scrollbarbutton[type="increment"] {
 		  background-image: url("${ProfilePathChrome}/icons/down.svg") !important;
 		}
-		scrollbar[orient="horizontal"] > scrollbarbutton[type="decrement"] {
+		scrollbar:not([vertical]) > scrollbarbutton[type="decrement"] {
 		  background-image: url("${ProfilePathChrome}/icons/left.svg") !important;
 		}
-		scrollbar[orient="horizontal"] > scrollbarbutton[type="increment"] {
+		scrollbar:not([vertical]) > scrollbarbutton[type="increment"] {
 		  background-image: url("${ProfilePathChrome}/icons/right.svg") !important;
 		}
 	`;
@@ -293,12 +315,12 @@
 		scrollbar scrollbarbutton {
 		  opacity: 0 !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton {
+		scrollbar[vertical="true"] scrollbarbutton {
 		  min-height: 1px !important;
 		  height: 1px !important;
 		  max-height: 1px !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton {
+		scrollbar:not([vertical]) scrollbarbutton {
 		  min-width: 1px !important;
 		  width: 1px !important;
 		  max-width: 1px !important;
@@ -325,18 +347,18 @@
 		:root{
 		  scrollbar-width: thin !important;
 		}
-		scrollbar[orient="vertical"] scrollbarbutton {
-		  height: 14px !important;
-		  width: 7px !important;
+		scrollbar[vertical="true"] scrollbarbutton {
+		  height: ${cs_buttons_vertical_size}px !important;
+		  width: ${cs_buttons_horizontal_size}px !important;
 		}
-		scrollbar[orient="horizontal"] scrollbarbutton {
-		  height: 7px !important;
-		  width: 14px !important;
+		scrollbar:not([vertical]) scrollbarbutton {
+		  height: ${cs_buttons_vertical_size}px !important;
+		  width: ${cs_buttons_horizontal_size}px !important;
 		}
 	`;
 
   Components.classes["@mozilla.org/content/style-sheet-service;1"]
-    .getService(Components.interfaces.nsIStyleSheetService)
+	.getService(Components.interfaces.nsIStyleSheetService)
 	  .loadAndRegisterSheet(Services.io.newURI("data:text/css;charset=utf-8," + encodeURIComponent(`
 		${custom_scrollbars_code}
 		${custom_scrollbar_arrows_code}
@@ -346,7 +368,14 @@
 		${thin_scrollbars_code}
   `), null, null),
   Components.classes["@mozilla.org/content/style-sheet-service;1"]
-    .getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET);
+	.getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET);
 
+  if (custom_scrollbar_width !== 0) {
+	const current = Services.prefs.getIntPref("widget.non-native-theme.scrollbar.size.override", 0);
+	if (current !== custom_scrollbar_width) {
+		console.log("LOLO!@L321312321321")
+	  Services.prefs.setIntPref("widget.non-native-theme.scrollbar.size.override", custom_scrollbar_width);
+	}
+  }
 
 })();

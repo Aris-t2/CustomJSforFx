@@ -3,7 +3,6 @@
 // option: place back button on a different toolbar
 // option: place back button on a different toolbar
 
-ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs");
   
 var navigation = CustomizableUI.AREA_NAVBAR;
 var tabs = CustomizableUI.AREA_TABSTRIP;
@@ -61,4 +60,4 @@ var MoveUrlbar = {
 
 }
 
-document.addEventListener("DOMContentLoaded", MoveUrlbar.init(), false);
+document.addEventListener("DOMContentLoaded", MoveUrlbar.init, false);
