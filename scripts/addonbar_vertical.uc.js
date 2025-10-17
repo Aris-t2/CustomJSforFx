@@ -279,6 +279,7 @@
 		}
 		#addonbar_v.experimental #addonbar_v_bg {
 		  position: relative !important;
+		  margin-top: auto !important;
 		}
 		/* rotate the background image in a vertical toolbar */
 		#addonbar_v.experimental #addonbar_v_bg::before {
@@ -287,7 +288,7 @@
 		  top: 0;
 		  left: 0;
 		  /* the horizontal length becomes the vertical span once rotated */
-		  width: 100vw !important; 
+		  width: 3000px !important; 
 		  height: ${addonbar_v_width} !important; 
 		  background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;
 		  background-repeat: no-repeat !important;
@@ -305,7 +306,8 @@
 		  background-size: auto !important;
 		}
 		#addonbar_v.experimental.additional #addonbar_v_bg::before {
-		  background-size: cover !important;
+		  background-size: auto, cover !important;
+		  background-repeat: var(--lwt-background-tiling), no-repeat !important;
 		}
 	  `;
 	}

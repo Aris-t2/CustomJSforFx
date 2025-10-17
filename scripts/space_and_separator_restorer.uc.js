@@ -128,6 +128,14 @@ var AddSeparator = {
 		#main-window[customizing] #wrapper-spacer #spacer {
 		  margin: 2px 0 !important;
 		}
+		#main-window[customizing] #configuration_toolbar #wrapper-separator {
+		  position: relative;
+		  #separator::before {
+			position: absolute;
+			inset-block: 0;
+			left: 50%;
+		  }
+		}
 		#main-window[customizing] #configuration_toolbar #wrapper-spring #spring {
 		  margin: -1px 0 !important;
 		  min-width: 80px !important;
@@ -145,8 +153,10 @@ var AddSeparator = {
 		}
 		toolbar[orient="vertical"] toolbarseparator {
 		  appearance: none !important;
+		  background-color: var(--toolbarseparator-color) !important;
 		  border-top: 1px solid rgba(15,17,38, 0.5) !important;
 		  border-bottom: 1px solid rgba(255,255,255, 0.3) !important;
+		  padding: 0px !important;
 		  margin: 2px 2px !important;
 		  height: 1px !important;
 		}

@@ -194,7 +194,7 @@
 		}
 		/* Switch between auto/cover for better background image display */
 		&.experimental.header { background-size: auto !important; }
-		&.experimental.additional { background-size: cover !important; }
+		&.experimental.additional { background-size: cover, auto !important; }
 	  }
 	  #addonbar {
 		/* Normalize buttons */
