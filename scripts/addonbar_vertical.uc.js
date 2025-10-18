@@ -59,9 +59,12 @@
 		CustomizableUI.registerArea("addonbar_v", { legacy: true });
 		CustomizableUI.registerToolbarNode(tb_addonbarv);
 
-		const prefs = Services.prefs.getBranch("browser.vaddonbar.");
+		// In case Firefox missed it during init, apply order manually
+		tb_addonbarv.style.order = addonbar_v_on_the_left ? 0 : browser.childElementCount;
+
 		// Restore state from prefs
 		// Apply after register to prevent silent fail when it's in collapsed state
+		const prefs = Services.prefs.getBranch("browser.vaddonbar.");
 	    try {
 	  	  Services.prefs.getDefaultBranch("browser.vaddonbar.").setBoolPref("enabled", true);
 		  const enabled = prefs.getBoolPref("enabled");
@@ -88,7 +91,7 @@
 		}
 
 		// Movable toggle button
-	    if (addonbar_v_togglebutton && !CustomizableUI.getWidget("togglebutton_addonbar_v")) {
+	    if (addonbar_v_togglebutton && CustomizableUI.getWidget("togglebutton_addonbar_v")?.provider !== "api") {
 	  	  CustomizableUI.createWidget({
 	  	    id: "togglebutton_addonbar_v", // button id
 	  	    defaultArea: CustomizableUI.AREA_NAVBAR,
