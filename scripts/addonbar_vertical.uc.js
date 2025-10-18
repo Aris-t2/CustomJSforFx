@@ -353,10 +353,23 @@
   }
 
   /* initialization delay */
-  if (location == "chrome://browser/content/browser.xhtml") {
-	document.addEventListener("DOMContentLoaded", () => init(), { once: true });
+  if (typeof gBrowserInit !== "undefined" && gBrowserInit.delayedStartupFinished) {
+	init();
+  } else {
+	const delayedListener = (subject, topic) => {
+	  if (topic === "browser-delayed-startup-finished" && subject === window) {
+		Services.obs.removeObserver(delayedListener, topic);
+		init();
+	  }
+	};
+	Services.obs.addObserver(delayedListener, "browser-delayed-startup-finished");
   }
+
   /* Alternative delays */
+  // document.addEventListener("DOMContentLoaded", () => init(), { once: true });
+  // or
+  // document.addEventListener('DOMContentLoaded', init(), false);
+  // or
   // Promise.resolve().then(() => init());
   // or
   // setTimeout(() => init(), 2000);

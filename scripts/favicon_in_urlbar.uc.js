@@ -23,6 +23,8 @@
   // ==UserConfig==
 
   function init() {
+	if (location != "chrome://browser/content/browser.xhtml") return;
+
 	try {
 	  // Create favicon element in the urlbar
 	  const favimginurlbar = document.createXULElement("image");
@@ -166,11 +168,24 @@
 	}
   }
 
-  /* initialization delay workaround */
-  if (location == "chrome://browser/content/browser.xhtml") {
-	document.addEventListener("DOMContentLoaded", () => init(), { once: true });
+  /* initialization delay */
+  if (typeof gBrowserInit !== "undefined" && gBrowserInit.delayedStartupFinished) {
+	init();
+  } else {
+	const delayedListener = (subject, topic) => {
+	  if (topic === "browser-delayed-startup-finished" && subject === window) {
+		Services.obs.removeObserver(delayedListener, topic);
+		init();
+	  }
+	};
+	Services.obs.addObserver(delayedListener, "browser-delayed-startup-finished");
   }
-  /* Use the below code instead of the one above this line, if issues occur */
+
+  /* Alternative delays */
+  // document.addEventListener("DOMContentLoaded", () => init(), { once: true });
+  // or
+  // document.addEventListener('DOMContentLoaded', init(), false);
+  // or
   // Promise.resolve().then(() => init());
   // or
   // setTimeout(() => init(), 2000);
