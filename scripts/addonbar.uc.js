@@ -1,4 +1,4 @@
-// Add-on Bar script for Firefox 14X+ by Aris
+// Add-on Bar script for Firefox 148+ by Aris
 //
 // no 'close' button
 // 'toggle' toolbar with 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS
@@ -41,10 +41,10 @@
 		document.getElementById("browser").parentNode.appendChild(tb_addonbar);
 		bar = tb_addonbar;
 
-		const _appendStatusPanelDefault = gBrowser._appendStatusPanel;
+		const _appendStatusPanelDefault = gBrowser.appendStatusPanel;
 		if (move_statuspanel_to_addonbar) {
 		  tb_addonbar.insertBefore(document.querySelector("#statuspanel"), tb_addonbar.firstChild);
-		  gBrowser._appendStatusPanel = function() { updateStatusPanel(); };
+		  gBrowser.appendStatusPanel = function() { updateStatusPanel(); };
 		  window.addEventListener("fullscreen", updateStatusPanel);
 		}
 
