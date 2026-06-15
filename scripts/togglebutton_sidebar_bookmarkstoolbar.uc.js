@@ -26,7 +26,7 @@ var ToggleSBandBT = {
 	
 	  onClick: function(event) {
 		  
-		var windows = Services.wm.getEnumerator(null);
+		var windows = Services.wm.getEnumerator('navigator:browser');
 		var tb_sb_bt_SideBar = null;
 		while (windows.hasMoreElements()) {
 		  var win = windows.getNext();
@@ -38,6 +38,7 @@ var ToggleSBandBT = {
 
 		  if(event.button==1) {  // 0 = leftclick, 1 = middleclick, 2 = rightclick			  
 			BookmarkingUI.toggleBookmarksToolbar('bookmarks-widget');
+			return;
 		  }
 		  
 		
@@ -62,10 +63,14 @@ var ToggleSBandBT = {
 	});
    } catch(e) {}
 
+	let icon = parseInt(Services.appinfo.version) >= 151
+	  ? 'chrome://browser/skin/sidebar-collapsed.svg'
+	  : 'chrome://browser/skin/sidebars.svg';
+
 	Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(Components.interfaces.nsIStyleSheetService)
 	  .loadAndRegisterSheet(Services.io.newURI('data:text/css;charset=utf-8,' + encodeURIComponent(`
 		#togglebutton_sb_bt .toolbarbutton-icon {
-		  list-style-image: url('chrome://browser/skin/sidebars.svg');
+		  list-style-image: url('${icon}');
 		}
 	  `), null, null), Components.classes['@mozilla.org/content/style-sheet-service;1']
 	.getService(Components.interfaces.nsIStyleSheetService).AGENT_SHEET);

@@ -31,7 +31,11 @@ var AddAddonbar = {
 	var addonbar_label = 'Add-on Bar';
 	var compact_buttons_code = '';
 	var h_button_label = 'Toggle horizontal Add-on Bar'; // Toggle button name
-	
+
+	let icon = parseInt(Services.appinfo.version) >= 151
+      ? 'chrome://browser/skin/sidebar-collapsed.svg'
+      : 'chrome://browser/skin/sidebars.svg';
+
 	if(compact_buttons)
 	  compact_buttons_code = `
 		#addonbar toolbarbutton .toolbarbutton-icon {
@@ -104,7 +108,7 @@ var AddAddonbar = {
 			max-height: 24px !important;
 		  }*/
 		  #togglebutton_addonbar_h .toolbarbutton-icon { \
-		    list-style-image: url('chrome://browser/skin/sidebars.svg');
+		    list-style-image: url('${icon}');
 		    fill: green; 
 			transform: rotate(270deg);
 		  }
@@ -151,7 +155,7 @@ var AddAddonbar = {
 			  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
 			}
 	    `);*/
-		key.addEventListener("command", () => {var windows = Services.wm.getEnumerator(null);
+		key.addEventListener('command', () => {var windows = Services.wm.getEnumerator('navigator:browser');
 			while (windows.hasMoreElements()) {
 			  var win = windows.getNext();
 			  var hAddonBar = win.document.getElementById('addonbar');
@@ -162,8 +166,27 @@ var AddAddonbar = {
 			  else win.document.querySelector('#togglebutton_addonbar_h').removeAttribute('checked');
 			}} );
 		document.getElementById('mainKeyset').appendChild(key);
-		
-		
+
+		// Attach handlers for buttons moved outside #navigator-toolbox
+	    // https://searchfox.org/firefox-main/source/browser/base/content/navigator-toolbox.js
+	    const customHandlers = {
+	  	  "unified-extensions-button": (el, e) => gUnifiedExtensions.togglePanel(e),
+	  	  "fxa-toolbar-menu-button":   (el, e) => gSync.toggleAccountPanel(el, e),
+	  	  "firefox-view-button":       (el, e) => FirefoxViewHandler.openToolbarMouseEvent(e),
+	  	  "downloads-button":          (el, e) => DownloadsIndicatorView.onCommand(e),
+	  	  "pageActionButton":          (el, e) => BrowserPageActions.mainButtonClicked(e),
+	  	  "alltabs-button":            (el, e) => gTabsPanel.showAllTabsPanel(e, "alltabs-button"),
+	  	  "library-button":            (el, e) => PanelUI.showSubView("appMenu-libraryView", el, e),
+	  	  "import-button":             (el, e) => MigrationUtils.showMigrationWizard(window, {
+	  	    entrypoint: MigrationUtils.MIGRATION_ENTRYPOINTS.BOOKMARKS_TOOLBAR,
+	  	  }),
+	    };
+
+		tb_addonbar.addEventListener("mousedown", (e) => {
+		  const button = e.target.closest("toolbarbutton");
+		  if (button?.id && customHandlers[button.id]) customHandlers[button.id](button, e);
+		});
+
 		try {
 		  setToolbarVisibility(document.getElementById('addonbar'), Services.prefs.getBranch('browser.addonbar.').getBoolPref('enabled'));
 		} catch(e) {}
@@ -177,7 +200,7 @@ var AddAddonbar = {
 			tooltiptext: h_button_label, // tooltip title
 			onClick: function(event) {
 			  if(event.button==0) {
-			    var windows = Services.wm.getEnumerator(null);
+			    var windows = Services.wm.getEnumerator('navigator:browser');
 				while (windows.hasMoreElements()) {
 				  var win = windows.getNext();
 				  
@@ -211,20 +234,3 @@ var AddAddonbar = {
 
 /* initialization delay workaround */
 document.addEventListener('DOMContentLoaded', AddAddonbar.init(), false);
-/* Use the below code instead of the one above this line, if issues occur */
-
-/* fix for downloads button on add-on bar - thanks to dimdamin */
-/* https://github.com/Aris-t2/CustomJSforFx/issues/125#issuecomment-2506613776 */
-(async url => !location.href.startsWith(url) || await delayedStartupPromise ||
-	(async (scrNT, nTjs) => {
-		if (scrNT.length >= 1) {
-			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
-			nTjs.res = await fetch(scrNT[0].src);
-			nTjs.src = (await nTjs.res.text())
-				.replace(/navigator-toolbox/, "addonbar")
-				.replace(/widget-overflow/, "addonbar");
-			(await ChromeUtils.compileScript(nTjs.uri + encodeURIComponent(nTjs.src))).executeInGlobal(this);
-		};
-	})(document.getElementById("navigator-toolbox").querySelectorAll(":scope > script"), {})
-)("chrome://browser/content/browser.x");
-

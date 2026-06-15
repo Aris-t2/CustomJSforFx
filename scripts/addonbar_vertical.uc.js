@@ -170,8 +170,8 @@
 		document.getElementById("downloads-button")?.removeAttribute("hidden");
 
 	} catch(e) {}
-	
-	
+
+
 	// Style toolbar
 	let css = `
 	  #main-window:not([customizing]) #addonbar_v:not([collapsed="true"]) {
@@ -265,7 +265,6 @@
 			content: "";
 			width: ${addonbar_v_width};
 			height: 1px;
-			/*background: rgb(from var(--toolbar-bgcolor) r g b / 1);*/
 			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;*/
 			background: rgb(from var(--toolbar-bgcolor) r g b / 1);
 			position: absolute;
@@ -315,11 +314,15 @@
 	  `;
 	}
 
+	let icon = parseInt(Services.appinfo.version) >= 151
+      ? "chrome://browser/skin/sidebar-collapsed.svg"
+      : "chrome://browser/skin/sidebars.svg";
+
 	// Toggle button styling
 	if (addonbar_v_togglebutton) {
 	  css += `
 		#togglebutton_addonbar_v .toolbarbutton-icon {
-		  list-style-image: url("chrome://browser/skin/sidebars.svg");
+		  list-style-image: url("${icon}");
 		  fill: var(--toolbarbutton-icon-fill);
 		}
 	  `;
