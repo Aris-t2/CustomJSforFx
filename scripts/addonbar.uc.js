@@ -212,6 +212,7 @@
 		> toolbaritem.unified-extensions-item:first-child toolbarbutton,
 		> #statuspanel + toolbaritem.unified-extensions-item toolbarbutton {
 		  padding-left: 1px !important;
+          max-width: 32px !important;
 		}
 	  }
 	`;
