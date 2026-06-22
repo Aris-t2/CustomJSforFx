@@ -252,7 +252,14 @@
 	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button > .toolbarbutton-text {
 	  	  min-width: unset !important;
 	  	  min-height: unset !important;
+          writing-mode: horizontal-tb !important;
+          padding-bottom: calc(var(--toolbarbutton-inner-padding) - 1px) !important;
+          padding-left: calc(var(--toolbarbutton-inner-padding) - 6px) !important;
+          padding-right: calc(var(--toolbarbutton-inner-padding) - 6px) !important;
 	    }
+        #main-window:not([customizing]) #addonbar_v > #zoom-controls{
+          margin: 2px 0px 2px 0px !important;
+        }
 	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button:not([label]) {
 	  	  display: none !important;
 	    }
