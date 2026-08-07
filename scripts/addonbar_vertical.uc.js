@@ -197,7 +197,7 @@
 		}
 	    #addonbar_v {
 	  	  appearance: none !important;
-	  	  background-color: var(--toolbar-bgcolor);
+	  	  background-color: var(--toolbar-background-color);
 	  	  background-image: var(--toolbar-bgimage);
 	  	  background-clip: padding-box;
 	  	  color: var(--toolbar-color, inherit);
@@ -272,8 +272,8 @@
 			content: "";
 			width: ${addonbar_v_width};
 			height: 1px;
-			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;*/
-			background: rgb(from var(--toolbar-bgcolor) r g b / 1);
+			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-background-color) r g b / 1)) !important;*/
+			background: rgb(from var(--toolbar-background-color) r g b / 1);
 			position: absolute;
 			opacity: 1;
 		  }
@@ -299,7 +299,7 @@
 		  /* the horizontal length becomes the vertical span once rotated */
 		  width: 3000px !important; 
 		  height: ${addonbar_v_width} !important; 
-		  background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;
+		  background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-background-color) r g b / 1)) !important;
 		  background-repeat: no-repeat !important;
 		  background-position: right top !important;
 		  background-size: cover !important;

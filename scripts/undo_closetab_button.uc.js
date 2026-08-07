@@ -9,6 +9,10 @@ try {
 
   var button_label = "Undo Close Tab";
 
+  if (CustomizableUI.getWidget("uc_undo_closetab_button")?.provider === "api") {
+   return;
+  }
+
   CustomizableUI.createWidget({
 	id: "uc_undo_closetab_button", // button id
 	defaultArea: CustomizableUI.AREA_NAVBAR,
@@ -17,7 +21,7 @@ try {
 	tooltiptext: button_label, // tooltip title
 	onClick: function(event) {
 	  if(event.button === 0) {
-		const win = event.target.ownerGlobal;
+		const win = event.target.documentGlobal;
 		const cmd = win.document.getElementById("History:UndoCloseTab");
 		cmd?.doCommand();
 	  }

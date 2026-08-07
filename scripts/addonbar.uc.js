@@ -142,9 +142,13 @@
 		outline: 1px dashed !important;
 		outline-offset: -2px !important;
 	  }
+      /* fix border top being cut */
+      #tabbrowser-tabbox{
+          margin-bottom: 0.01px !important;
+      }
 	  #addonbar {
-		border-top: 1px solid var(--sidebar-border-color,rgba(0,0,0,0.1)) !important;
-		background-color: var(--toolbar-bgcolor);
+		border-top: 0.01px solid var(--sidebar-border-color, var(--chrome-content-separator-color)) !important;
+		background-color: var(--toolbar-background-color);
 		background-image: var(--toolbar-bgimage);
 		-moz-window-dragging: no-drag !important;
 	  }
@@ -158,7 +162,7 @@
 	  :root[lwtheme] #addonbar.experimental,
 	  :root[lwtheme][lwtheme-image="true"] #addonbar.experimental {
 		background-image: var(--lwt-header-image, none), var(--lwt-additional-images) !important;
-		background-color: rgb(from var(--toolbar-bgcolor) r g b / 1) !important;
+		background-color: rgb(from var(--toolbar-background-color) r g b / 1) !important;
 		background-repeat: no-repeat, var(--lwt-background-tiling) !important;
 		background-position: right top, var(--lwt-background-alignment) !important;
 	  }
@@ -178,10 +182,11 @@
 		  > #statuspanel-label {
 			background-position: right top, var(--lwt-background-alignment) !important;
 			background-repeat: no-repeat, var(--lwt-background-tiling) !important;
-			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;*/
-			background: var(--lwt-accent-color, rgb(from var(--toolbar-bgcolor) r g b / 1)) !important;
+			/*background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-background-color) r g b / 1)) !important;*/
+			background: var(--lwt-accent-color, rgb(from var(--toolbar-background-color) r g b / 1)) !important;
 			color: var(--lwt-text-color) !important;
 			border: none !important;
+            color-scheme: unset !important;
 		  }
 		  &[mirror] {
 			opacity: 0 !important;
@@ -190,7 +195,7 @@
 		}
 		/* Plain colored themes without images */
 		&:not(.header, .additional) > #statuspanel > #statuspanel-label {
-		  background: rgb(from var(--toolbar-bgcolor) r g b / 1) !important;
+		  background: rgb(from var(--toolbar-background-color) r g b / 1) !important;
 		}
 		/* Switch between auto/cover for better background image display */
 		&.experimental.header { background-size: auto !important; }
@@ -199,8 +204,15 @@
 	  #addonbar {
 		/* Normalize buttons */
 		toolbarbutton {
-		  margin: 0 !important;
-		  padding: 0 3px !important;
+		  padding: 0 2px !important;
+          /* margin-right: 3px !important; */
+          max-height: 28px !important;
+          /* max-width: 28px !important; */
+          > .toolbarbutton-icon,
+            .toolbarbutton-badge-stack{
+            max-width: 28px !important;
+            padding: 8px 6px !important;
+          }
 		}
 		> toolbaritem {
 		  margin: 0 !important;
@@ -211,8 +223,7 @@
 		> #statuspanel + toolbarbutton,
 		> toolbaritem.unified-extensions-item:first-child toolbarbutton,
 		> #statuspanel + toolbaritem.unified-extensions-item toolbarbutton {
-		  padding-left: 1px !important;
-          max-width: 32px !important;
+          margin-left: -1px !important;
 		}
 	  }
 	`;

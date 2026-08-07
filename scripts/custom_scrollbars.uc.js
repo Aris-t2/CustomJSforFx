@@ -14,6 +14,7 @@
 	   widget.windows.overlay-scrollbars.enabled > false (Windows)
 	   widget.gtk.overlay-scrollbars.enabled > false (Linux)
    [!] The above preferences have to be set to 'false' for this code to work
+       svg.context-properties.content.enabled > true (required for custom_scrollbar_arrows_version)
  
    [!] STARTUP CACHE HAS TO BE DELETED AFTER EVERY CHANGE!
    -> finding 'startupCache' folder: address bar > about:profiles > Local Directory > Open Folder > startupCache
@@ -75,6 +76,7 @@
   // default: custom_scrollbar_arrows_version = 1
   //  1 ==> SVG arrows as code: might not work on some pages
   //  2 ==> SVG arrows as files: files have to be downloaded from
+  //  Requires "svg.context-properties.content.enabled" set to "true"
   //        https://github.com/Aris-t2/CustomJSforFx/tree/master/icons
   //        and placed inside 'chrome\icons' folder
   const custom_scrollbar_arrows_version = 1;
@@ -373,7 +375,6 @@
   if (custom_scrollbar_width !== 0) {
 	const current = Services.prefs.getIntPref("widget.non-native-theme.scrollbar.size.override", 0);
 	if (current !== custom_scrollbar_width) {
-		console.log("LOLO!@L321312321321")
 	  Services.prefs.setIntPref("widget.non-native-theme.scrollbar.size.override", custom_scrollbar_width);
 	}
   }

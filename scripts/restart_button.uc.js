@@ -16,6 +16,10 @@ try {
   
   var button_label = "Restart";
  
+  if (CustomizableUI.getWidget("uc-restart")?.provider === "api") {
+   return;
+  }
+  
   CustomizableUI.createWidget({
 	id: "uc-restart", // button id
 	defaultArea: CustomizableUI.AREA_NAVBAR,

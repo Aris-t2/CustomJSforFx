@@ -324,17 +324,17 @@ var Tabstoolbar = {
 				let sourceNode = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
 				if (sourceNode instanceof XULElement &&
 					sourceNode.localName == "tab" &&
-					sourceNode.ownerGlobal.isChromeWindow &&
+					sourceNode.documentGlobal.isChromeWindow &&
 					sourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser" &&
-					sourceNode.ownerGlobal.gBrowser.tabContainer == sourceNode.parentNode) {
+					sourceNode.documentGlobal.gBrowser.tabContainer == sourceNode.parentNode) {
 					// Do not allow transfering a private tab to a non-private window
 					// and vice versa.
 					if (PrivateBrowsingUtils.isWindowPrivate(window) !=
-						PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerGlobal))
+						PrivateBrowsingUtils.isWindowPrivate(sourceNode.documentGlobal))
 						return "none";
 
 					if (window.gMultiProcessBrowser !=
-						sourceNode.ownerGlobal.gMultiProcessBrowser)
+						sourceNode.documentGlobal.gMultiProcessBrowser)
 						return "none";
 
 					return dt.dropEffect == "copy" ? "copy" : "move";
