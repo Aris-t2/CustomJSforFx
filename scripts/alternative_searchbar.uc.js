@@ -116,7 +116,9 @@
         const header = searchbuttonpopup.querySelector(".searchmode-switcher-panel-description");
         if (header) {
           const separator = header.nextElementSibling;
-          if (separator?.localName === "hr") separator.remove();
+          if (separator?.localName === "hr" && !separator.className) {
+            separator.remove();
+          }
           header.remove();
         }
 
@@ -546,6 +548,41 @@
           selected?.removeAttribute("selected");
         })).observe(searchbarNew, { attributes: true, attributeFilter: ["open"] });
 
+        // from #openPanel()
+        function forceOpenOneOffPanel(view) {
+          if (view.isOpen) return;
+          const input = view.input;
+          input.inputField.setAttribute("aria-expanded", "true");
+          input.toggleAttribute("suppress-focus-border", true);
+          input.toggleAttribute("open", true);
+        }
+        // 'searchbarNew.view.onQueryFinished()' calls 'close()' when a query has no results,
+        // keep it open so the one-off buttons can be used with a unique query
+        const view = searchbarNew.view;
+        if (view && !view._oneOffNoResultsHooked) {
+          view._oneOffNoResultsHooked = true;
+          const oldClose = view.close;
+          view.close = function(...args) {
+            if (this._keepNoResultsOpen) return;
+            return oldClose.apply(this, args);
+          };
+
+          const oldOnQueryFinished = view.onQueryFinished;
+          view.onQueryFinished = function(...args) {
+            this._keepNoResultsOpen = true;
+            try {
+              const result = oldOnQueryFinished.apply(this, args);
+              // display one-off for query with no autocomplete results (usertyping noresults)
+              if (!this.isOpen) {
+                forceOpenOneOffPanel(this);
+              }
+              return result
+            } finally {
+              this._keepNoResultsOpen = false;
+            }
+          };
+        }
+
         const sButton = document.createElement("button");
         sButton.className = "searchbar-engine-one-off-item search-setting-button";
         sButton.tabIndex = -1;
@@ -623,24 +660,25 @@
           }
           /* general engine popup + autocomplete alignments */
           #searchbar-new {
+            & .urlbarView-results,
             & .searchmode-switcher {
-              padding-left: 3px;
+              padding-left: 1px;
             }
-            & .urlbarView-results {
-              padding-left: 3px;
+            & .urlbarView-favicon {
+              padding-left: 3px !important;
+              margin: 0 4px 0 4px !important;
             }
             & .searchmode-switcher-addEngine::part(button),
             & .searchmode-switcher-installed::part(button),
             & .searchmode-switcher-panel-search-settings-button::part(button) {
               background-position-x: 4px;
+              /*margin-inline-end: 2px !important;
+              margin-left: 2px !important;*/
+              padding-block: 4px;
               /*padding-inline-start: calc(var(--panel-menuitem-padding-inline) + 22px - 4px);*/
             }
             & .searchmode-switcher-addEngine::part(button)::before {
               inset-inline-start: 13px;
-            }
-            & .urlbarView-favicon {
-              /*padding-right: 4px !important;*/
-              padding-left: 3px !important;
             }
           }
 

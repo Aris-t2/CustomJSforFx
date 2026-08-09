@@ -97,7 +97,7 @@
 	  	    defaultArea: CustomizableUI.AREA_NAVBAR,
 	  	    removable: true,
 	  	    label: button_label, // button title
-	  	    tooltiptext: button_label, // tooltip title
+	  	    tooltiptext: button_label + "\nToggle: Ctrl + Alt + /", // tooltip title
 			onClick(event) {
 			  if (event.button == 0 || event.button == 1) {
 				for (let win of Services.wm.getEnumerator("navigator:browser")) {
@@ -149,6 +149,11 @@
 		  const button = e.target.closest("toolbarbutton");
 		  if (button?.id && customHandlers[button.id]) customHandlers[button.id](button, e);
 		});
+
+        bar.addEventListener("dragover", e => {
+          if (e.dataTransfer.getData("text/toolbarwrapper-id/main-window") == "togglebutton_addonbar_v")
+            e.stopImmediatePropagation();
+        }, true);
 
 		// Force display during customization
 		document.addEventListener("beforecustomization", () => {
