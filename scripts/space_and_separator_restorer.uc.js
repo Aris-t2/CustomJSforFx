@@ -151,6 +151,11 @@ var AddSeparator = {
 		#main-window[customizing] toolbarspacer {
 		  border: 1px solid !important;
 		}
+        #main-window[customizing] toolbar[orient="vertical"] toolbarspring {
+          flex: 0 0 auto !important;
+          min-width: calc(100% - 10px) !important;
+          margin-inline: auto !important;
+        }
 		toolbar[orient="vertical"] toolbarseparator {
 		  appearance: none !important;
 		  background-color: var(--toolbarseparator-color) !important;
