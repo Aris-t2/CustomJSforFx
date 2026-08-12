@@ -10,7 +10,7 @@
 // toolbar is display horizontally in customizing mode
 
 // [!] Fix for WebExtensions with own windows by 黒仪大螃蟹 (for 1-N scripts)
-	
+
 (function() {
 
   // ==UserConfig==
@@ -150,47 +150,101 @@
 		  if (button?.id && customHandlers[button.id]) customHandlers[button.id](button, e);
 		});
 
-        bar.addEventListener("dragover", e => {
-          if (e.dataTransfer.getData("text/toolbarwrapper-id/main-window") == "togglebutton_addonbar_v")
-            e.stopImmediatePropagation();
-        }, true);
+		bar.addEventListener("dragover", e => {
+		  if (e.dataTransfer.getData("text/toolbarwrapper-id/main-window") == "togglebutton_addonbar_v")
+			e.stopImmediatePropagation();
+		}, true);
 
 		// Force display during customization
 		document.addEventListener("beforecustomization", () => {
-		  bar.setAttribute("orient", "horizontal");
-		  document.getElementById("navigator-toolbox").appendChild(bar);
+		  const customization = document.querySelector("#customization-content-container");
+		  bar?.toggleAttribute("addonbar-v-right", !addonbar_v_on_the_left);
+		  customization?.parentElement.insertBefore(bar, customization);
 		  bar.collapsed = false;
 		});
 		document.addEventListener("aftercustomization", () => {
-		  bar.setAttribute("orient", "vertical");
 		  addonbar_v_on_the_left
 			? browser.insertBefore(bar, browser.firstChild)
 			: browser.appendChild(bar);
 		  bar.collapsed = !prefs.getBoolPref("enabled", true);
-		  bar.appendChild(document.getElementById("addonbar_v_bg")); // Make sure bg is always at the very end
+		  const bg = document.getElementById("addonbar_v_bg");
+		  if (bg) bar.appendChild(bg); // Make sure bg is always at the very end
 		});
 	  }
 	  // Ignore download-button's autohide `browser.download.autohideButton` preference
 	  if (!Services.prefs.getBranch("browser.download.").getBoolPref("autohideButton"))
 		document.getElementById("downloads-button")?.removeAttribute("hidden");
 
+	  // Custom handling for button placement during customization
+	  // since native logic uses horizontal left/right positioning
+	  handleVerticalDragAndDrop(bar);
+
 	} catch(e) {}
 
 
 	// Style toolbar
 	let css = `
-	  #main-window:not([customizing]) #addonbar_v:not([collapsed="true"]) {
+	  #main-window #addonbar_v:not([collapsed="true"]) {
 	  	width: ${addonbar_v_width};
 	  	min-width: ${addonbar_v_width};
 	  	max-width: ${addonbar_v_width};
 	  }
-	  #main-window[customizing] #addonbar_v {
-	  	outline: 1px dashed !important;
-	  	outline-offset: -2px !important;
-		overflow: hidden !important;
-		height: 28px !important;
-		min-height: 28px !important;
-		max-height: 28px !important;
+
+	  /* vertical alignment in customise mode */
+	  #main-window[customizing] #customization-container {
+		display: grid !important;
+		grid-template-columns: ${addonbar_v_width} minmax(0, 1fr) !important;
+		grid-template-rows: minmax(0, 1fr) auto !important;
+
+		#addonbar_v {
+		  grid-column: 1 !important;
+		  grid-row: 1 / -1 !important;
+
+		  width: ${addonbar_v_width} !important;
+		  min-width: ${addonbar_v_width} !important;
+		  max-width: ${addonbar_v_width} !important;
+
+		  height: auto !important;
+		  min-height: 0 !important;
+		  max-height: none !important;
+
+		  flex: none !important;
+		  align-self: stretch !important;
+
+		  outline: 1px dashed !important;
+		  outline-offset: -2px !important;
+
+		  /* button alignment + separator size */
+		  > toolbarpaletteitem > :is(toolbaritem, toolbarbutton, toolbarseparator, toolbarspacer) {
+			width: 100% !important;
+		  }
+		}
+
+		#customization-content-container {
+		  grid-row: 1 !important;
+		  grid-column: 2 !important;
+		  min-width: 0 !important;
+		  min-height: 0 !important;
+		}
+
+		#customization-footer {
+		  grid-row: 2 !important;
+		  grid-column: 2 !important;
+		}
+
+		/* addonbar_v_on_the_left=false */
+		&:has(#addonbar_v[addonbar-v-right]) {
+		  grid-template-columns: minmax(0, 1fr) ${addonbar_v_width} !important;
+
+		  #addonbar_v {
+			grid-column: 2 !important;
+		  }
+
+		  #customization-content-container,
+		  #customization-footer {
+			grid-column: 1 !important;
+		  }
+		}
 	  }
 	`;
 
@@ -225,36 +279,40 @@
 	    #addonbar_v toolbaritem separator {
 	  	  display: none !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v > toolbaritem {
+		#main-window #addonbar_v > toolbarpaletteitem > toolbaritem,
+	    #main-window #addonbar_v > toolbaritem {
 	  	  writing-mode: vertical-rl !important;
 	  	  text-orientation: mixed !important;
 	  	  transform: rotate(0deg) !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v > toolbaritem menupopup {
+	    #main-window #addonbar_v > toolbaritem menupopup {
 	  	  max-height: 170px !important;
 	  	  max-width: 170px !important;
 	  	  transform: rotate(-90deg) !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v > toolbaritem .toolbarbutton-badge {
+	    #main-window #addonbar_v > toolbaritem .toolbarbutton-badge {
 	  	  transform: rotate(-90deg) !important;
 	  	  position: absolute !important;
 	  	  padding: 1px 2px !important;
 	  	  top: -4px !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v #search-container,
-	    #main-window:not([customizing]) #addonbar_v #wrapper-search-container {
+	    #main-window #addonbar_v #search-container,
+	    #main-window #addonbar_v #wrapper-search-container {
 	  	  flex: unset !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v #search-container {
+	    #main-window #addonbar_v #search-container {
 	  	  min-width: unset !important;
 	  	  width: unset !important;
 	  	  height: 100px !important;
-	  
+
 	  	  &[width] {
 	  	    flex: unset !important;
 	  	  }
 	    }
-	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button > .toolbarbutton-text {
+		#main-window[customizing] #addonbar_v > #wrapper-zoom-controls {
+		  height: 96px !important; /* 32px per button */
+		}
+	    #main-window #addonbar_v #zoom-reset-button > .toolbarbutton-text {
 	  	  min-width: unset !important;
 	  	  min-height: unset !important;
 		  writing-mode: horizontal-tb !important;
@@ -262,17 +320,17 @@
 		  padding-left:   calc(var(--toolbarbutton-inner-padding, var(--toolbarbutton-padding-inner)) - 6px) !important;
 		  padding-right:  calc(var(--toolbarbutton-inner-padding, var(--toolbarbutton-padding-inner)) - 6px) !important;
 	    }
-		#main-window:not([customizing]) #addonbar_v > #zoom-controls{
+		#main-window #addonbar_v > #zoom-controls{
 		  margin: 2px 0px 2px 0px !important;
 		}
-	    #main-window:not([customizing]) #addonbar_v #zoom-reset-button:not([label]) {
+	    #main-window #addonbar_v #zoom-reset-button:not([label]) {
 	  	  display: none !important;
 	    }
-	    #main-window:not([customizing]) #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
+	    #main-window #addonbar_v .toolbarbutton-combined-buttons-dropmarker > .toolbarbutton-icon {
 	  	  width: unset !important;
 	  	  height: 16px !important;
 	    }
-		#main-window:not([customizing]) #addonbar_v:not([collapsed="true"], .header, .additional) {
+		#main-window #addonbar_v:not([collapsed="true"], .header, .additional) {
 		  &::before, &::after {
 			content: "";
 			width: ${addonbar_v_width};
@@ -287,6 +345,7 @@
 		}
 		#addonbar_v.experimental {
 		  overflow: hidden !important;
+		  z-index: 0 !important;
 		}
 		#addonbar_v.experimental > *:not(#addonbar_v_bg) {
 		  z-index: 1 !important;
@@ -294,6 +353,7 @@
 		#addonbar_v.experimental #addonbar_v_bg {
 		  position: relative !important;
 		  margin-top: auto !important;
+		  z-index: -1 !important;
 		}
 		/* rotate the background image in a vertical toolbar */
 		#addonbar_v.experimental #addonbar_v_bg::before {
@@ -302,8 +362,8 @@
 		  top: 0;
 		  left: 0;
 		  /* the horizontal length becomes the vertical span once rotated */
-		  width: 3000px !important; 
-		  height: ${addonbar_v_width} !important; 
+		  width: 3000px !important;
+		  height: ${addonbar_v_width} !important;
 		  background: var(--lwt-header-image, var(--lwt-additional-images), rgb(from var(--toolbar-background-color) r g b / 1)) !important;
 		  background-repeat: no-repeat !important;
 		  background-position: right top !important;
@@ -313,9 +373,9 @@
 		  z-index: 0 !important;
 		  display: block !important;
 		}
-		#main-window[customizing] #addonbar_v.experimental #addonbar_v_bg::before {
+		/*#main-window[customizing] #addonbar_v.experimental #addonbar_v_bg::before {
 		  display: none !important;
-		}
+		}*/
 		#addonbar_v.experimental.header #addonbar_v_bg::before {
 		  background-size: auto !important;
 		}
@@ -368,6 +428,175 @@
 	if (!sss.sheetRegistered(uri, sss.AGENT_SHEET)) {
 	  sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
 	}
+  }
+
+  function handleVerticalDragAndDrop(bar) {
+	let target = null;
+	let direction = null;
+	let draggedItem = null;
+	let pushed = null;
+
+	// prevent layout jump on addonbar button drag start
+	const hide_dragged = {
+	  "height": "0px",
+	  "min-height": "0px",
+	  "opacity": "0",
+	};
+
+	function setDraggedHidden(hidden) {
+	  if (!draggedItem) return;
+	  for (const prop in hide_dragged) {
+		hidden ? draggedItem.style.setProperty(prop, hide_dragged[prop], "important")
+			   : draggedItem.style.removeProperty(prop);
+	  }
+	}
+	function clearInsertionSpace() {
+	  if (!pushed) return;
+	  pushed.style.removeProperty("margin-top");
+	  pushed.style.removeProperty("margin-bottom");
+	  pushed = null;
+	}
+	function clear() {
+	  clearInsertionSpace();
+	  target = null;
+	  direction = null;
+	}
+	function finishDrag() {
+	  clear();
+	  setDraggedHidden(false);
+	  draggedItem = null;
+	}
+	function dragOutside(event) {
+	  const node = event.type == "dragleave" ? event.relatedTarget : event.target;
+	  if (target && !bar.contains(node)) clear();
+	}
+	function pushItems(list, index, dir) {
+	  clearInsertionSpace();
+	  const afterLast = dir == "after" && index == list.length - 1;
+	  const item = afterLast ? list[index] : dir == "before" ? list[index] : list[index + 1];
+	  item.style.setProperty(afterLast ? "margin-bottom" : "margin-top", "32px");
+	  pushed = item;
+
+	}
+	function suppressNativeSpacing() {
+	  for (const item of bar.querySelectorAll("toolbarpaletteitem")) {
+		item.style.setProperty("border-inline-start-width", "0px", "important");
+		item.style.setProperty("border-inline-end-width", "0px", "important");
+	  }
+	}
+	function suppressNativeAction(event) {
+	  event.preventDefault();
+	  event.stopImmediatePropagation();
+	}
+	function draggedId(event) {
+	  return event.dataTransfer.getData("text/toolbarwrapper-id/main-window");
+	}
+	function items(id) {
+	  return [...bar.children].filter(node =>
+		node.localName == "toolbarpaletteitem" && node.id && node.id != "wrapper-" + id
+	  );
+	}
+
+	function dragOver(event) {
+	  if (!document.documentElement.hasAttribute("customizing")) return;
+
+	  const id = draggedId(event);
+	  if (!id || !CustomizableUI.canWidgetMoveToArea(id, "addonbar_v")) return;
+
+	  const list = items(id);
+	  if (!list.length) {
+		suppressNativeAction(event);
+		return;
+	  }
+
+	  // find insertion target
+	  let index = list.findIndex(item => {
+		const r = item.getBoundingClientRect();
+		return event.clientY < r.top + r.height / 2;
+	  });
+	  const dir = index !== -1 ? "before" : "after";
+	  if (index === -1) index = list.length - 1;
+	  const item = list[index];
+
+	  // set current dragged item and keep it fresh
+	  if (!draggedItem || !draggedItem.isConnected) {
+		draggedItem = document.getElementById("wrapper-" + id);
+		setDraggedHidden(true);
+	  }
+
+	  if (item !== target || dir !== direction) {
+		target = item;
+		direction = dir;
+		pushItems(list, index, dir);
+	  }
+
+	  suppressNativeSpacing();
+	  suppressNativeAction(event);
+	}
+
+	function drop(event) {
+	  if (!document.documentElement.hasAttribute("customizing")) return;
+
+	  const id = draggedId(event);
+	  if (!id || !target) {
+		finishDrag();
+		return;
+	  }
+
+	  const targetId = target.firstElementChild?.id || target.id.replace(/^wrapper-/, "");
+	  const placement = CustomizableUI.getPlacementOfWidget(targetId);
+
+	  if (!placement) {
+		finishDrag();
+		suppressNativeAction(event);
+		return;
+	  }
+
+	  let position = placement.position;
+	  if (direction == "after") position++;
+
+	  const wrapper = document.getElementById("wrapper-" + id);
+	  const origin = wrapper?.closest('[customizable="true"]');
+
+	  if (origin?.id == "addonbar_v") {
+		CustomizableUI.moveWidgetWithinArea(id, position);
+	  } else {
+		CustomizableUI.addWidgetToArea(id, "addonbar_v", position);
+	  }
+
+	  const bg = document.getElementById("addonbar_v_bg");
+	  if (bg) bar.appendChild(bg); // keep bg at the end
+	  finishDrag();
+	  suppressNativeAction(event);
+	}
+
+	// suppressNativeSpacing() is often too slow
+	const observer = new MutationObserver(mutations => {
+	  for (const { type, target: item, attributeName } of mutations) {
+		if (type != "attributes" || item.localName != "toolbarpaletteitem" || attributeName != "style") continue;
+		item.style.removeProperty("border-inline-start-width");
+		item.style.removeProperty("border-inline-end-width");
+		if (item == draggedItem) setDraggedHidden(true);
+	  }
+	});
+
+	function dragAndDropListeners(enable) {
+	  const method = enable ? "addEventListener" : "removeEventListener";
+	  bar[method]("dragover", dragOver, true);
+	  bar[method]("drop", drop, true);
+	  bar[method]("dragleave", dragOutside, true);
+	  document[method]("dragend", finishDrag, true);
+	  document[method]("dragover", dragOutside, true);
+	}
+
+	document.addEventListener("beforecustomization", () => {
+	  dragAndDropListeners(true);
+	  observer.observe(bar, { subtree: true, attributes: true, attributeFilter: ["style"] });
+	});
+	document.addEventListener("aftercustomization", () => {
+	  dragAndDropListeners(false);
+	  observer.disconnect();
+	});
   }
 
   /* initialization delay */
