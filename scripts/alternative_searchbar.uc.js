@@ -369,11 +369,13 @@
         ChromeUtils.defineESModuleGetters(lazy, {
           UrlbarResult: "chrome://browser/content/urlbar/UrlbarResult.mjs",
           UrlbarUtils: "moz-src:///browser/components/urlbar/UrlbarUtils.sys.mjs",
+          UrlbarShared: "chrome://browser/content/urlbar/UrlbarShared.mjs",
           FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
           UrlbarProviderRecentSearches: "moz-src:///browser/components/urlbar/UrlbarProviderRecentSearches.sys.mjs",
         });
 
-        const manager = searchbarNew.view.controller.manager;
+        const controller = searchbarNew.view.controller;
+        const manager = controller.parentController?.manager ?? controller.manager;
         // separate provider instance per browser window
         class SearchbarHistoryProvider extends lazy.UrlbarProviderRecentSearches {
           constructor(id) {
@@ -403,17 +405,19 @@
             const results = await lazy.FormHistory.getAutoCompleteResults( queryContext.searchString,
               { fieldname: "searchbar-history" }, () => false
             );
+            const resultType   = lazy.UrlbarShared?.RESULT_TYPE   ?? lazy.UrlbarUtils.RESULT_TYPE;
+            const resultSource = lazy.UrlbarShared?.RESULT_SOURCE ?? lazy.UrlbarUtils.RESULT_SOURCE;
             for (const entry of results.slice(0, custom_search_history_max_results)) {
               addCallback(this,
                 new lazy.UrlbarResult({
-                  type: lazy.UrlbarUtils.RESULT_TYPE.SEARCH,
-                  source: lazy.UrlbarUtils.RESULT_SOURCE.HISTORY,
+                  type: resultType.SEARCH,
+                  source: resultSource.HISTORY,
                   payload: {
                     engine: engine.name,
                     suggestion: entry.text,
                     title: entry.text,
                     isBlockable: true,
-                    blockL10n: { id: "urlbar-result-menu-remove-from-history" },
+                    blockL10n: { id: `urlbar-result-menu-remove-from-history${lazy.UrlbarShared?.RESULT_TYPE ? "2" : ""}` },
                   },
                 })
               );
@@ -594,7 +598,7 @@
         const sLabel = document.createElement("label");
         sLabel.className = "button-text";
         // translated settings label
-        document.l10n.formatValue("urlbar-searchmode-popup-search-settings-panelitem")
+        document.l10n.formatValue(`urlbar-searchmode-popup-search-settings${appver < 154 ? "-panelitem" : ""}`)
         .then(settingsText => {
           sButton.title = settingsText;
           sLabel.textContent = settingsText;
