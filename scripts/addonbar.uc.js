@@ -1,4 +1,4 @@
-// Add-on Bar script for Firefox 148+ by Aris
+// Add-on Bar script for Firefox 153+ by Aris
 //
 // no 'close' button
 // 'toggle' toolbar with 'Ctr + /' on Windows/Linux or 'Cmd + /' on macOS
@@ -212,6 +212,10 @@
             .toolbarbutton-badge-stack{
             max-width: 28px !important;
             padding: 8px 6px !important;
+
+            :root[uidensity="compact"] & {
+              padding: 6px 6px !important;
+            }
           }
 		}
 		> toolbaritem {
