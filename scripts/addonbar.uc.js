@@ -41,6 +41,10 @@
 		document.getElementById("browser").parentNode.appendChild(tb_addonbar);
 		bar = tb_addonbar;
 
+		// Register
+		CustomizableUI.registerArea("addonbar", { legacy: true });
+		CustomizableUI.registerToolbarNode(tb_addonbar);
+
 		const _appendStatusPanelDefault = gBrowser.appendStatusPanel;
 		if (move_statuspanel_to_addonbar) {
 		  tb_addonbar.insertBefore(document.querySelector("#statuspanel"), tb_addonbar.firstChild);
@@ -54,10 +58,6 @@
 		  const shouldMove = bar && !bar.collapsed && !window.fullScreen;
 		  (shouldMove ? bar.insertBefore(StatusPanel.panel, bar.firstChild) : _appendStatusPanelDefault.call(gBrowser));
 		}
-
-		// Register
-		CustomizableUI.registerArea("addonbar", { legacy: true });
-		CustomizableUI.registerToolbarNode(tb_addonbar);
 
 		const prefs = Services.prefs.getBranch("browser.addonbar.");
 		// Restore state from prefs
@@ -205,12 +205,15 @@
 		/* Normalize buttons */
 		toolbarbutton {
 		  padding: 0 2px !important;
-          /* margin-right: 3px !important; */
           max-height: 28px !important;
-          /* max-width: 28px !important; */
+          overflow: hidden !important;
+          &:has(.toolbarbutton-badge) {
+            overflow: visible !important;
+          }
           > .toolbarbutton-icon,
             .toolbarbutton-badge-stack{
             max-width: 28px !important;
+            max-height: 32px !important;
             padding: 8px 6px !important;
 
             :root[uidensity="compact"] & {
@@ -222,12 +225,24 @@
 		  margin: 0 !important;
 		  padding: 0 !important;
 		}
+        /* Customise mode */
+        > toolbarpaletteitem > .toolbaritem-combined-buttons {
+          margin: 0 !important;
+        }
+        & toolbarseparator {
+          padding: 2px 0 !important;
+        }
 		/* First button alignment */  
 		> toolbarbutton:not(#statuspanel):first-child,
 		> #statuspanel + toolbarbutton,
 		> toolbaritem.unified-extensions-item:first-child toolbarbutton,
-		> #statuspanel + toolbaritem.unified-extensions-item toolbarbutton {
-          margin-left: -1px !important;
+		> #statuspanel + toolbaritem.unified-extensions-item toolbarbutton,
+        /* customise mode */
+        > toolbarpaletteitem:first-child > toolbarbutton,
+        > #statuspanel + toolbarpaletteitem > toolbarbutton,
+        > toolbarpaletteitem:first-child > toolbaritem.unified-extensions-item,
+        > #statuspanel + toolbarpaletteitem > toolbaritem.unified-extensions-item {
+          margin-left: ${compact_buttons ? "3px" : "-1px"} !important;
 		}
 	  }
 	`;
@@ -235,33 +250,48 @@
 	// Compact button styling
 	if (compact_buttons) {
 	  css += `
-		#addonbar toolbarbutton .toolbarbutton-icon {
-		  padding: 0 !important;
-		  width: 16px !important;
-		  height: 16px !important;
-		}
-		#addonbar .toolbarbutton-badge-stack {
-		  padding: 0 !important;
-		  margin: 0 !important;
-		  width: 16px !important;
-		  min-width: 16px !important;
-		  height: 16px !important;
-		  min-height: 16px !important;
-		}
-		#addonbar toolbarbutton .toolbarbutton-badge {
-		  margin-top: 0px !important;
-		  font-size: 5pt !important;
-		  min-width: unset !important;
-		  min-height: unset !important;
-		  margin-inline-start: 0px !important;
-		  margin-inline-end: 0px !important;
-		}
-		#addonbar .toolbaritem-combined-buttons {
-		  margin-inline: 0px !important;
-		}
-		#addonbar toolbarbutton {
-		  padding: 0 !important;
-		}
+        #addonbar {
+          toolbarbutton {
+            padding: 0 !important;
+            margin: 0 2px 0 0 !important;
+            max-height: 20px !important;
+            border-radius: 4px !important;
+    
+            > .toolbarbutton-icon,
+            > .toolbarbutton-badge-stack {
+              padding: 2px 4px !important;
+              border-radius: 4px !important;
+
+             :root[uidensity="compact"] & {
+               padding: 2px 4px !important;
+             }
+            }
+
+            > .toolbarbutton-icon {
+              box-sizing: content-box !important;
+              width: 16px !important;
+              height: 16px !important;
+            }
+
+            > .toolbarbutton-badge-stack {
+              width: 16px !important;
+              box-sizing: content-box !important;
+              position: relative !important;
+            }
+
+            .toolbarbutton-badge {
+              position: absolute !important;
+              top: -2px !important;
+              right: 0 !important;
+              /*min-width: unset !important;*/
+              /*min-height: unset !important;*/
+              margin-inline-end: -4px !important;
+              margin-block: 0 !important;
+              /*margin-inline: 0 !important;*/
+              font-size: 10px !important;
+            }
+          }
+        }
 	  `;
 	}
 
