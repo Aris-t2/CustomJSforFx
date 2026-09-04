@@ -73,7 +73,8 @@ var userChrome = {
                 .loadSubScriptWithOptions(userChrome.getURLSpecFromActualFile(aFile),
                                           {target: window,
                                            charset: userChrome.charSet,
-                                           ignoreCache: userChrome.ignoreCache});
+                                           ignoreCache: userChrome.ignoreCache,
+                                           allowUnsafeURL: true});
       // log it
       /*userChrome.log(aRelDirToken ? ("[" + aRelDirToken + "]/" +
           (aFolder && aFolder != "*" ? aFolder + "/" : "") + aFile.leafName) :

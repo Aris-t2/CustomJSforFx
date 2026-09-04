@@ -36,8 +36,8 @@ var UserChrome_js = {
     var window = document.defaultView;
     if (document.location && document.location.protocol == "chrome:") {
       try {
-        Services.scriptloader.loadSubScript(this.utilFileURI, window, "UTF-8");
-        Services.scriptloader.loadSubScript(this.ucFileURI, window, "UTF-8");
+        Services.scriptloader.loadSubScriptWithOptions(this.utilFileURI, { target: window, charset: "UTF-8", allowUnsafeURL: true });
+        Services.scriptloader.loadSubScriptWithOptions(this.ucFileURI, { target: window, charset: "UTF-8", allowUnsafeURL: true });
       }
       catch(e) {
 		Components.utils.reportError(e);
