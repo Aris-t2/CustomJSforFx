@@ -476,7 +476,6 @@
 	  const item = afterLast ? list[index] : dir == "before" ? list[index] : list[index + 1];
 	  item.style.setProperty(afterLast ? "margin-bottom" : "margin-top", "32px");
 	  pushed = item;
-
 	}
 	function suppressNativeSpacing() {
 	  for (const item of bar.querySelectorAll("toolbarpaletteitem")) {
@@ -538,8 +537,17 @@
 	  if (!document.documentElement.hasAttribute("customizing")) return;
 
 	  const id = draggedId(event);
-	  if (!id || !target) {
+	  if (!id) {
 		finishDrag();
+		return;
+	  }
+	  // when addonbar_v is empty
+	  if (!target) {
+		CustomizableUI.addWidgetToArea(id, "addonbar_v", 0);
+		const bg = document.getElementById("addonbar_v_bg");
+		if (bg) bar.appendChild(bg); // keep bg at the end
+		finishDrag();
+		suppressNativeAction(event);
 		return;
 	  }
 
