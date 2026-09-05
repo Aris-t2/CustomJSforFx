@@ -36,7 +36,7 @@
 // Option: hide 'oneoff' search engines (engines at popups bottom)
 // Option: hide placeholder text 'Search'
 // Option: swap the icons of search engine button and go button
-// Option: show 'add engines' '+' indicator
+// Option: hide 'add engines' '+' indicator
 // Option: always display go button
 // Option: select search engine by scrolling mouse wheel over searchbars button
 // option: replace native search suggestions with old plain search history (independent of Firefox search suggestion settings)
@@ -55,7 +55,7 @@
   const switch_glass_and_engine_icon = false;           // swap search engine and go button icons
   const clear_searchbar_after_search = false;           // clear input after search
   const clear_searchbar_on_doubleclick = false;         // clear input after double-clicking the input box
-  const show_addengines_plus_indicator = false;         // show add engines '+' sign over button
+  const hide_addengines_plus_indicator = false;         // hide add engines '+' sign over button
   const custom_search_history = true;                   // replace search suggestions with old plain search history
   const custom_search_history_max_results = 50;         // maximum number of search history results
   const select_engine_with_mousewheel = false;          // select engine with mousewheel over search button
@@ -799,7 +799,7 @@
           `;
         }
 
-        if (show_addengines_plus_indicator) {
+        if (!hide_addengines_plus_indicator && appver < 155) {
           css += `
             searchbar[addengines="true"] ~ #searchbar-new .searchmode-switcher::part(button)::before {
               content: "";
@@ -812,7 +812,13 @@
               inset-inline-start: 17px;
             }
           `;
-
+        }
+        if (hide_addengines_plus_indicator && appver >= 155) {
+          css += `
+            .searchmode-switcher[addengines]::part(button)::after {
+              display: none !important;
+            }
+          `;
         }
 
         if (switch_glass_and_engine_icon) {
