@@ -180,6 +180,9 @@ setTimeout(function(){
 (async url => !location.href.startsWith(url) || await delayedStartupPromise ||
 	(async (scrNT, nTjs) => {
 		if (scrNT.length >= 1) {
+			/* only allow trusted, locally packaged chrome:// scripts to be loaded and executed - */
+			/* prevents remote/MITM-injected script execution in the privileged chrome context */
+			if (!scrNT[0].src.startsWith("chrome://browser/")) return;
 			nTjs.uri = "data:application/x-javascript;charset=UTF-8,";
 			nTjs.res = await fetch(scrNT[0].src);
 			nTjs.src = (await nTjs.res.text())
