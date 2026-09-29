@@ -813,6 +813,11 @@
               ${Services.prefs.getBoolPref("browser.nova.enabled", false) ? `
                 clip-path: inset(0 0 0 0 round 0 0 16px 0) !important;
               ` : ""}
+              ${Services.prefs.getBoolPref("browser.nova.enabled", false) && !restore_oneoff_buttons ? `
+                :root[uidensity="compact"] & {
+                  margin-right: -5px !important;
+                }
+              ` : ""}
             }
           `;
           if (restore_oneoff_buttons) {
@@ -821,6 +826,11 @@
                 padding-right: 0 !important;
               }
               #searchbar-new .urlbarView-results {
+                ${Services.prefs.getBoolPref("browser.nova.enabled", true) ? `
+                 :root[uidensity="compact"] & {
+                   margin-right: 4px !important;
+                 }
+                ` : ""}
                 clip-path: none !important;
               }
             `;
